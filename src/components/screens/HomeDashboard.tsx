@@ -36,8 +36,8 @@ export function HomeDashboard({ role }: { role: Role }) {
       <div className="relative overflow-hidden bg-primary px-4 pt-5 pb-24 text-primary-foreground">
         <span
           aria-hidden
-          className="pointer-events-none absolute -right-6 -top-10 select-none font-black italic leading-none text-primary-foreground/15"
-          style={{ fontSize: "16rem", fontFamily: "'Arial Black', system-ui, sans-serif" }}
+          className="pointer-events-none absolute -right-4 -top-6 select-none font-black italic leading-none text-primary-foreground/10"
+          style={{ fontSize: "10rem", fontFamily: "'Arial Black', system-ui, sans-serif" }}
         >
           A
         </span>
