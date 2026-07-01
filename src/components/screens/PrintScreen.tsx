@@ -1,6 +1,7 @@
 import { PageLayout } from "@/components/layout/PageLayout";
 import { SubPageHeader } from "@/components/layout/SubPageHeader";
 import { StickyActionBar } from "@/components/layout/StickyActionBar";
+import { BarcodeScannerSheet } from "@/components/layout/BarcodeScannerSheet";
 import { ScanLine, Bluetooth } from "lucide-react";
 import { useState } from "react";
 
@@ -8,6 +9,9 @@ export function PrintScreen() {
   const [tab, setTab] = useState<"query" | "scan">("query");
   const [scanMode, setScanMode] = useState<"customer" | "waybill">("customer");
   const [chooseAll, setChooseAll] = useState(false);
+  const [queryValue, setQueryValue] = useState("");
+  const [scanValue, setScanValue] = useState("");
+  const [scanning, setScanning] = useState<null | "query" | "scan">(null);
 
   return (
     <PageLayout withBottomNav withStickyAction>
@@ -40,8 +44,10 @@ export function PrintScreen() {
               <div className="rounded-2xl bg-card p-3 shadow-sm">
                 <label className="block text-[10px] font-medium uppercase tracking-wide text-muted-foreground">Waybill No.</label>
                 <div className="flex items-center gap-2">
-                  <input placeholder="Scan" className="flex-1 bg-transparent py-1 text-sm outline-none" />
-                  <ScanLine className="h-4 w-4 text-primary" />
+                  <input value={queryValue} onChange={e => setQueryValue(e.target.value)} placeholder="Scan" className="flex-1 bg-transparent py-1 text-sm outline-none" />
+                  <button type="button" onClick={() => setScanning("query")} aria-label="Open scanner" className="text-primary active:scale-95">
+                    <ScanLine className="h-4 w-4" />
+                  </button>
                 </div>
               </div>
             </div>
@@ -64,8 +70,10 @@ export function PrintScreen() {
             </div>
             <div className="mt-3 rounded-2xl bg-card p-3 shadow-sm">
               <div className="flex items-center gap-2">
-                <input placeholder="Scan or enter" className="flex-1 bg-transparent py-1 text-sm outline-none" />
-                <ScanLine className="h-4 w-4 text-primary" />
+                <input value={scanValue} onChange={e => setScanValue(e.target.value)} placeholder="Scan or enter" className="flex-1 bg-transparent py-1 text-sm outline-none" />
+                <button type="button" onClick={() => setScanning("scan")} aria-label="Open scanner" className="text-primary active:scale-95">
+                  <ScanLine className="h-4 w-4" />
+                </button>
               </div>
             </div>
           </>
@@ -75,6 +83,13 @@ export function PrintScreen() {
 
         <div className="mt-16 text-center text-sm text-muted-foreground">No Results Found.</div>
       </div>
+
+      <BarcodeScannerSheet
+        open={scanning !== null}
+        onClose={() => setScanning(null)}
+        onDetected={v => (scanning === "query" ? setQueryValue(v) : setScanValue(v))}
+        title="Scan Waybill"
+      />
 
       <StickyActionBar>
         <div className="flex items-center gap-2">
