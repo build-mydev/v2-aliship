@@ -74,7 +74,7 @@ export function HomeDashboard({ role }: { role: Role }) {
       </div>
 
       {/* Inbound card */}
-      <div className="mt-4 px-4">
+      <div className="mt-3 px-4">
         <div className="rounded-2xl bg-card p-4 shadow-sm">
           <div className="grid grid-cols-[auto_1fr] items-center gap-3">
             <div className="relative">
