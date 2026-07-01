@@ -1,6 +1,7 @@
 import { PageLayout } from "@/components/layout/PageLayout";
 import { SubPageHeader } from "@/components/layout/SubPageHeader";
 import { StickyActionBar } from "@/components/layout/StickyActionBar";
+import { BarcodeScannerSheet } from "@/components/layout/BarcodeScannerSheet";
 import { ScanLine, Bluetooth } from "lucide-react";
 import { useState } from "react";
 
@@ -8,6 +9,9 @@ export function PrintScreen() {
   const [tab, setTab] = useState<"query" | "scan">("query");
   const [scanMode, setScanMode] = useState<"customer" | "waybill">("customer");
   const [chooseAll, setChooseAll] = useState(false);
+  const [queryValue, setQueryValue] = useState("");
+  const [scanValue, setScanValue] = useState("");
+  const [scanning, setScanning] = useState<null | "query" | "scan">(null);
 
   return (
     <PageLayout withBottomNav withStickyAction>
