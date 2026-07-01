@@ -5,6 +5,7 @@ import { StaticScanPage } from "@/components/layout/StaticScanPage";
 import { StickyActionBar } from "@/components/layout/StickyActionBar";
 import { ScanLine, ChevronDown, Camera, PenLine, Calendar, X } from "lucide-react";
 import { PhotoCaptureTile } from "@/components/layout/PhotoCaptureTile";
+import { BarcodeScannerSheet } from "@/components/layout/BarcodeScannerSheet";
 
 const LABELS: Record<string, string> = {
   departure: "Departure Scan",
