@@ -17,8 +17,12 @@ function DCHome() {
   ];
   return (
     <PageLayout withBottomNav>
-      <HeroBanner variant="wordmark" siteName="Ruaraka DC" roleBadge="DC ADMIN" />
-      <TileGrid tiles={tiles} />
+      <HeroBanner variant="wordmark" />
+      <div className="px-3 py-3">
+        <div className="rounded-2xl bg-card p-3 shadow-sm">
+          <TileGrid tiles={tiles} />
+        </div>
+      </div>
     </PageLayout>
   );
 }
