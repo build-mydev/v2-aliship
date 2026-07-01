@@ -25,6 +25,8 @@ import { Route as WaybillReceiverRouteImport } from './routes/waybill.receiver'
 import { Route as RiderMenuRouteImport } from './routes/rider.menu'
 import { Route as OfficePrintRouteImport } from './routes/office.print'
 import { Route as OfficeMenuRouteImport } from './routes/office.menu'
+import { Route as OfficeDeliveryMonitorRouteImport } from './routes/office.delivery-monitor'
+import { Route as OfficeCashPendingRouteImport } from './routes/office.cash-pending'
 import { Route as DriverMenuRouteImport } from './routes/driver.menu'
 import { Route as DcMenuRouteImport } from './routes/dc.menu'
 import { Route as AdminUsersRouteImport } from './routes/admin.users'
@@ -36,13 +38,17 @@ import { Route as AdminPrintRouteImport } from './routes/admin.print'
 import { Route as AdminMenuRouteImport } from './routes/admin.menu'
 import { Route as AdminInvestigationsRouteImport } from './routes/admin.investigations'
 import { Route as AdminImpersonateRouteImport } from './routes/admin.impersonate'
+import { Route as AdminDeliveryMonitorRouteImport } from './routes/admin.delivery-monitor'
+import { Route as AdminCashPendingRouteImport } from './routes/admin.cash-pending'
 import { Route as AdminAuditRouteImport } from './routes/admin.audit'
 import { Route as AdminAccountsRouteImport } from './routes/admin.accounts'
 import { Route as OfficeWaybillNewRouteImport } from './routes/office.waybill.new'
 import { Route as OfficeScanTypeRouteImport } from './routes/office.scan.$type'
+import { Route as OfficeOpsSlugRouteImport } from './routes/office.ops.$slug'
 import { Route as DcScanTypeRouteImport } from './routes/dc.scan.$type'
 import { Route as AdminWaybillNewRouteImport } from './routes/admin.waybill.new'
 import { Route as AdminScanTypeRouteImport } from './routes/admin.scan.$type'
+import { Route as AdminOpsSlugRouteImport } from './routes/admin.ops.$slug'
 import { Route as AdminAccountsIdRouteImport } from './routes/admin.accounts.$id'
 
 const RiderRoute = RiderRouteImport.update({
@@ -125,6 +131,16 @@ const OfficeMenuRoute = OfficeMenuRouteImport.update({
   path: '/menu',
   getParentRoute: () => OfficeRoute,
 } as any)
+const OfficeDeliveryMonitorRoute = OfficeDeliveryMonitorRouteImport.update({
+  id: '/delivery-monitor',
+  path: '/delivery-monitor',
+  getParentRoute: () => OfficeRoute,
+} as any)
+const OfficeCashPendingRoute = OfficeCashPendingRouteImport.update({
+  id: '/cash-pending',
+  path: '/cash-pending',
+  getParentRoute: () => OfficeRoute,
+} as any)
 const DriverMenuRoute = DriverMenuRouteImport.update({
   id: '/menu',
   path: '/menu',
@@ -180,6 +196,16 @@ const AdminImpersonateRoute = AdminImpersonateRouteImport.update({
   path: '/impersonate',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminDeliveryMonitorRoute = AdminDeliveryMonitorRouteImport.update({
+  id: '/delivery-monitor',
+  path: '/delivery-monitor',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminCashPendingRoute = AdminCashPendingRouteImport.update({
+  id: '/cash-pending',
+  path: '/cash-pending',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminAuditRoute = AdminAuditRouteImport.update({
   id: '/audit',
   path: '/audit',
@@ -200,6 +226,11 @@ const OfficeScanTypeRoute = OfficeScanTypeRouteImport.update({
   path: '/scan/$type',
   getParentRoute: () => OfficeRoute,
 } as any)
+const OfficeOpsSlugRoute = OfficeOpsSlugRouteImport.update({
+  id: '/ops/$slug',
+  path: '/ops/$slug',
+  getParentRoute: () => OfficeRoute,
+} as any)
 const DcScanTypeRoute = DcScanTypeRouteImport.update({
   id: '/scan/$type',
   path: '/scan/$type',
@@ -213,6 +244,11 @@ const AdminWaybillNewRoute = AdminWaybillNewRouteImport.update({
 const AdminScanTypeRoute = AdminScanTypeRouteImport.update({
   id: '/scan/$type',
   path: '/scan/$type',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminOpsSlugRoute = AdminOpsSlugRouteImport.update({
+  id: '/ops/$slug',
+  path: '/ops/$slug',
   getParentRoute: () => AdminRoute,
 } as any)
 const AdminAccountsIdRoute = AdminAccountsIdRouteImport.update({
@@ -230,6 +266,8 @@ export interface FileRoutesByFullPath {
   '/rider': typeof RiderRouteWithChildren
   '/admin/accounts': typeof AdminAccountsRouteWithChildren
   '/admin/audit': typeof AdminAuditRoute
+  '/admin/cash-pending': typeof AdminCashPendingRoute
+  '/admin/delivery-monitor': typeof AdminDeliveryMonitorRoute
   '/admin/impersonate': typeof AdminImpersonateRoute
   '/admin/investigations': typeof AdminInvestigationsRoute
   '/admin/menu': typeof AdminMenuRoute
@@ -241,6 +279,8 @@ export interface FileRoutesByFullPath {
   '/admin/users': typeof AdminUsersRoute
   '/dc/menu': typeof DcMenuRoute
   '/driver/menu': typeof DriverMenuRoute
+  '/office/cash-pending': typeof OfficeCashPendingRoute
+  '/office/delivery-monitor': typeof OfficeDeliveryMonitorRoute
   '/office/menu': typeof OfficeMenuRoute
   '/office/print': typeof OfficePrintRoute
   '/rider/menu': typeof RiderMenuRoute
@@ -252,9 +292,11 @@ export interface FileRoutesByFullPath {
   '/office/': typeof OfficeIndexRoute
   '/rider/': typeof RiderIndexRoute
   '/admin/accounts/$id': typeof AdminAccountsIdRoute
+  '/admin/ops/$slug': typeof AdminOpsSlugRoute
   '/admin/scan/$type': typeof AdminScanTypeRoute
   '/admin/waybill/new': typeof AdminWaybillNewRoute
   '/dc/scan/$type': typeof DcScanTypeRoute
+  '/office/ops/$slug': typeof OfficeOpsSlugRoute
   '/office/scan/$type': typeof OfficeScanTypeRoute
   '/office/waybill/new': typeof OfficeWaybillNewRoute
 }
@@ -262,6 +304,8 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/admin/accounts': typeof AdminAccountsRouteWithChildren
   '/admin/audit': typeof AdminAuditRoute
+  '/admin/cash-pending': typeof AdminCashPendingRoute
+  '/admin/delivery-monitor': typeof AdminDeliveryMonitorRoute
   '/admin/impersonate': typeof AdminImpersonateRoute
   '/admin/investigations': typeof AdminInvestigationsRoute
   '/admin/menu': typeof AdminMenuRoute
@@ -273,6 +317,8 @@ export interface FileRoutesByTo {
   '/admin/users': typeof AdminUsersRoute
   '/dc/menu': typeof DcMenuRoute
   '/driver/menu': typeof DriverMenuRoute
+  '/office/cash-pending': typeof OfficeCashPendingRoute
+  '/office/delivery-monitor': typeof OfficeDeliveryMonitorRoute
   '/office/menu': typeof OfficeMenuRoute
   '/office/print': typeof OfficePrintRoute
   '/rider/menu': typeof RiderMenuRoute
@@ -284,9 +330,11 @@ export interface FileRoutesByTo {
   '/office': typeof OfficeIndexRoute
   '/rider': typeof RiderIndexRoute
   '/admin/accounts/$id': typeof AdminAccountsIdRoute
+  '/admin/ops/$slug': typeof AdminOpsSlugRoute
   '/admin/scan/$type': typeof AdminScanTypeRoute
   '/admin/waybill/new': typeof AdminWaybillNewRoute
   '/dc/scan/$type': typeof DcScanTypeRoute
+  '/office/ops/$slug': typeof OfficeOpsSlugRoute
   '/office/scan/$type': typeof OfficeScanTypeRoute
   '/office/waybill/new': typeof OfficeWaybillNewRoute
 }
@@ -300,6 +348,8 @@ export interface FileRoutesById {
   '/rider': typeof RiderRouteWithChildren
   '/admin/accounts': typeof AdminAccountsRouteWithChildren
   '/admin/audit': typeof AdminAuditRoute
+  '/admin/cash-pending': typeof AdminCashPendingRoute
+  '/admin/delivery-monitor': typeof AdminDeliveryMonitorRoute
   '/admin/impersonate': typeof AdminImpersonateRoute
   '/admin/investigations': typeof AdminInvestigationsRoute
   '/admin/menu': typeof AdminMenuRoute
@@ -311,6 +361,8 @@ export interface FileRoutesById {
   '/admin/users': typeof AdminUsersRoute
   '/dc/menu': typeof DcMenuRoute
   '/driver/menu': typeof DriverMenuRoute
+  '/office/cash-pending': typeof OfficeCashPendingRoute
+  '/office/delivery-monitor': typeof OfficeDeliveryMonitorRoute
   '/office/menu': typeof OfficeMenuRoute
   '/office/print': typeof OfficePrintRoute
   '/rider/menu': typeof RiderMenuRoute
@@ -322,9 +374,11 @@ export interface FileRoutesById {
   '/office/': typeof OfficeIndexRoute
   '/rider/': typeof RiderIndexRoute
   '/admin/accounts/$id': typeof AdminAccountsIdRoute
+  '/admin/ops/$slug': typeof AdminOpsSlugRoute
   '/admin/scan/$type': typeof AdminScanTypeRoute
   '/admin/waybill/new': typeof AdminWaybillNewRoute
   '/dc/scan/$type': typeof DcScanTypeRoute
+  '/office/ops/$slug': typeof OfficeOpsSlugRoute
   '/office/scan/$type': typeof OfficeScanTypeRoute
   '/office/waybill/new': typeof OfficeWaybillNewRoute
 }
@@ -339,6 +393,8 @@ export interface FileRouteTypes {
     | '/rider'
     | '/admin/accounts'
     | '/admin/audit'
+    | '/admin/cash-pending'
+    | '/admin/delivery-monitor'
     | '/admin/impersonate'
     | '/admin/investigations'
     | '/admin/menu'
@@ -350,6 +406,8 @@ export interface FileRouteTypes {
     | '/admin/users'
     | '/dc/menu'
     | '/driver/menu'
+    | '/office/cash-pending'
+    | '/office/delivery-monitor'
     | '/office/menu'
     | '/office/print'
     | '/rider/menu'
@@ -361,9 +419,11 @@ export interface FileRouteTypes {
     | '/office/'
     | '/rider/'
     | '/admin/accounts/$id'
+    | '/admin/ops/$slug'
     | '/admin/scan/$type'
     | '/admin/waybill/new'
     | '/dc/scan/$type'
+    | '/office/ops/$slug'
     | '/office/scan/$type'
     | '/office/waybill/new'
   fileRoutesByTo: FileRoutesByTo
@@ -371,6 +431,8 @@ export interface FileRouteTypes {
     | '/'
     | '/admin/accounts'
     | '/admin/audit'
+    | '/admin/cash-pending'
+    | '/admin/delivery-monitor'
     | '/admin/impersonate'
     | '/admin/investigations'
     | '/admin/menu'
@@ -382,6 +444,8 @@ export interface FileRouteTypes {
     | '/admin/users'
     | '/dc/menu'
     | '/driver/menu'
+    | '/office/cash-pending'
+    | '/office/delivery-monitor'
     | '/office/menu'
     | '/office/print'
     | '/rider/menu'
@@ -393,9 +457,11 @@ export interface FileRouteTypes {
     | '/office'
     | '/rider'
     | '/admin/accounts/$id'
+    | '/admin/ops/$slug'
     | '/admin/scan/$type'
     | '/admin/waybill/new'
     | '/dc/scan/$type'
+    | '/office/ops/$slug'
     | '/office/scan/$type'
     | '/office/waybill/new'
   id:
@@ -408,6 +474,8 @@ export interface FileRouteTypes {
     | '/rider'
     | '/admin/accounts'
     | '/admin/audit'
+    | '/admin/cash-pending'
+    | '/admin/delivery-monitor'
     | '/admin/impersonate'
     | '/admin/investigations'
     | '/admin/menu'
@@ -419,6 +487,8 @@ export interface FileRouteTypes {
     | '/admin/users'
     | '/dc/menu'
     | '/driver/menu'
+    | '/office/cash-pending'
+    | '/office/delivery-monitor'
     | '/office/menu'
     | '/office/print'
     | '/rider/menu'
@@ -430,9 +500,11 @@ export interface FileRouteTypes {
     | '/office/'
     | '/rider/'
     | '/admin/accounts/$id'
+    | '/admin/ops/$slug'
     | '/admin/scan/$type'
     | '/admin/waybill/new'
     | '/dc/scan/$type'
+    | '/office/ops/$slug'
     | '/office/scan/$type'
     | '/office/waybill/new'
   fileRoutesById: FileRoutesById
@@ -562,6 +634,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OfficeMenuRouteImport
       parentRoute: typeof OfficeRoute
     }
+    '/office/delivery-monitor': {
+      id: '/office/delivery-monitor'
+      path: '/delivery-monitor'
+      fullPath: '/office/delivery-monitor'
+      preLoaderRoute: typeof OfficeDeliveryMonitorRouteImport
+      parentRoute: typeof OfficeRoute
+    }
+    '/office/cash-pending': {
+      id: '/office/cash-pending'
+      path: '/cash-pending'
+      fullPath: '/office/cash-pending'
+      preLoaderRoute: typeof OfficeCashPendingRouteImport
+      parentRoute: typeof OfficeRoute
+    }
     '/driver/menu': {
       id: '/driver/menu'
       path: '/menu'
@@ -639,6 +725,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminImpersonateRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/delivery-monitor': {
+      id: '/admin/delivery-monitor'
+      path: '/delivery-monitor'
+      fullPath: '/admin/delivery-monitor'
+      preLoaderRoute: typeof AdminDeliveryMonitorRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/cash-pending': {
+      id: '/admin/cash-pending'
+      path: '/cash-pending'
+      fullPath: '/admin/cash-pending'
+      preLoaderRoute: typeof AdminCashPendingRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/audit': {
       id: '/admin/audit'
       path: '/audit'
@@ -667,6 +767,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OfficeScanTypeRouteImport
       parentRoute: typeof OfficeRoute
     }
+    '/office/ops/$slug': {
+      id: '/office/ops/$slug'
+      path: '/ops/$slug'
+      fullPath: '/office/ops/$slug'
+      preLoaderRoute: typeof OfficeOpsSlugRouteImport
+      parentRoute: typeof OfficeRoute
+    }
     '/dc/scan/$type': {
       id: '/dc/scan/$type'
       path: '/scan/$type'
@@ -686,6 +793,13 @@ declare module '@tanstack/react-router' {
       path: '/scan/$type'
       fullPath: '/admin/scan/$type'
       preLoaderRoute: typeof AdminScanTypeRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/ops/$slug': {
+      id: '/admin/ops/$slug'
+      path: '/ops/$slug'
+      fullPath: '/admin/ops/$slug'
+      preLoaderRoute: typeof AdminOpsSlugRouteImport
       parentRoute: typeof AdminRoute
     }
     '/admin/accounts/$id': {
@@ -713,6 +827,8 @@ const AdminAccountsRouteWithChildren = AdminAccountsRoute._addFileChildren(
 interface AdminRouteChildren {
   AdminAccountsRoute: typeof AdminAccountsRouteWithChildren
   AdminAuditRoute: typeof AdminAuditRoute
+  AdminCashPendingRoute: typeof AdminCashPendingRoute
+  AdminDeliveryMonitorRoute: typeof AdminDeliveryMonitorRoute
   AdminImpersonateRoute: typeof AdminImpersonateRoute
   AdminInvestigationsRoute: typeof AdminInvestigationsRoute
   AdminMenuRoute: typeof AdminMenuRoute
@@ -723,6 +839,7 @@ interface AdminRouteChildren {
   AdminToolsRoute: typeof AdminToolsRoute
   AdminUsersRoute: typeof AdminUsersRoute
   AdminIndexRoute: typeof AdminIndexRoute
+  AdminOpsSlugRoute: typeof AdminOpsSlugRoute
   AdminScanTypeRoute: typeof AdminScanTypeRoute
   AdminWaybillNewRoute: typeof AdminWaybillNewRoute
 }
@@ -730,6 +847,8 @@ interface AdminRouteChildren {
 const AdminRouteChildren: AdminRouteChildren = {
   AdminAccountsRoute: AdminAccountsRouteWithChildren,
   AdminAuditRoute: AdminAuditRoute,
+  AdminCashPendingRoute: AdminCashPendingRoute,
+  AdminDeliveryMonitorRoute: AdminDeliveryMonitorRoute,
   AdminImpersonateRoute: AdminImpersonateRoute,
   AdminInvestigationsRoute: AdminInvestigationsRoute,
   AdminMenuRoute: AdminMenuRoute,
@@ -740,6 +859,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminToolsRoute: AdminToolsRoute,
   AdminUsersRoute: AdminUsersRoute,
   AdminIndexRoute: AdminIndexRoute,
+  AdminOpsSlugRoute: AdminOpsSlugRoute,
   AdminScanTypeRoute: AdminScanTypeRoute,
   AdminWaybillNewRoute: AdminWaybillNewRoute,
 }
@@ -774,17 +894,23 @@ const DriverRouteWithChildren =
   DriverRoute._addFileChildren(DriverRouteChildren)
 
 interface OfficeRouteChildren {
+  OfficeCashPendingRoute: typeof OfficeCashPendingRoute
+  OfficeDeliveryMonitorRoute: typeof OfficeDeliveryMonitorRoute
   OfficeMenuRoute: typeof OfficeMenuRoute
   OfficePrintRoute: typeof OfficePrintRoute
   OfficeIndexRoute: typeof OfficeIndexRoute
+  OfficeOpsSlugRoute: typeof OfficeOpsSlugRoute
   OfficeScanTypeRoute: typeof OfficeScanTypeRoute
   OfficeWaybillNewRoute: typeof OfficeWaybillNewRoute
 }
 
 const OfficeRouteChildren: OfficeRouteChildren = {
+  OfficeCashPendingRoute: OfficeCashPendingRoute,
+  OfficeDeliveryMonitorRoute: OfficeDeliveryMonitorRoute,
   OfficeMenuRoute: OfficeMenuRoute,
   OfficePrintRoute: OfficePrintRoute,
   OfficeIndexRoute: OfficeIndexRoute,
+  OfficeOpsSlugRoute: OfficeOpsSlugRoute,
   OfficeScanTypeRoute: OfficeScanTypeRoute,
   OfficeWaybillNewRoute: OfficeWaybillNewRoute,
 }
