@@ -33,11 +33,11 @@ export function HomeDashboard({ role }: { role: Role }) {
   return (
     <PageLayout withBottomNav>
       {/* Orange header with giant A watermark */}
-      <div className="relative overflow-hidden bg-primary px-4 pt-4 pb-16 text-primary-foreground">
+      <div className="relative overflow-hidden bg-primary px-4 pt-4 pb-8 text-primary-foreground">
         <span
           aria-hidden
-          className="pointer-events-none absolute -right-4 -top-6 select-none font-black italic leading-none text-primary-foreground/10"
-          style={{ fontSize: "10rem", fontFamily: "'Arial Black', system-ui, sans-serif" }}
+          className="pointer-events-none absolute -right-4 -top-4 select-none font-black italic leading-none text-primary-foreground/10"
+          style={{ fontSize: "8rem", fontFamily: "'Arial Black', system-ui, sans-serif" }}
         >
           A
         </span>
