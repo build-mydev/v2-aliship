@@ -11,9 +11,9 @@ const LABELS: Record<string, string> = {
   bag: "Bag Scan",
   delivery: "Delivery Scan",
   pod: "POD Scan",
-  return: "Return Scan",
+  return: "Return Entry",
   handover: "Handover Scan",
-  exception: "Exception Scan",
+  exception: "Hold Scan",
   rider: "Rider Scan",
   "vehicle-sealing": "Vehicle Sealing Scan",
   unsealing: "Unsealing Scan",
@@ -39,9 +39,87 @@ export function ScanPageForType({ type, withBottomNav = true }: { type: string; 
       return <DeliveredScan title={title} withBottomNav={withBottomNav} />;
     case "payment":
       return <PaymentScan title={title} withBottomNav={withBottomNav} />;
+    case "exception-entry":
+      return <ExceptionEntry title={title} withBottomNav={withBottomNav} />;
+    case "return":
+      return <ReturnEntry title={title} withBottomNav={withBottomNav} />;
+    case "exception":
+      return <HoldScan title={title} withBottomNav={withBottomNav} />;
     default:
       return <StaticScanPage title={title} />;
   }
+}
+
+/* ---------- Select bottom sheet ---------- */
+
+function SelectSheet({
+  open, options, value, onSelect, onClose,
+}: {
+  open: boolean; options: string[]; value: string | null;
+  onSelect: (v: string) => void; onClose: () => void;
+}) {
+  const [pending, setPending] = useState<string | null>(value);
+  if (!open) return null;
+  return (
+    <div className="fixed inset-0 z-50 flex flex-col justify-end bg-black/50" onClick={onClose}>
+      <div className="rounded-t-2xl bg-card pb-0" onClick={e => e.stopPropagation()}>
+        <div className="flex items-center justify-between px-5 pt-4 pb-3">
+          <div className="text-base font-bold">Select</div>
+          <button onClick={onClose} aria-label="Close"><X className="h-5 w-5 text-muted-foreground" /></button>
+        </div>
+        <div className="h-px bg-border" />
+        <div className="max-h-[45vh] overflow-y-auto py-2">
+          {options.map(opt => (
+            <button
+              key={opt}
+              onClick={() => setPending(opt)}
+              className={
+                "block w-full border-b border-border px-5 py-4 text-center text-sm " +
+                (pending === opt ? "font-semibold text-primary" : "text-foreground")
+              }
+            >
+              {opt}
+            </button>
+          ))}
+        </div>
+        <button
+          onClick={() => { if (pending) { onSelect(pending); onClose(); } }}
+          className="block w-full bg-primary py-4 text-center text-sm font-semibold text-primary-foreground"
+        >
+          Confirm
+        </button>
+      </div>
+    </div>
+  );
+}
+
+function SelectField({
+  placeholder, value, onClick, focused,
+}: { placeholder: string; value: string | null; onClick: () => void; focused?: boolean }) {
+  return (
+    <button
+      onClick={onClick}
+      className={
+        "flex w-full items-center gap-2 rounded-xl border bg-card px-3 py-3 text-left " +
+        (focused ? "border-primary" : "border-border")
+      }
+    >
+      <span className={"flex-1 text-sm " + (value ? "text-foreground" : "text-muted-foreground")}>
+        {value ?? placeholder}
+      </span>
+      <ChevronDown className="h-4 w-4 text-muted-foreground" />
+    </button>
+  );
+}
+
+function TextArea({ placeholder }: { placeholder: string }) {
+  return (
+    <textarea
+      placeholder={placeholder}
+      rows={3}
+      className="w-full resize-none rounded-xl border border-border bg-card px-3 py-3 text-sm outline-none placeholder:text-muted-foreground"
+    />
+  );
 }
 
 /* ---------- Shared primitives ---------- */
