@@ -129,6 +129,8 @@ function TextArea({ placeholder }: { placeholder: string }) {
 function InputRow({
   placeholder, suffix, scan, chevron, focused,
 }: { placeholder: string; suffix?: string; scan?: boolean; chevron?: boolean; focused?: boolean }) {
+  const [value, setValue] = useState("");
+  const [scanning, setScanning] = useState(false);
   return (
     <div
       className={
@@ -136,9 +138,31 @@ function InputRow({
         (focused ? "border-primary" : "border-border")
       }
     >
-      <input placeholder={placeholder} className="flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground" />
+      <input
+        value={value}
+        onChange={e => setValue(e.target.value)}
+        placeholder={placeholder}
+        className="flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground"
+      />
       {suffix && <span className="text-xs font-medium text-muted-foreground">{suffix}</span>}
-      {scan && <ScanLine className="h-5 w-5 text-muted-foreground" />}
+      {scan && (
+        <>
+          <button
+            type="button"
+            onClick={() => setScanning(true)}
+            aria-label="Open scanner"
+            className="rounded-full p-1 text-primary active:scale-95"
+          >
+            <ScanLine className="h-5 w-5" />
+          </button>
+          <BarcodeScannerSheet
+            open={scanning}
+            onClose={() => setScanning(false)}
+            onDetected={v => setValue(v)}
+            title={placeholder}
+          />
+        </>
+      )}
       {chevron && <ChevronDown className="h-4 w-4 text-muted-foreground" />}
     </div>
   );
