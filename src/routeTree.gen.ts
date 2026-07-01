@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as RiderRouteImport } from './routes/rider'
 import { Route as OfficeRouteImport } from './routes/office'
 import { Route as DcRouteImport } from './routes/dc'
+import { Route as ChangePasswordRouteImport } from './routes/change-password'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as RiderIndexRouteImport } from './routes/rider.index'
@@ -64,6 +65,11 @@ const OfficeRoute = OfficeRouteImport.update({
 const DcRoute = DcRouteImport.update({
   id: '/dc',
   path: '/dc',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ChangePasswordRoute = ChangePasswordRouteImport.update({
+  id: '/change-password',
+  path: '/change-password',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminRoute = AdminRouteImport.update({
@@ -260,6 +266,7 @@ const AdminAccountsIdRoute = AdminAccountsIdRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
+  '/change-password': typeof ChangePasswordRoute
   '/dc': typeof DcRouteWithChildren
   '/office': typeof OfficeRouteWithChildren
   '/rider': typeof RiderRouteWithChildren
@@ -302,6 +309,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/change-password': typeof ChangePasswordRoute
   '/admin/accounts': typeof AdminAccountsRouteWithChildren
   '/admin/audit': typeof AdminAuditRoute
   '/admin/cash-pending': typeof AdminCashPendingRoute
@@ -343,6 +351,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
+  '/change-password': typeof ChangePasswordRoute
   '/dc': typeof DcRouteWithChildren
   '/office': typeof OfficeRouteWithChildren
   '/rider': typeof RiderRouteWithChildren
@@ -388,6 +397,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/admin'
+    | '/change-password'
     | '/dc'
     | '/office'
     | '/rider'
@@ -430,6 +440,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/change-password'
     | '/admin/accounts'
     | '/admin/audit'
     | '/admin/cash-pending'
@@ -470,6 +481,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/admin'
+    | '/change-password'
     | '/dc'
     | '/office'
     | '/rider'
@@ -514,6 +526,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminRoute: typeof AdminRouteWithChildren
+  ChangePasswordRoute: typeof ChangePasswordRoute
   DcRoute: typeof DcRouteWithChildren
   OfficeRoute: typeof OfficeRouteWithChildren
   RiderRoute: typeof RiderRouteWithChildren
@@ -542,6 +555,13 @@ declare module '@tanstack/react-router' {
       path: '/dc'
       fullPath: '/dc'
       preLoaderRoute: typeof DcRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/change-password': {
+      id: '/change-password'
+      path: '/change-password'
+      fullPath: '/change-password'
+      preLoaderRoute: typeof ChangePasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin': {
@@ -927,6 +947,7 @@ const RiderRouteWithChildren = RiderRoute._addFileChildren(RiderRouteChildren)
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRoute: AdminRouteWithChildren,
+  ChangePasswordRoute: ChangePasswordRoute,
   DcRoute: DcRouteWithChildren,
   OfficeRoute: OfficeRouteWithChildren,
   RiderRoute: RiderRouteWithChildren,
