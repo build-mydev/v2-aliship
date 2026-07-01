@@ -4,6 +4,7 @@ import { SubPageHeader } from "@/components/layout/SubPageHeader";
 import { StaticScanPage } from "@/components/layout/StaticScanPage";
 import { StickyActionBar } from "@/components/layout/StickyActionBar";
 import { ScanLine, ChevronDown, Camera, PenLine, Calendar, X } from "lucide-react";
+import { PhotoCaptureTile } from "@/components/layout/PhotoCaptureTile";
 
 const LABELS: Record<string, string> = {
   departure: "Departure Scan",
@@ -200,7 +201,8 @@ function ArrivalScan({ title, withBottomNav }: { title: string; withBottomNav: b
           </label>
         </div>
         <InputRow placeholder="Waybill Number/Bag Number" scan />
-        <IconTile icon={Camera} label="Take A Picture" />
+        <PhotoCaptureTile label="Take A Picture" />
+
         <SaveButton />
       </div>
       <ScannedBlock count={0} />
@@ -257,7 +259,8 @@ function DeliveredScan({ title, withBottomNav }: { title: string; withBottomNav:
         <InputRow placeholder="Remark" focused />
         <InputRow placeholder="Waybill No." scan />
         <div className="flex gap-2">
-          <IconTile icon={Camera} label="Take A Picture" />
+          <PhotoCaptureTile label="Take A Picture" />
+
           <IconTile icon={PenLine} label="POD Signature" iconClass="text-primary" />
         </div>
         <SaveButton />
@@ -476,7 +479,8 @@ function ExceptionEntry({ title, withBottomNav }: { title: string; withBottomNav
         <SelectField placeholder="Exception Type" value={type} onClick={() => setOpen(true)} focused={!type} />
         <TextArea placeholder="Reason" />
         <InputRow placeholder="NotifySite" />
-        <IconTile icon={Camera} label="Take A Picture" />
+        <PhotoCaptureTile label="Take A Picture" />
+
         <SaveButton enabled={!!type} />
       </div>
       <ScannedBlock count={0} />
@@ -505,7 +509,7 @@ function ReturnEntry({ title, withBottomNav }: { title: string; withBottomNav: b
         <SelectField placeholder="Type" value={type} onClick={() => setOpen(true)} />
         <TextArea placeholder="Reason" />
         <InputRow placeholder="Waybill No." scan />
-        <IconTile icon={Camera} label="Take A Picture" />
+        <PhotoCaptureTile label="Take A Picture" />
         <SaveButton enabled={!!type} />
       </div>
       <ScannedBlock count={0} />

@@ -6,6 +6,7 @@ import { riderParcels } from "@/data/static";
 import { Phone, Camera, PenTool, AlertTriangle, CheckCircle2, Calendar, Home as HomeIcon, MapPin, Undo2 } from "lucide-react";
 import { FormSheet, Field, Textarea, TextInput } from "@/components/layout/FormSheet";
 import { Button } from "@/components/ui/button";
+import { PhotoCaptureTile } from "@/components/layout/PhotoCaptureTile";
 
 export const Route = createFileRoute("/rider/parcel/$id")({ component: RiderParcelDetail });
 
@@ -62,7 +63,7 @@ function RiderParcelDetail() {
 
       <FormSheet open={sheet === "delivered"} onOpenChange={o => !o && setSheet(null)} title="Confirm Delivery" saveLabel="Confirm Delivered">
         <div className="grid grid-cols-2 gap-2">
-          <IconTile icon={Camera} label="Take Photo" />
+          <PhotoCaptureTile label="Take Photo" size="md" />
           <IconTile icon={PenTool} label="POD Signature" />
         </div>
         <Field label="Remark"><Textarea placeholder="Optional" /></Field>
