@@ -91,9 +91,9 @@ export function HomeDashboard({ role }: { role: Role }) {
       </div>
 
       {/* Operations grid */}
-      <div className="mt-3 px-4">
+      <div className="mt-2 px-4">
         <div className="rounded-2xl bg-card p-4 shadow-sm">
-          <div className="grid grid-cols-4 gap-y-5">
+          <div className="grid grid-cols-4 gap-y-4">
             {ops.map(s => (
               <TileLink key={s.key} to={`${base}/ops/${s.slug}`} label={s.label} icon={s.icon} count={(dashboardCounts as Record<string, number>)[s.key] ?? 0} />
             ))}
@@ -102,7 +102,7 @@ export function HomeDashboard({ role }: { role: Role }) {
       </div>
 
       {/* Delivery Monitor row */}
-      <div className="mt-3 px-4">
+      <div className="mt-2 px-4">
         <Link to={`${base}/delivery-monitor`} className="flex items-center justify-between rounded-2xl bg-card p-4 shadow-sm">
           <span className="text-sm font-semibold">Delivery Monitor</span>
           <ChevronRight className="h-4 w-4 text-muted-foreground" />
