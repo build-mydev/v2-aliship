@@ -1,110 +1,43 @@
-# ALISHIP Static UI Rebuild Plan
+# Speedaf-style Bleeding Wordmark Hero
 
-Mobile-first static logistics UI. Zero backend. All mock data in `src/data/static.ts`. Full navigation via TanStack Router file-based routes.
+Rework the `wordmark` variant of `src/components/layout/HeroBanner.tsx` so the ALISHIP logotype visually spills out of the orange header into the white content beneath — matching the Speedaf reference.
 
-## Design tokens & fonts
+## Changes
 
-Update `src/styles.css`:
-- Primary `#FF6600` (orange), primary-foreground white
-- Background near-white, cards white, soft gray borders, rounded-2xl, soft shadow scale
-- No external font loading. Add CSS classes:
-  - `.font-wordmark` → `'Arial Black', 'Helvetica Neue', Arial, sans-serif; font-weight:900; font-style:italic`
-  - Base body → `system-ui, -apple-system, sans-serif`
+### 1. `src/components/layout/HeroBanner.tsx`
+- Split rendering by variant. Keep `compact` untouched (still shows site/role/settings).
+- For `wordmark`:
+  - Render only the giant "ALISHIP" text — no `express` tagline, no site row, no settings gear, no role badge (ignore those props in this variant).
+  - Outer wrapper: `relative` container with a fixed orange block height (`h-32`).
+  - Inner text element absolutely positioned, full-bleed edge-to-edge:
+    - `absolute left-0 right-0 top-2`
+    - `w-screen` with `ml-[calc(50%-50vw)]` to escape any parent horizontal padding
+    - `overflow-visible`, no horizontal padding
+  - Typography:
+    - `font-family: 'Arial Black', sans-serif`, `font-weight: 900`, `font-style: italic`
+    - `color: white`, `letter-spacing: -0.02em`, `line-height: 1`
+    - `font-size: clamp(5rem, 32vw, 10rem)`
+    - `text-align: center` (matches reference; letters span full width due to size)
+  - The oversized text naturally extends ~30–50px below the `h-32` orange block into whatever renders next.
 
-All component colors via tokens (`bg-primary`, `bg-card`, `text-muted-foreground`, `border-border`, `text-destructive`). No hex/`text-white`/`bg-black` in components.
+### 2. Consumer screens — accommodate the overlap
+The wordmark hero is used in:
+- `src/components/screens/ScanOpsScreen.tsx` (Office & Admin ScanOps)
+- `src/routes/dc.index.tsx` (uses wordmark with siteName/roleBadge — those extras now suppressed by the variant)
 
-## Static data (`src/data/static.ts`)
+For these, the first content card sits directly under the hero. Add a small top offset (e.g. wrap the content area with `pt-6` reduction / no change needed) — the white card already starts right after the orange block, so the italic descenders of ALISHIP naturally cross onto it. No structural change required beyond confirming the first child is a white/card surface with rounded top corners.
 
-Exports: `sites`, `parcels` (status enum: pending/in_transit/arrived/out_for_delivery/delivered/exception/investigation), `manifests`, `bags`, `users`, `accounts`, `codRecords`, `auditLog`, `appSettings`, `dashboardCounts`, `riders`, `roleProfiles`, `demoRoles`.
+- In `ScanOpsScreen`: current spacing `space-y-3 px-3 py-3` — change first card wrapper to have `rounded-t-3xl` feel by keeping existing `rounded-2xl` card; ensure `py-3` top padding is enough so text bleeds onto the card, not into empty background. Keep as-is (background is already `bg-background` neutral; card is white).
+- In `dc.index.tsx`: TileGrid tiles render on background. Wrap the TileGrid in a `rounded-3xl bg-card` container so the bleeding text lands on a white surface, matching the reference.
 
-Helpers:
-- `type Role = 'super_admin'|'office'|'dc_admin'|'driver'|'rider'`
-- `rolePath(role)` → `/admin | /office | /dc | /driver | /rider`
-- `siteForRole(role)` → mock site
-- `logout()` → clears localStorage keys (`aliship.role`, `aliship.employeeNo`), then `window.location.href = '/'`
-- `demoRoles` map: `ADMIN001→super_admin`, `OFFICE001→office`, `DC001→dc_admin`, `RIDER001→rider`, `DRIVER001→driver`
+### 3. HomeDashboard
+`HomeDashboard.tsx` uses a custom orange header (not `HeroBanner`) — leave unchanged. The user references Home/Profile/Admin "tabs" — those tabs use `ScanOpsScreen` / `dc.index` which already use `HeroBanner variant="wordmark"`, so the change propagates automatically.
 
-## Layout primitives (`src/components/layout/`)
+## Technical notes
+- Full-bleed trick `w-screen ml-[calc(50%-50vw)]` works inside any padded parent without needing to alter parents.
+- `overflow-visible` on the orange block lets descenders of the italic "P"/"H" show below.
+- No new dependencies. Pure Tailwind + inline style for the `clamp()` font-size (Tailwind arbitrary value `text-[clamp(5rem,32vw,10rem)]` also works).
 
-- `HeroBanner` — variants `wordmark` | `compact`; giant italic ALISHIP wordmark on primary bg; optional site-info sub-bar (site name, role chip, settings gear)
-- `SubPageHeader` — 56px primary bar; back chevron (uses `useRouter().history.back()`), centered white title
-- `BottomNav` — fixed `bottom-0 inset-x-0 z-50`; role-aware tabs; primary active state
-- `PageLayout` — flex column min-h-screen; content wrapper adds `pb-16` when bottom nav present
-- `PageToolbar` — sticky search + filter chips
-- `CardList` / `CardListItem` — rounded cards, icon + title + subtitle + badge + chevron
-- `DetailHeader` — big title, subtitle, status badge
-- `FormShell` — form container; sticky action bar helper
-- `StickyActionBar` — `fixed inset-x-0 bottom-16` (above bottom nav)
-- `SectionBlock` — labeled section wrapper
-- `TileGrid` / `Tile` — 2-col colored icon squares for scan ops
-- `StaticScanPage` — generic scan-type page (SubPageHeader, one scan input, Save, empty scanned list)
-
-## Routes (file-based, `src/routes/`)
-
-### Auth
-- `index.tsx` — Login screen: centered, orange halo, rounded-3xl orange tile with white `Package` icon, italic ALISHIP wordmark + "express" tagline, "Default" dropdown chip, floating-label Employee No. + Password, orange pill Login button, demo IDs helper, version footer. On submit: lookup `demoRoles`, store role + employee no. in localStorage, navigate to `rolePath(role)`.
-
-### Office (role: office)
-- `office.tsx` — layout with `<Outlet/>` + BottomNav (Home, Profile)
-- `office.index.tsx` — ScanOpsScreen (wordmark hero + 11-tile grid: Waybill Entry, Print, Departure/Arrival/Bag/Delivery/POD/Return/Handover/Exception/Rider Scan)
-- `office.menu.tsx` — HomeDashboard (compact hero, Cash Pending Settlement card, inbound stats grid, Delivery Monitor list, Sign Out at bottom)
-- `office.waybill.new.tsx` — Waybill Entry (Express/LTL tabs, e-waybill chip, two info cards, sticky Place An Order pill)
-- `office.print.tsx` — Print (Query Print / Scan Code Print tabs, empty state, fixed bottom bar with Choose All + Bluetooth + Print above BottomNav)
-- `office.scan.$type.tsx` — Departure Scan gets custom layout; other types render `StaticScanPage`
-
-### Admin (role: super_admin) — mirrors office plus tools
-- `admin.tsx` — layout + BottomNav (Home, Profile, Admin Tools)
-- `admin.index.tsx` — ScanOps grid (same as office)
-- `admin.menu.tsx` — HomeDashboard
-- `admin.tools.tsx` — 2-col tile grid: Sites, Users, Accounts, Reports, Investigations, Audit Log, Settings, Impersonate
-- `admin.waybill.new.tsx`, `admin.print.tsx`, `admin.scan.$type.tsx` — reuse office components
-- `admin.sites.tsx`, `admin.users.tsx`, `admin.accounts.tsx`, `admin.accounts.$id.tsx`, `admin.reports.tsx`, `admin.investigations.tsx`, `admin.audit.tsx`, `admin.settings.tsx`, `admin.impersonate.tsx` — CardList-based static lists/details
-
-### Shared waybill address pages
-- `waybill.sender.tsx` — Sender card (PaperPlane), sticky Confirm pill
-- `waybill.receiver.tsx` — Receiver card (Mail), sticky Confirm pill
-
-### DC (role: dc_admin)
-- `dc.tsx` — layout + BottomNav (Home, Profile)
-- `dc.index.tsx` — ScanOps grid: Arrival Scan, Departure Scan, Bag Scan, Vehicle Sealing Scan, Unsealing Scan, Exception Entry
-- `dc.menu.tsx` — DC Dashboard: wordmark hero, DC name + "DC ADMIN" badge, 4 stat cards (Parcels at DC 47, Expected Incoming 12, Outgoing Today 8, Exceptions 2), Inbound section (Yet to Arrive 3, Arrived-Pending 2), Sign Out button at bottom
-- `dc.scan.$type.tsx` — StaticScanPage (covers `departure`, `arrival`, others)
-
-### Rider (role: rider) / Driver (role: driver)
-- `rider.tsx` / `rider.index.tsx` / `rider.menu.tsx` — hero + a couple stat cards + menu CardList + Sign Out at bottom
-- `driver.tsx` / `driver.index.tsx` / `driver.menu.tsx` — same pattern
-
-## BottomNav & sticky rules
-
-- BottomNav: `fixed bottom-0 inset-x-0 z-50 bg-card border-t border-border`, active tab uses `text-primary`
-- Main content wrapper for role layouts: `pb-16` so content clears the nav
-- Sticky sub-page action bars (Place An Order, Confirm, Save, Print toolbar): `fixed inset-x-0 bottom-16 z-40`
-- SubPageHeader used on ALL non-tab sub-pages; back chevron calls router history back
-
-## Sign Out placement
-
-On every profile/dashboard route (`/office/menu`, `/admin/menu`, `/dc/menu`, `/rider/menu`, `/driver/menu`):
-- Bottom of scrollable content, above BottomNav padding
-- Divider line above
-- Full-width red ghost button: `border border-destructive text-destructive bg-transparent hover:bg-destructive/10`, label "Sign Out"
-- Click → `logout()`
-
-## Technical details
-
-- Router: rely on generated `routeTree.gen.ts`; each new route uses `createFileRoute("...")` with slash-separated path matching filename dots
-- `useNavigate`/`Link` from `@tanstack/react-router`
-- shadcn/ui already present; use `Button`, `Input`, `Select`, `Checkbox`, `Tabs`, `Card`, `Badge`
-- Icons via `lucide-react` (Package, PaperPlane→`Send`, Mail, ChevronLeft, ChevronRight, Search, Bluetooth, Settings, LogOut, etc.)
-- localStorage keys: `aliship.role`, `aliship.employeeNo`
-- Login accepts any password; if employee no. not in `demoRoles`, show inline error
-
-## Deliverables checklist
-
-1. Design tokens + system-font wordmark in `styles.css`
-2. `src/data/static.ts` with all mocks + helpers
-3. All layout primitives
-4. Login screen at `/`
-5. Office, Admin, DC, Rider, Driver route trees
-6. All sub-pages (waybill, print, scan variants, admin tools list/detail)
-7. Sign Out on every dashboard
-8. Zero console/build errors, all navigation works
+## Out of scope
+- Custom SVG logo mark (the reference has a stylized "S" with an arrow). We're staying with the ALISHIP wordmark in Arial Black italic as originally specified.
+- HomeDashboard's orange header (uses its own layout, not HeroBanner).
