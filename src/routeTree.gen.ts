@@ -40,6 +40,7 @@ import { Route as AdminDeliveryMonitorRouteImport } from './routes/admin.deliver
 import { Route as AdminCashPendingRouteImport } from './routes/admin.cash-pending'
 import { Route as AdminAuditRouteImport } from './routes/admin.audit'
 import { Route as AdminAccountsRouteImport } from './routes/admin.accounts'
+import { Route as RiderParcelIdRouteImport } from './routes/rider.parcel.$id'
 import { Route as OfficeWaybillNewRouteImport } from './routes/office.waybill.new'
 import { Route as OfficeScanTypeRouteImport } from './routes/office.scan.$type'
 import { Route as OfficeOpsSlugRouteImport } from './routes/office.ops.$slug'
@@ -204,6 +205,11 @@ const AdminAccountsRoute = AdminAccountsRouteImport.update({
   path: '/accounts',
   getParentRoute: () => AdminRoute,
 } as any)
+const RiderParcelIdRoute = RiderParcelIdRouteImport.update({
+  id: '/parcel/$id',
+  path: '/parcel/$id',
+  getParentRoute: () => RiderRoute,
+} as any)
 const OfficeWaybillNewRoute = OfficeWaybillNewRouteImport.update({
   id: '/waybill/new',
   path: '/waybill/new',
@@ -285,6 +291,7 @@ export interface FileRoutesByFullPath {
   '/office/ops/$slug': typeof OfficeOpsSlugRoute
   '/office/scan/$type': typeof OfficeScanTypeRoute
   '/office/waybill/new': typeof OfficeWaybillNewRoute
+  '/rider/parcel/$id': typeof RiderParcelIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -322,6 +329,7 @@ export interface FileRoutesByTo {
   '/office/ops/$slug': typeof OfficeOpsSlugRoute
   '/office/scan/$type': typeof OfficeScanTypeRoute
   '/office/waybill/new': typeof OfficeWaybillNewRoute
+  '/rider/parcel/$id': typeof RiderParcelIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -364,6 +372,7 @@ export interface FileRoutesById {
   '/office/ops/$slug': typeof OfficeOpsSlugRoute
   '/office/scan/$type': typeof OfficeScanTypeRoute
   '/office/waybill/new': typeof OfficeWaybillNewRoute
+  '/rider/parcel/$id': typeof RiderParcelIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -407,6 +416,7 @@ export interface FileRouteTypes {
     | '/office/ops/$slug'
     | '/office/scan/$type'
     | '/office/waybill/new'
+    | '/rider/parcel/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -444,6 +454,7 @@ export interface FileRouteTypes {
     | '/office/ops/$slug'
     | '/office/scan/$type'
     | '/office/waybill/new'
+    | '/rider/parcel/$id'
   id:
     | '__root__'
     | '/'
@@ -485,6 +496,7 @@ export interface FileRouteTypes {
     | '/office/ops/$slug'
     | '/office/scan/$type'
     | '/office/waybill/new'
+    | '/rider/parcel/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -716,6 +728,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminAccountsRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/rider/parcel/$id': {
+      id: '/rider/parcel/$id'
+      path: '/parcel/$id'
+      fullPath: '/rider/parcel/$id'
+      preLoaderRoute: typeof RiderParcelIdRouteImport
+      parentRoute: typeof RiderRoute
+    }
     '/office/waybill/new': {
       id: '/office/waybill/new'
       path: '/waybill/new'
@@ -872,12 +891,14 @@ interface RiderRouteChildren {
   RiderHistoryRoute: typeof RiderHistoryRoute
   RiderMenuRoute: typeof RiderMenuRoute
   RiderIndexRoute: typeof RiderIndexRoute
+  RiderParcelIdRoute: typeof RiderParcelIdRoute
 }
 
 const RiderRouteChildren: RiderRouteChildren = {
   RiderHistoryRoute: RiderHistoryRoute,
   RiderMenuRoute: RiderMenuRoute,
   RiderIndexRoute: RiderIndexRoute,
+  RiderParcelIdRoute: RiderParcelIdRoute,
 }
 
 const RiderRouteWithChildren = RiderRoute._addFileChildren(RiderRouteChildren)
