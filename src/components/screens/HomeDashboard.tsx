@@ -33,7 +33,7 @@ export function HomeDashboard({ role }: { role: Role }) {
   return (
     <PageLayout withBottomNav>
       {/* Orange header with giant A watermark */}
-      <div className="relative overflow-hidden bg-primary px-4 pt-5 pb-24 text-primary-foreground">
+      <div className="relative overflow-hidden bg-primary px-4 pt-4 pb-16 text-primary-foreground">
         <span
           aria-hidden
           className="pointer-events-none absolute -right-4 -top-6 select-none font-black italic leading-none text-primary-foreground/10"
@@ -59,7 +59,7 @@ export function HomeDashboard({ role }: { role: Role }) {
       </div>
 
       {/* Cash pending overlap card */}
-      <div className="-mt-16 px-4">
+      <div className="-mt-10 px-4">
         <Link to={`${base}/cash-pending`} className="flex items-center justify-between rounded-2xl bg-card p-4 shadow-md">
           <div>
             <div className="text-sm text-muted-foreground">Cash Pending Settlement</div>
