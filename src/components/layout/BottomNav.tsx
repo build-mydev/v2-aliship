@@ -31,12 +31,8 @@ export function BottomNav({ role }: { role: Role }) {
       { to: "/rider", label: "Home", icon: Home },
       { to: "/rider/menu", label: "Profile", icon: User },
     ];
-  } else if (role === "driver") {
-    tabs = [
-      { to: "/driver", label: "Home", icon: Home },
-      { to: "/driver/menu", label: "Profile", icon: User },
-    ];
   }
+
 
   if (tabs.length === 0) return null;
 
