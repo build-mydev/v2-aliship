@@ -26,11 +26,9 @@ export function rolePath(role: Role): string {
 export function siteForRole(role: Role) { return roleProfiles[role].site; }
 
 export function logout() {
-  try {
-    localStorage.removeItem("aliship.role");
-    localStorage.removeItem("aliship.employeeNo");
-  } catch {}
-  window.location.href = "/";
+  import("@/integrations/supabase/client")
+    .then(({ supabase }) => supabase.auth.signOut())
+    .finally(() => { window.location.href = "/"; });
 }
 
 export function getCurrentRole(): Role | null {
