@@ -119,16 +119,20 @@
   }
 
   html, body {
-    font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    font-family: "DM Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
     background-color: var(--color-background);
     color: var(--color-foreground);
     -webkit-font-smoothing: antialiased;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: "Urbanist", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   }
 }
 
 @layer utilities {
   .font-wordmark {
-    font-family: "Arial Black", "Helvetica Neue", Arial, sans-serif;
+    font-family: "Urbanist", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
     font-weight: 900;
     font-style: italic;
     letter-spacing: -0.02em;
