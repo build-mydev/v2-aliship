@@ -4,6 +4,8 @@ import type { Role } from "@/data/static";
 
 interface Tab { to: string; label: string; icon: LucideIcon }
 
+
+
 export function BottomNav({ role }: { role: Role }) {
   const pathname = useRouterState({ select: s => s.location.pathname });
 
