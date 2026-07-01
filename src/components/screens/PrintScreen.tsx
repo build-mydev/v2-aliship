@@ -70,8 +70,10 @@ export function PrintScreen() {
             </div>
             <div className="mt-3 rounded-2xl bg-card p-3 shadow-sm">
               <div className="flex items-center gap-2">
-                <input placeholder="Scan or enter" className="flex-1 bg-transparent py-1 text-sm outline-none" />
-                <ScanLine className="h-4 w-4 text-primary" />
+                <input value={scanValue} onChange={e => setScanValue(e.target.value)} placeholder="Scan or enter" className="flex-1 bg-transparent py-1 text-sm outline-none" />
+                <button type="button" onClick={() => setScanning("scan")} aria-label="Open scanner" className="text-primary active:scale-95">
+                  <ScanLine className="h-4 w-4" />
+                </button>
               </div>
             </div>
           </>
@@ -81,6 +83,13 @@ export function PrintScreen() {
 
         <div className="mt-16 text-center text-sm text-muted-foreground">No Results Found.</div>
       </div>
+
+      <BarcodeScannerSheet
+        open={scanning !== null}
+        onClose={() => setScanning(null)}
+        onDetected={v => (scanning === "query" ? setQueryValue(v) : setScanValue(v))}
+        title="Scan Waybill"
+      />
 
       <StickyActionBar>
         <div className="flex items-center gap-2">
