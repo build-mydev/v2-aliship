@@ -59,7 +59,7 @@ export function HomeDashboard({ role }: { role: Role }) {
       </div>
 
       {/* Cash pending overlap card */}
-      <div className="-mt-16 px-4">
+      <div className="-mt-10 px-4">
         <Link to={`${base}/cash-pending`} className="flex items-center justify-between rounded-2xl bg-card p-4 shadow-md">
           <div>
             <div className="text-sm text-muted-foreground">Cash Pending Settlement</div>
