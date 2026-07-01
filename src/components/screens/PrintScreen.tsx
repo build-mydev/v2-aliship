@@ -44,8 +44,10 @@ export function PrintScreen() {
               <div className="rounded-2xl bg-card p-3 shadow-sm">
                 <label className="block text-[10px] font-medium uppercase tracking-wide text-muted-foreground">Waybill No.</label>
                 <div className="flex items-center gap-2">
-                  <input placeholder="Scan" className="flex-1 bg-transparent py-1 text-sm outline-none" />
-                  <ScanLine className="h-4 w-4 text-primary" />
+                  <input value={queryValue} onChange={e => setQueryValue(e.target.value)} placeholder="Scan" className="flex-1 bg-transparent py-1 text-sm outline-none" />
+                  <button type="button" onClick={() => setScanning("query")} aria-label="Open scanner" className="text-primary active:scale-95">
+                    <ScanLine className="h-4 w-4" />
+                  </button>
                 </div>
               </div>
             </div>
