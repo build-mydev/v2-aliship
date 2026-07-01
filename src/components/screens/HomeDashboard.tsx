@@ -32,16 +32,9 @@ export function HomeDashboard({ role }: { role: Role }) {
 
   return (
     <PageLayout withBottomNav>
-      {/* Orange header with giant A watermark */}
-      <div className="relative overflow-hidden bg-primary px-4 pt-4 pb-8 text-primary-foreground">
-        <span
-          aria-hidden
-          className="pointer-events-none absolute -right-4 -top-4 select-none font-black italic leading-none text-primary-foreground/10"
-          style={{ fontSize: "8rem", fontFamily: "'Arial Black', system-ui, sans-serif" }}
-        >
-          A
-        </span>
-        <div className="relative flex items-start justify-between">
+      {/* Orange header */}
+      <div className="bg-primary px-4 pt-4 pb-6 text-primary-foreground">
+        <div className="flex items-start justify-between">
           <div className="flex items-start gap-3">
             <div className="flex h-14 w-20 items-center justify-center overflow-hidden rounded-md bg-primary-foreground/10 text-2xl">
               🇰🇪
@@ -59,17 +52,27 @@ export function HomeDashboard({ role }: { role: Role }) {
       </div>
 
       {/* Cash pending overlap card */}
-      <div className="-mt-8 px-4">
-        <Link to={`${base}/cash-pending`} className="flex items-center justify-between rounded-2xl bg-card p-4 shadow-md">
+      <div className="-mt-4 px-4">
+        <Link to={`${base}/cash-pending`} className="relative flex items-center justify-between overflow-hidden rounded-2xl bg-card p-4 shadow-md">
           <div>
             <div className="text-sm text-muted-foreground">Cash Pending Settlement</div>
             <div className="mt-1 text-2xl font-bold text-primary">
               {dashboardCounts.cashPendingSettlement.toLocaleString()}
             </div>
           </div>
-          <span className="flex items-center text-sm text-muted-foreground">
-            View Details <ChevronRight className="h-4 w-4" />
-          </span>
+          <div className="flex flex-col items-end gap-1">
+            <span className="flex items-center text-sm text-muted-foreground">
+              View Details <ChevronRight className="h-4 w-4" />
+            </span>
+            <svg width="64" height="40" viewBox="0 0 64 40" fill="none" className="mt-1 opacity-60">
+              <ellipse cx="46" cy="33" rx="8" ry="5" fill="currentColor" className="text-primary/30" />
+              <circle cx="14" cy="30" r="5" stroke="currentColor" strokeWidth="2" className="text-primary" />
+              <circle cx="46" cy="30" r="5" stroke="currentColor" strokeWidth="2" className="text-primary" />
+              <path d="M8 30h12l6-12h16l4 8h4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-primary" />
+              <circle cx="28" cy="14" r="4" fill="currentColor" className="text-primary" />
+              <path d="M28 18v4l-2 4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" className="text-primary" />
+            </svg>
+          </div>
         </Link>
       </div>
 
