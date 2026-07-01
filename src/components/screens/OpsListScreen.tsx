@@ -441,11 +441,16 @@ export function CashPendingScreen() {
 /* ---------------- Delivery Monitor with filter sheet ---------------- */
 
 const RIDERS = [
-  { name: "Steve Kahindi",       vol: 40, del: 3,  un: 37, noExc: 25, noCall: 18, cr: 7.5 },
-  { name: "Erick Kilole Mweva",  vol: 63, del: 8,  un: 55, noExc: 48, noCall: 52, cr: 12.7 },
-  { name: "KYALO KALULYA",       vol: 24, del: 17, un: 7,  noExc: 7,  noCall: 7,  cr: 70.83 },
-  { name: "Wilfred Muriithi",    vol: 12, del: 11, un: 1,  noExc: 1,  noCall: 1,  cr: 91.67 },
-  { name: "ELVIS KISIENYA KISIA",vol: 1,  del: 1,  un: 0,  noExc: 0,  noCall: 0,  cr: 100 },
+  { name: "Steve Kahindi",       vol: 40, del: 3,  un: 37, noExc: 25, noCall: 18, cr: 7.5,
+    unWaybills: ["KE010114000012","KE010114000045","KE010114000078","KE010114000091","KE010114000102"] },
+  { name: "Erick Kilole Mweva",  vol: 63, del: 8,  un: 55, noExc: 48, noCall: 52, cr: 12.7,
+    unWaybills: ["KE010114220011","KE010114220034","KE010114220056"] },
+  { name: "KYALO KALULYA",       vol: 24, del: 17, un: 7,  noExc: 7,  noCall: 7,  cr: 70.83,
+    unWaybills: ["KKE103148042615","KKE103148343541"] },
+  { name: "Wilfred Muriithi",    vol: 12, del: 11, un: 1,  noExc: 1,  noCall: 1,  cr: 91.67,
+    unWaybills: ["KE010114470047"] },
+  { name: "ELVIS KISIENYA KISIA",vol: 1,  del: 1,  un: 0,  noExc: 0,  noCall: 0,  cr: 100,
+    unWaybills: [] },
 ];
 
 export function DeliveryMonitorScreen() {
@@ -453,6 +458,7 @@ export function DeliveryMonitorScreen() {
   const [range, setRange] = useState<"today" | "history">("today");
   const [cod, setCod] = useState<"yes" | "no" | null>(null);
   const [ret, setRet] = useState<"yes" | "no" | null>(null);
+  const [expanded, setExpanded] = useState<Record<number, boolean>>({});
 
   return (
     <PageLayout>
@@ -464,30 +470,58 @@ export function DeliveryMonitorScreen() {
       </div>
 
       <div className="pb-8">
-        {RIDERS.map((r, i) => (
-          <div key={i} className="border-b border-border bg-card px-4 py-4">
-            <div className="flex items-baseline justify-between">
-              <div className="text-sm font-bold">
-                <span>07-01:</span> <span className="ml-2">{r.name}</span>
-              </div>
-              <div className="text-sm">CR: <span className="font-bold text-primary">{r.cr.toFixed(2)}%</span></div>
-            </div>
-            <div className="mt-3 grid grid-cols-5 gap-1 text-center text-xs">
-              {[
-                ["Delivery Volume", r.vol],
-                ["Delivered", r.del],
-                ["Un-Delivered", r.un],
-                ["No Exception", r.noExc],
-                ["No Call Record", r.noCall],
-              ].map(([l, v]) => (
-                <div key={l as string}>
-                  <div className="text-muted-foreground">{l}</div>
-                  <div className="mt-1 text-sm font-semibold">{v}</div>
+        {RIDERS.map((r, i) => {
+          const isOpen = !!expanded[i];
+          const canOpen = r.un > 0;
+          return (
+            <div key={i} className="border-b border-border bg-card px-4 py-4">
+              <div className="flex items-baseline justify-between">
+                <div className="text-sm font-bold">
+                  <span>07-01:</span> <span className="ml-2">{r.name}</span>
                 </div>
-              ))}
+                <div className="text-sm">CR: <span className="font-bold text-primary">{r.cr.toFixed(2)}%</span></div>
+              </div>
+              <div className="mt-3 grid grid-cols-5 gap-1 text-center text-xs">
+                {([
+                  ["Delivery Volume", r.vol, false],
+                  ["Delivered", r.del, false],
+                  ["Un-Delivered", r.un, true],
+                  ["No Exception", r.noExc, false],
+                  ["No Call Record", r.noCall, false],
+                ] as [string, number, boolean][]).map(([l, v, clickable]) => {
+                  const active = clickable && canOpen;
+                  return (
+                    <button
+                      key={l}
+                      type="button"
+                      disabled={!active}
+                      onClick={() => active && setExpanded(s => ({ ...s, [i]: !s[i] }))}
+                      className="text-center disabled:cursor-default"
+                    >
+                      <div className={active ? "text-primary" : "text-muted-foreground"}>{l}</div>
+                      <div className={"mt-1 text-sm font-semibold " + (active ? "text-primary underline" : "")}>{v}</div>
+                    </button>
+                  );
+                })}
+              </div>
+              {isOpen && r.unWaybills.length > 0 && (
+                <div className="mt-3 divide-y divide-border border-t border-border">
+                  {r.unWaybills.map(w => (
+                    <Link
+                      key={w}
+                      to="/office/ops/$slug"
+                      params={{ slug: "track" }}
+                      className="flex items-center justify-between py-3 text-sm font-semibold text-primary"
+                    >
+                      <span>{w}</span>
+                      <ChevronRight className="h-4 w-4" />
+                    </Link>
+                  ))}
+                </div>
+              )}
             </div>
-          </div>
-        ))}
+          );
+        })}
         <div className="py-4 text-center text-xs text-muted-foreground">No More Data</div>
       </div>
 
