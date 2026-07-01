@@ -301,16 +301,94 @@ function KV({ k, v }: { k: string; v: React.ReactNode }) {
 
 const CONFIG: Record<string, { title: string; placeholder?: string; toast?: boolean }> = {
   "pending-pickup": { title: "Pending Pickup", placeholder: "Waybill No. / Last 4 Digits of Telephone / Receiver." },
-  "out-for-delivery": { title: "Out For Delivery List", placeholder: "Waybill No. / Last 4 Digits of Telephone / Receiver." },
   "today-exceptions": { title: "Today's Exceptions", placeholder: "Waybill No. / Last 4 Digits of Telephone / Receiver.", toast: true },
   "self-pickup-search": { title: "Self Pickup Search", placeholder: "Waybill number / Pickup code /last 4 digits of phone number/receiver" },
 };
+
+function OutForDeliveryScreen() {
+  const [q, setQ] = useState("");
+  const record = {
+    waybill: "KE010114470047",
+    attempts: 2,
+    receiver: "Ali Mwamassah",
+    time: "2026-07-01 09:53:01",
+    phone: "+254702776145",
+    calls: 0,
+    item: "mosquito killer lamp",
+    address: "NTSA Miritini , Miritini, Jomvu Mombasa , Kenya\nMombasa Jomvu Kenya",
+  };
+  return (
+    <PageLayout>
+      <SubPageHeader title="Out For Delivery List" />
+      <div className="bg-card px-4 pt-4 pb-5 shadow-sm">
+        <div className="flex items-center gap-2 rounded-xl border border-border px-3 py-3">
+          <input
+            value={q}
+            onChange={e => setQ(e.target.value)}
+            placeholder="Waybill No. / Last 4 Digits of Telephone / Receiver."
+            className="flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground"
+          />
+          <ScanLine className="h-5 w-5 text-muted-foreground" />
+        </div>
+        <div className="mt-4 flex justify-center">
+          <button className="rounded-full bg-primary/40 px-10 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm">
+            Search
+          </button>
+        </div>
+      </div>
+
+      <div className="mt-2 bg-card px-4 pt-4 pb-5 shadow-sm">
+        <div className="flex items-start justify-between">
+          <div className="text-base font-bold text-primary">{record.waybill}</div>
+          <div className="text-sm font-bold">Delivery Attempts: <span>{record.attempts}</span></div>
+        </div>
+        <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-muted-foreground">
+          <span className="flex items-center gap-1"><User className="h-4 w-4" />{record.receiver}</span>
+          <span className="flex items-center gap-1"><Calendar className="h-4 w-4" />{record.time}</span>
+        </div>
+        <div className="mt-2 flex flex-wrap items-center gap-x-2 gap-y-2 text-xs">
+          <Phone className="h-4 w-4 text-muted-foreground" />
+          <span className="font-semibold text-primary">{record.phone}</span>
+          <span className="text-muted-foreground">/</span>
+          <span className="font-semibold text-primary">{record.phone}</span>
+          <span className="text-foreground">Number of calls:{record.calls}</span>
+        </div>
+        <div className="mt-2 flex items-center gap-2 text-xs text-muted-foreground">
+          <Box className="h-4 w-4" />
+          <span>{record.item}</span>
+        </div>
+        <button className="mt-3 flex w-full items-start gap-2 rounded-lg bg-muted/50 p-3 text-left text-xs text-muted-foreground">
+          <span className="flex-1 whitespace-pre-line">{record.address}</span>
+          <ChevronRight className="mt-0.5 h-4 w-4 shrink-0" />
+        </button>
+
+        <div className="mt-4 flex justify-center gap-4">
+          <Link
+            to="/office/scan/$type"
+            params={{ type: "exception-entry" }}
+            className="rounded-full border border-primary px-6 py-2 text-sm font-semibold text-primary"
+          >
+            Exception Entry
+          </Link>
+          <Link
+            to="/office/scan/$type"
+            params={{ type: "delivered" }}
+            className="rounded-full border border-primary px-6 py-2 text-sm font-semibold text-primary"
+          >
+            Delivered Scan
+          </Link>
+        </div>
+      </div>
+    </PageLayout>
+  );
+}
 
 export function OpsListScreen({ slug }: { slug: string }) {
   if (slug === "yet-to-arrive") return <YetToArriveScreen />;
   if (slug === "arrived-pending") return <ArrivedPendingScreen />;
   if (slug === "work-log") return <WorkLogScreen />;
   if (slug === "track") return <TrackScreen />;
+  if (slug === "out-for-delivery") return <OutForDeliveryScreen />;
 
   const cfg = CONFIG[slug] ?? { title: slug, placeholder: "Search…" };
   return (
@@ -321,6 +399,7 @@ export function OpsListScreen({ slug }: { slug: string }) {
     </PageLayout>
   );
 }
+
 
 /* ---------------- Cash Pending (unchanged simple) ---------------- */
 
