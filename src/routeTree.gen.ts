@@ -9,38 +9,186 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as RiderRouteImport } from './routes/rider'
+import { Route as OfficeRouteImport } from './routes/office'
+import { Route as DriverRouteImport } from './routes/driver'
+import { Route as DcRouteImport } from './routes/dc'
+import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as OfficeIndexRouteImport } from './routes/office.index'
+import { Route as AdminIndexRouteImport } from './routes/admin.index'
+import { Route as OfficeMenuRouteImport } from './routes/office.menu'
+import { Route as AdminMenuRouteImport } from './routes/admin.menu'
 
+const RiderRoute = RiderRouteImport.update({
+  id: '/rider',
+  path: '/rider',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OfficeRoute = OfficeRouteImport.update({
+  id: '/office',
+  path: '/office',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DriverRoute = DriverRouteImport.update({
+  id: '/driver',
+  path: '/driver',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DcRoute = DcRouteImport.update({
+  id: '/dc',
+  path: '/dc',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const OfficeIndexRoute = OfficeIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => OfficeRoute,
+} as any)
+const AdminIndexRoute = AdminIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AdminRoute,
+} as any)
+const OfficeMenuRoute = OfficeMenuRouteImport.update({
+  id: '/menu',
+  path: '/menu',
+  getParentRoute: () => OfficeRoute,
+} as any)
+const AdminMenuRoute = AdminMenuRouteImport.update({
+  id: '/menu',
+  path: '/menu',
+  getParentRoute: () => AdminRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRouteWithChildren
+  '/dc': typeof DcRoute
+  '/driver': typeof DriverRoute
+  '/office': typeof OfficeRouteWithChildren
+  '/rider': typeof RiderRoute
+  '/admin/menu': typeof AdminMenuRoute
+  '/office/menu': typeof OfficeMenuRoute
+  '/admin/': typeof AdminIndexRoute
+  '/office/': typeof OfficeIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/dc': typeof DcRoute
+  '/driver': typeof DriverRoute
+  '/rider': typeof RiderRoute
+  '/admin/menu': typeof AdminMenuRoute
+  '/office/menu': typeof OfficeMenuRoute
+  '/admin': typeof AdminIndexRoute
+  '/office': typeof OfficeIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/admin': typeof AdminRouteWithChildren
+  '/dc': typeof DcRoute
+  '/driver': typeof DriverRoute
+  '/office': typeof OfficeRouteWithChildren
+  '/rider': typeof RiderRoute
+  '/admin/menu': typeof AdminMenuRoute
+  '/office/menu': typeof OfficeMenuRoute
+  '/admin/': typeof AdminIndexRoute
+  '/office/': typeof OfficeIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/admin'
+    | '/dc'
+    | '/driver'
+    | '/office'
+    | '/rider'
+    | '/admin/menu'
+    | '/office/menu'
+    | '/admin/'
+    | '/office/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/dc'
+    | '/driver'
+    | '/rider'
+    | '/admin/menu'
+    | '/office/menu'
+    | '/admin'
+    | '/office'
+  id:
+    | '__root__'
+    | '/'
+    | '/admin'
+    | '/dc'
+    | '/driver'
+    | '/office'
+    | '/rider'
+    | '/admin/menu'
+    | '/office/menu'
+    | '/admin/'
+    | '/office/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AdminRoute: typeof AdminRouteWithChildren
+  DcRoute: typeof DcRoute
+  DriverRoute: typeof DriverRoute
+  OfficeRoute: typeof OfficeRouteWithChildren
+  RiderRoute: typeof RiderRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/rider': {
+      id: '/rider'
+      path: '/rider'
+      fullPath: '/rider'
+      preLoaderRoute: typeof RiderRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/office': {
+      id: '/office'
+      path: '/office'
+      fullPath: '/office'
+      preLoaderRoute: typeof OfficeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/driver': {
+      id: '/driver'
+      path: '/driver'
+      fullPath: '/driver'
+      preLoaderRoute: typeof DriverRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dc': {
+      id: '/dc'
+      path: '/dc'
+      fullPath: '/dc'
+      preLoaderRoute: typeof DcRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -48,11 +196,69 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/office/': {
+      id: '/office/'
+      path: '/'
+      fullPath: '/office/'
+      preLoaderRoute: typeof OfficeIndexRouteImport
+      parentRoute: typeof OfficeRoute
+    }
+    '/admin/': {
+      id: '/admin/'
+      path: '/'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AdminIndexRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/office/menu': {
+      id: '/office/menu'
+      path: '/menu'
+      fullPath: '/office/menu'
+      preLoaderRoute: typeof OfficeMenuRouteImport
+      parentRoute: typeof OfficeRoute
+    }
+    '/admin/menu': {
+      id: '/admin/menu'
+      path: '/menu'
+      fullPath: '/admin/menu'
+      preLoaderRoute: typeof AdminMenuRouteImport
+      parentRoute: typeof AdminRoute
+    }
   }
 }
 
+interface AdminRouteChildren {
+  AdminMenuRoute: typeof AdminMenuRoute
+  AdminIndexRoute: typeof AdminIndexRoute
+}
+
+const AdminRouteChildren: AdminRouteChildren = {
+  AdminMenuRoute: AdminMenuRoute,
+  AdminIndexRoute: AdminIndexRoute,
+}
+
+const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
+
+interface OfficeRouteChildren {
+  OfficeMenuRoute: typeof OfficeMenuRoute
+  OfficeIndexRoute: typeof OfficeIndexRoute
+}
+
+const OfficeRouteChildren: OfficeRouteChildren = {
+  OfficeMenuRoute: OfficeMenuRoute,
+  OfficeIndexRoute: OfficeIndexRoute,
+}
+
+const OfficeRouteWithChildren =
+  OfficeRoute._addFileChildren(OfficeRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AdminRoute: AdminRouteWithChildren,
+  DcRoute: DcRoute,
+  DriverRoute: DriverRoute,
+  OfficeRoute: OfficeRouteWithChildren,
+  RiderRoute: RiderRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
