@@ -1,42 +1,94 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { PageLayout } from "@/components/layout/PageLayout";
 import { SubPageHeader } from "@/components/layout/SubPageHeader";
-import { dashboardCounts } from "@/data/static";
+import { reportSummary, volumeBySite, creditAging, riderPerformance } from "@/data/static";
+import { Package, DollarSign, CheckCircle2, AlertTriangle } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { StatCard } from "./admin.accounts";
 
-export const Route = createFileRoute("/admin/reports")({ component: () => (
-  <PageLayout withBottomNav>
-    <SubPageHeader title="Reports" />
-    <div className="space-y-3 px-4 py-4">
-      <div className="grid grid-cols-2 gap-2">
-        <StatCard label="Out for Delivery" value={dashboardCounts.outForDelivery} />
-        <StatCard label="Exceptions" value={dashboardCounts.todayExceptions} />
-        <StatCard label="Pending Pickup" value={dashboardCounts.pendingPickup} />
-        <StatCard label="Yet to Arrive" value={dashboardCounts.yetToArrive} />
-      </div>
-      <div className="rounded-2xl bg-card p-4 shadow-sm">
-        <div className="mb-2 text-sm font-semibold">Volume this week</div>
-        <div className="flex h-32 items-end gap-2">
-          {[40, 65, 50, 80, 72, 90, 55].map((v, i) => (
-            <div key={i} style={{ height: `${v}%` }} className="flex-1 rounded-t bg-primary/70" />
-          ))}
-        </div>
-      </div>
-      <div className="rounded-2xl bg-card p-4 shadow-sm">
-        <div className="mb-2 text-sm font-semibold">On-time delivery</div>
-        <div className="h-2 overflow-hidden rounded-full bg-muted">
-          <div className="h-full w-[82%] bg-primary" />
-        </div>
-        <div className="mt-1 text-xs text-muted-foreground">82% this week</div>
-      </div>
-    </div>
-  </PageLayout>
-) });
+export const Route = createFileRoute("/admin/reports")({ component: AdminReports });
 
-function StatCard({ label, value }: { label: string; value: number }) {
+function AdminReports() {
+  const maxVol = Math.max(...volumeBySite.map(v => v.parcels));
   return (
-    <div className="rounded-2xl bg-card p-4 shadow-sm">
-      <div className="text-2xl font-bold text-primary">{value}</div>
-      <div className="text-xs text-muted-foreground">{label}</div>
-    </div>
+    <PageLayout withBottomNav>
+      <SubPageHeader title="Reports" />
+      <div className="space-y-4 px-4 pt-4 pb-24">
+        <div className="flex gap-2">
+          <select className="h-11 flex-1 rounded-xl border border-border bg-card px-3 text-sm">
+            <option>Today</option><option>Last 7 Days</option><option>This Month</option>
+          </select>
+          <select className="h-11 flex-1 rounded-xl border border-border bg-card px-3 text-sm">
+            <option>All Sites</option><option>Mombasa CBD</option><option>Nairobi CBD</option>
+          </select>
+        </div>
+
+        <div>
+          <div className="mb-1 px-1 text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">Summary</div>
+          <div className="grid grid-cols-2 gap-2">
+            <StatCard icon={Package} label="Total Parcels Today" value={String(reportSummary.totalParcels)} />
+            <StatCard icon={DollarSign} label="Revenue Today" value={"KES " + reportSummary.revenue.toLocaleString()} />
+            <StatCard icon={CheckCircle2} label="Delivered Today" value={String(reportSummary.delivered)} />
+            <StatCard icon={AlertTriangle} label="Exceptions Today" value={String(reportSummary.exceptions)} />
+          </div>
+        </div>
+
+        <div>
+          <div className="mb-1 px-1 text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">Volume by Site</div>
+          <div className="rounded-2xl bg-card p-4 shadow-sm">
+            {volumeBySite.map(v => (
+              <div key={v.site} className="mb-3 last:mb-0">
+                <div className="mb-1 flex justify-between text-xs">
+                  <span className="font-medium">{v.site}</span>
+                  <span className="text-muted-foreground">{v.parcels} parcels</span>
+                </div>
+                <div className="h-2 rounded-full bg-muted">
+                  <div className="h-2 rounded-full bg-primary" style={{ width: `${(v.parcels / maxVol) * 100}%` }} />
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div>
+          <div className="mb-1 px-1 text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">Credit Accounts Aging</div>
+          <div className="divide-y divide-border rounded-2xl bg-card shadow-sm">
+            {creditAging.map(c => (
+              <div key={c.id} className="flex items-center gap-2 p-4">
+                <div className="min-w-0 flex-1">
+                  <div className="text-sm font-semibold">{c.id} - {c.company}</div>
+                  <div className={"text-xs font-bold " + (c.amount < 0 ? "text-destructive" : "text-muted-foreground")}>
+                    {c.amount < 0 ? "-" : ""}KES {Math.abs(c.amount).toLocaleString()}
+                  </div>
+                </div>
+                <span className={"rounded-full px-2 py-0.5 text-[10px] font-semibold " + (c.tone === "danger" ? "bg-destructive/15 text-destructive" : "bg-emerald-100 text-emerald-700")}>{c.badge}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div>
+          <div className="mb-1 px-1 text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">Rider Performance</div>
+          <div className="rounded-2xl bg-card p-4 shadow-sm">
+            {riderPerformance.map(r => {
+              const pct = Math.round((r.delivered / r.total) * 100);
+              return (
+                <div key={r.name} className="mb-3 last:mb-0">
+                  <div className="mb-1 flex justify-between text-xs">
+                    <span className="font-medium">{r.name}</span>
+                    <span className="text-muted-foreground">{r.delivered}/{r.total} ({pct}%)</span>
+                  </div>
+                  <div className="h-2 rounded-full bg-muted">
+                    <div className="h-2 rounded-full bg-primary" style={{ width: `${pct}%` }} />
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        <Button variant="outline" className="w-full rounded-full border-primary text-primary hover:bg-primary/10">Export Report</Button>
+      </div>
+    </PageLayout>
   );
 }
