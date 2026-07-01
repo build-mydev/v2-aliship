@@ -440,17 +440,42 @@ export function CashPendingScreen() {
 
 /* ---------------- Delivery Monitor with filter sheet ---------------- */
 
-const RIDERS = [
-  { name: "Steve Kahindi",       vol: 40, del: 3,  un: 37, noExc: 25, noCall: 18, cr: 7.5,
-    unWaybills: ["KE010114000012","KE010114000045","KE010114000078","KE010114000091","KE010114000102"] },
-  { name: "Erick Kilole Mweva",  vol: 63, del: 8,  un: 55, noExc: 48, noCall: 52, cr: 12.7,
-    unWaybills: ["KE010114220011","KE010114220034","KE010114220056"] },
-  { name: "KYALO KALULYA",       vol: 24, del: 17, un: 7,  noExc: 7,  noCall: 7,  cr: 70.83,
-    unWaybills: ["KKE103148042615","KKE103148343541"] },
-  { name: "Wilfred Muriithi",    vol: 12, del: 11, un: 1,  noExc: 1,  noCall: 1,  cr: 91.67,
-    unWaybills: ["KE010114470047"] },
-  { name: "ELVIS KISIENYA KISIA",vol: 1,  del: 1,  un: 0,  noExc: 0,  noCall: 0,  cr: 100,
-    unWaybills: [] },
+type Cat = "del" | "un" | "noExc" | "noCall";
+
+const RIDERS: Array<{
+  name: string; vol: number; del: number; un: number; noExc: number; noCall: number; cr: number;
+  waybills: Record<Cat, string[]>;
+}> = [
+  { name: "Steve Kahindi", vol: 40, del: 3, un: 37, noExc: 25, noCall: 18, cr: 7.5,
+    waybills: {
+      del:    ["KE010114000001","KE010114000002","KE010114000003"],
+      un:     ["KE010114000012","KE010114000045","KE010114000078","KE010114000091","KE010114000102"],
+      noExc:  ["KE010114000201","KE010114000202","KE010114000203","KE010114000204","KE010114000205"],
+      noCall: ["KE010114000301","KE010114000302","KE010114000303","KE010114000304","KE010114000305"],
+    } },
+  { name: "Erick Kilole Mweva", vol: 63, del: 8, un: 55, noExc: 48, noCall: 52, cr: 12.7,
+    waybills: {
+      del:    ["KE010114210001","KE010114210002","KE010114210003","KE010114210004","KE010114210005"],
+      un:     ["KE010114220011","KE010114220034","KE010114220056","KE010114220078","KE010114220091"],
+      noExc:  ["KE010114230011","KE010114230022","KE010114230033","KE010114230044","KE010114230055"],
+      noCall: ["KE010114240011","KE010114240022","KE010114240033","KE010114240044","KE010114240055"],
+    } },
+  { name: "KYALO KALULYA", vol: 24, del: 17, un: 7, noExc: 7, noCall: 7, cr: 70.83,
+    waybills: {
+      del:    ["KKE103148100001","KKE103148100002","KKE103148100003","KKE103148100004","KKE103148100005"],
+      un:     ["KKE103148042615","KKE103148343541"],
+      noExc:  ["KKE103148200001","KKE103148200002","KKE103148200003"],
+      noCall: ["KKE103148300001","KKE103148300002","KKE103148300003"],
+    } },
+  { name: "Wilfred Muriithi", vol: 12, del: 11, un: 1, noExc: 1, noCall: 1, cr: 91.67,
+    waybills: {
+      del:    ["KE010114400001","KE010114400002","KE010114400003","KE010114400004","KE010114400005"],
+      un:     ["KE010114470047"],
+      noExc:  ["KE010114480001"],
+      noCall: ["KE010114490001"],
+    } },
+  { name: "ELVIS KISIENYA KISIA", vol: 1, del: 1, un: 0, noExc: 0, noCall: 0, cr: 100,
+    waybills: { del: ["KE010114500001"], un: [], noExc: [], noCall: [] } },
 ];
 
 export function DeliveryMonitorScreen() {
@@ -458,7 +483,7 @@ export function DeliveryMonitorScreen() {
   const [range, setRange] = useState<"today" | "history">("today");
   const [cod, setCod] = useState<"yes" | "no" | null>(null);
   const [ret, setRet] = useState<"yes" | "no" | null>(null);
-  const [expanded, setExpanded] = useState<Record<number, boolean>>({});
+  const [expanded, setExpanded] = useState<Record<number, Cat | null>>({});
 
   return (
     <PageLayout>
@@ -471,8 +496,8 @@ export function DeliveryMonitorScreen() {
 
       <div className="pb-8">
         {RIDERS.map((r, i) => {
-          const isOpen = !!expanded[i];
-          const canOpen = r.un > 0;
+          const activeCat = expanded[i] ?? null;
+          const list = activeCat ? r.waybills[activeCat] : [];
           return (
             <div key={i} className="border-b border-border bg-card px-4 py-4">
               <div className="flex items-baseline justify-between">
@@ -483,30 +508,31 @@ export function DeliveryMonitorScreen() {
               </div>
               <div className="mt-3 grid grid-cols-5 gap-1 text-center text-xs">
                 {([
-                  ["Delivery Volume", r.vol, false],
-                  ["Delivered", r.del, false],
-                  ["Un-Delivered", r.un, true],
-                  ["No Exception", r.noExc, false],
-                  ["No Call Record", r.noCall, false],
-                ] as [string, number, boolean][]).map(([l, v, clickable]) => {
-                  const active = clickable && canOpen;
+                  ["Delivery Volume", r.vol, null],
+                  ["Delivered", r.del, "del"],
+                  ["Un-Delivered", r.un, "un"],
+                  ["No Exception", r.noExc, "noExc"],
+                  ["No Call Record", r.noCall, "noCall"],
+                ] as [string, number, Cat | null][]).map(([l, v, cat]) => {
+                  const clickable = cat !== null && v > 0;
+                  const isActive = cat !== null && activeCat === cat;
                   return (
                     <button
                       key={l}
                       type="button"
-                      disabled={!active}
-                      onClick={() => active && setExpanded(s => ({ ...s, [i]: !s[i] }))}
+                      disabled={!clickable}
+                      onClick={() => clickable && setExpanded(s => ({ ...s, [i]: s[i] === cat ? null : cat }))}
                       className="text-center disabled:cursor-default"
                     >
-                      <div className={active ? "text-primary" : "text-muted-foreground"}>{l}</div>
-                      <div className={"mt-1 text-sm font-semibold " + (active ? "text-primary underline" : "")}>{v}</div>
+                      <div className={isActive ? "text-primary" : "text-muted-foreground"}>{l}</div>
+                      <div className={"mt-1 text-sm font-semibold " + (isActive ? "text-primary underline" : "")}>{v}</div>
                     </button>
                   );
                 })}
               </div>
-              {isOpen && r.unWaybills.length > 0 && (
+              {activeCat && list.length > 0 && (
                 <div className="mt-3 divide-y divide-border border-t border-border">
-                  {r.unWaybills.map(w => (
+                  {list.map(w => (
                     <Link
                       key={w}
                       to="/office/ops/$slug"
@@ -524,6 +550,7 @@ export function DeliveryMonitorScreen() {
         })}
         <div className="py-4 text-center text-xs text-muted-foreground">No More Data</div>
       </div>
+
 
       {open && (
         <div className="fixed inset-0 z-50 flex flex-col bg-black/40" onClick={() => setOpen(false)}>
