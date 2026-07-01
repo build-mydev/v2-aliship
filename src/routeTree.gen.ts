@@ -21,6 +21,7 @@ import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as WaybillSenderRouteImport } from './routes/waybill.sender'
 import { Route as WaybillReceiverRouteImport } from './routes/waybill.receiver'
 import { Route as RiderMenuRouteImport } from './routes/rider.menu'
+import { Route as RiderHistoryRouteImport } from './routes/rider.history'
 import { Route as OfficePrintRouteImport } from './routes/office.print'
 import { Route as OfficeMenuRouteImport } from './routes/office.menu'
 import { Route as OfficeDeliveryMonitorRouteImport } from './routes/office.delivery-monitor'
@@ -106,6 +107,11 @@ const WaybillReceiverRoute = WaybillReceiverRouteImport.update({
 const RiderMenuRoute = RiderMenuRouteImport.update({
   id: '/menu',
   path: '/menu',
+  getParentRoute: () => RiderRoute,
+} as any)
+const RiderHistoryRoute = RiderHistoryRouteImport.update({
+  id: '/history',
+  path: '/history',
   getParentRoute: () => RiderRoute,
 } as any)
 const OfficePrintRoute = OfficePrintRouteImport.update({
@@ -263,6 +269,7 @@ export interface FileRoutesByFullPath {
   '/office/delivery-monitor': typeof OfficeDeliveryMonitorRoute
   '/office/menu': typeof OfficeMenuRoute
   '/office/print': typeof OfficePrintRoute
+  '/rider/history': typeof RiderHistoryRoute
   '/rider/menu': typeof RiderMenuRoute
   '/waybill/receiver': typeof WaybillReceiverRoute
   '/waybill/sender': typeof WaybillSenderRoute
@@ -299,6 +306,7 @@ export interface FileRoutesByTo {
   '/office/delivery-monitor': typeof OfficeDeliveryMonitorRoute
   '/office/menu': typeof OfficeMenuRoute
   '/office/print': typeof OfficePrintRoute
+  '/rider/history': typeof RiderHistoryRoute
   '/rider/menu': typeof RiderMenuRoute
   '/waybill/receiver': typeof WaybillReceiverRoute
   '/waybill/sender': typeof WaybillSenderRoute
@@ -340,6 +348,7 @@ export interface FileRoutesById {
   '/office/delivery-monitor': typeof OfficeDeliveryMonitorRoute
   '/office/menu': typeof OfficeMenuRoute
   '/office/print': typeof OfficePrintRoute
+  '/rider/history': typeof RiderHistoryRoute
   '/rider/menu': typeof RiderMenuRoute
   '/waybill/receiver': typeof WaybillReceiverRoute
   '/waybill/sender': typeof WaybillSenderRoute
@@ -382,6 +391,7 @@ export interface FileRouteTypes {
     | '/office/delivery-monitor'
     | '/office/menu'
     | '/office/print'
+    | '/rider/history'
     | '/rider/menu'
     | '/waybill/receiver'
     | '/waybill/sender'
@@ -418,6 +428,7 @@ export interface FileRouteTypes {
     | '/office/delivery-monitor'
     | '/office/menu'
     | '/office/print'
+    | '/rider/history'
     | '/rider/menu'
     | '/waybill/receiver'
     | '/waybill/sender'
@@ -458,6 +469,7 @@ export interface FileRouteTypes {
     | '/office/delivery-monitor'
     | '/office/menu'
     | '/office/print'
+    | '/rider/history'
     | '/rider/menu'
     | '/waybill/receiver'
     | '/waybill/sender'
@@ -569,6 +581,13 @@ declare module '@tanstack/react-router' {
       path: '/menu'
       fullPath: '/rider/menu'
       preLoaderRoute: typeof RiderMenuRouteImport
+      parentRoute: typeof RiderRoute
+    }
+    '/rider/history': {
+      id: '/rider/history'
+      path: '/history'
+      fullPath: '/rider/history'
+      preLoaderRoute: typeof RiderHistoryRouteImport
       parentRoute: typeof RiderRoute
     }
     '/office/print': {
@@ -850,11 +869,13 @@ const OfficeRouteWithChildren =
   OfficeRoute._addFileChildren(OfficeRouteChildren)
 
 interface RiderRouteChildren {
+  RiderHistoryRoute: typeof RiderHistoryRoute
   RiderMenuRoute: typeof RiderMenuRoute
   RiderIndexRoute: typeof RiderIndexRoute
 }
 
 const RiderRouteChildren: RiderRouteChildren = {
+  RiderHistoryRoute: RiderHistoryRoute,
   RiderMenuRoute: RiderMenuRoute,
   RiderIndexRoute: RiderIndexRoute,
 }
