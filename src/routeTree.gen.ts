@@ -16,18 +16,26 @@ import { Route as DcRouteImport } from './routes/dc'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as OfficeIndexRouteImport } from './routes/office.index'
+import { Route as DcIndexRouteImport } from './routes/dc.index'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as WaybillSenderRouteImport } from './routes/waybill.sender'
 import { Route as WaybillReceiverRouteImport } from './routes/waybill.receiver'
 import { Route as OfficePrintRouteImport } from './routes/office.print'
 import { Route as OfficeMenuRouteImport } from './routes/office.menu'
+import { Route as DcMenuRouteImport } from './routes/dc.menu'
+import { Route as AdminUsersRouteImport } from './routes/admin.users'
+import { Route as AdminToolsRouteImport } from './routes/admin.tools'
+import { Route as AdminSitesRouteImport } from './routes/admin.sites'
+import { Route as AdminReportsRouteImport } from './routes/admin.reports'
 import { Route as AdminPrintRouteImport } from './routes/admin.print'
 import { Route as AdminMenuRouteImport } from './routes/admin.menu'
+import { Route as AdminAccountsRouteImport } from './routes/admin.accounts'
 import { Route as OfficeWaybillNewRouteImport } from './routes/office.waybill.new'
 import { Route as OfficeScanTypeRouteImport } from './routes/office.scan.$type'
 import { Route as DcScanTypeRouteImport } from './routes/dc.scan.$type'
 import { Route as AdminWaybillNewRouteImport } from './routes/admin.waybill.new'
 import { Route as AdminScanTypeRouteImport } from './routes/admin.scan.$type'
+import { Route as AdminAccountsIdRouteImport } from './routes/admin.accounts.$id'
 
 const RiderRoute = RiderRouteImport.update({
   id: '/rider',
@@ -64,6 +72,11 @@ const OfficeIndexRoute = OfficeIndexRouteImport.update({
   path: '/',
   getParentRoute: () => OfficeRoute,
 } as any)
+const DcIndexRoute = DcIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => DcRoute,
+} as any)
 const AdminIndexRoute = AdminIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -89,6 +102,31 @@ const OfficeMenuRoute = OfficeMenuRouteImport.update({
   path: '/menu',
   getParentRoute: () => OfficeRoute,
 } as any)
+const DcMenuRoute = DcMenuRouteImport.update({
+  id: '/menu',
+  path: '/menu',
+  getParentRoute: () => DcRoute,
+} as any)
+const AdminUsersRoute = AdminUsersRouteImport.update({
+  id: '/users',
+  path: '/users',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminToolsRoute = AdminToolsRouteImport.update({
+  id: '/tools',
+  path: '/tools',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminSitesRoute = AdminSitesRouteImport.update({
+  id: '/sites',
+  path: '/sites',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminReportsRoute = AdminReportsRouteImport.update({
+  id: '/reports',
+  path: '/reports',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminPrintRoute = AdminPrintRouteImport.update({
   id: '/print',
   path: '/print',
@@ -97,6 +135,11 @@ const AdminPrintRoute = AdminPrintRouteImport.update({
 const AdminMenuRoute = AdminMenuRouteImport.update({
   id: '/menu',
   path: '/menu',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminAccountsRoute = AdminAccountsRouteImport.update({
+  id: '/accounts',
+  path: '/accounts',
   getParentRoute: () => AdminRoute,
 } as any)
 const OfficeWaybillNewRoute = OfficeWaybillNewRouteImport.update({
@@ -124,6 +167,11 @@ const AdminScanTypeRoute = AdminScanTypeRouteImport.update({
   path: '/scan/$type',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminAccountsIdRoute = AdminAccountsIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => AdminAccountsRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -132,14 +180,22 @@ export interface FileRoutesByFullPath {
   '/driver': typeof DriverRoute
   '/office': typeof OfficeRouteWithChildren
   '/rider': typeof RiderRoute
+  '/admin/accounts': typeof AdminAccountsRouteWithChildren
   '/admin/menu': typeof AdminMenuRoute
   '/admin/print': typeof AdminPrintRoute
+  '/admin/reports': typeof AdminReportsRoute
+  '/admin/sites': typeof AdminSitesRoute
+  '/admin/tools': typeof AdminToolsRoute
+  '/admin/users': typeof AdminUsersRoute
+  '/dc/menu': typeof DcMenuRoute
   '/office/menu': typeof OfficeMenuRoute
   '/office/print': typeof OfficePrintRoute
   '/waybill/receiver': typeof WaybillReceiverRoute
   '/waybill/sender': typeof WaybillSenderRoute
   '/admin/': typeof AdminIndexRoute
+  '/dc/': typeof DcIndexRoute
   '/office/': typeof OfficeIndexRoute
+  '/admin/accounts/$id': typeof AdminAccountsIdRoute
   '/admin/scan/$type': typeof AdminScanTypeRoute
   '/admin/waybill/new': typeof AdminWaybillNewRoute
   '/dc/scan/$type': typeof DcScanTypeRoute
@@ -148,17 +204,24 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/dc': typeof DcRouteWithChildren
   '/driver': typeof DriverRoute
   '/rider': typeof RiderRoute
+  '/admin/accounts': typeof AdminAccountsRouteWithChildren
   '/admin/menu': typeof AdminMenuRoute
   '/admin/print': typeof AdminPrintRoute
+  '/admin/reports': typeof AdminReportsRoute
+  '/admin/sites': typeof AdminSitesRoute
+  '/admin/tools': typeof AdminToolsRoute
+  '/admin/users': typeof AdminUsersRoute
+  '/dc/menu': typeof DcMenuRoute
   '/office/menu': typeof OfficeMenuRoute
   '/office/print': typeof OfficePrintRoute
   '/waybill/receiver': typeof WaybillReceiverRoute
   '/waybill/sender': typeof WaybillSenderRoute
   '/admin': typeof AdminIndexRoute
+  '/dc': typeof DcIndexRoute
   '/office': typeof OfficeIndexRoute
+  '/admin/accounts/$id': typeof AdminAccountsIdRoute
   '/admin/scan/$type': typeof AdminScanTypeRoute
   '/admin/waybill/new': typeof AdminWaybillNewRoute
   '/dc/scan/$type': typeof DcScanTypeRoute
@@ -173,14 +236,22 @@ export interface FileRoutesById {
   '/driver': typeof DriverRoute
   '/office': typeof OfficeRouteWithChildren
   '/rider': typeof RiderRoute
+  '/admin/accounts': typeof AdminAccountsRouteWithChildren
   '/admin/menu': typeof AdminMenuRoute
   '/admin/print': typeof AdminPrintRoute
+  '/admin/reports': typeof AdminReportsRoute
+  '/admin/sites': typeof AdminSitesRoute
+  '/admin/tools': typeof AdminToolsRoute
+  '/admin/users': typeof AdminUsersRoute
+  '/dc/menu': typeof DcMenuRoute
   '/office/menu': typeof OfficeMenuRoute
   '/office/print': typeof OfficePrintRoute
   '/waybill/receiver': typeof WaybillReceiverRoute
   '/waybill/sender': typeof WaybillSenderRoute
   '/admin/': typeof AdminIndexRoute
+  '/dc/': typeof DcIndexRoute
   '/office/': typeof OfficeIndexRoute
+  '/admin/accounts/$id': typeof AdminAccountsIdRoute
   '/admin/scan/$type': typeof AdminScanTypeRoute
   '/admin/waybill/new': typeof AdminWaybillNewRoute
   '/dc/scan/$type': typeof DcScanTypeRoute
@@ -196,14 +267,22 @@ export interface FileRouteTypes {
     | '/driver'
     | '/office'
     | '/rider'
+    | '/admin/accounts'
     | '/admin/menu'
     | '/admin/print'
+    | '/admin/reports'
+    | '/admin/sites'
+    | '/admin/tools'
+    | '/admin/users'
+    | '/dc/menu'
     | '/office/menu'
     | '/office/print'
     | '/waybill/receiver'
     | '/waybill/sender'
     | '/admin/'
+    | '/dc/'
     | '/office/'
+    | '/admin/accounts/$id'
     | '/admin/scan/$type'
     | '/admin/waybill/new'
     | '/dc/scan/$type'
@@ -212,17 +291,24 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/dc'
     | '/driver'
     | '/rider'
+    | '/admin/accounts'
     | '/admin/menu'
     | '/admin/print'
+    | '/admin/reports'
+    | '/admin/sites'
+    | '/admin/tools'
+    | '/admin/users'
+    | '/dc/menu'
     | '/office/menu'
     | '/office/print'
     | '/waybill/receiver'
     | '/waybill/sender'
     | '/admin'
+    | '/dc'
     | '/office'
+    | '/admin/accounts/$id'
     | '/admin/scan/$type'
     | '/admin/waybill/new'
     | '/dc/scan/$type'
@@ -236,14 +322,22 @@ export interface FileRouteTypes {
     | '/driver'
     | '/office'
     | '/rider'
+    | '/admin/accounts'
     | '/admin/menu'
     | '/admin/print'
+    | '/admin/reports'
+    | '/admin/sites'
+    | '/admin/tools'
+    | '/admin/users'
+    | '/dc/menu'
     | '/office/menu'
     | '/office/print'
     | '/waybill/receiver'
     | '/waybill/sender'
     | '/admin/'
+    | '/dc/'
     | '/office/'
+    | '/admin/accounts/$id'
     | '/admin/scan/$type'
     | '/admin/waybill/new'
     | '/dc/scan/$type'
@@ -313,6 +407,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OfficeIndexRouteImport
       parentRoute: typeof OfficeRoute
     }
+    '/dc/': {
+      id: '/dc/'
+      path: '/'
+      fullPath: '/dc/'
+      preLoaderRoute: typeof DcIndexRouteImport
+      parentRoute: typeof DcRoute
+    }
     '/admin/': {
       id: '/admin/'
       path: '/'
@@ -348,6 +449,41 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OfficeMenuRouteImport
       parentRoute: typeof OfficeRoute
     }
+    '/dc/menu': {
+      id: '/dc/menu'
+      path: '/menu'
+      fullPath: '/dc/menu'
+      preLoaderRoute: typeof DcMenuRouteImport
+      parentRoute: typeof DcRoute
+    }
+    '/admin/users': {
+      id: '/admin/users'
+      path: '/users'
+      fullPath: '/admin/users'
+      preLoaderRoute: typeof AdminUsersRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/tools': {
+      id: '/admin/tools'
+      path: '/tools'
+      fullPath: '/admin/tools'
+      preLoaderRoute: typeof AdminToolsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/sites': {
+      id: '/admin/sites'
+      path: '/sites'
+      fullPath: '/admin/sites'
+      preLoaderRoute: typeof AdminSitesRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/reports': {
+      id: '/admin/reports'
+      path: '/reports'
+      fullPath: '/admin/reports'
+      preLoaderRoute: typeof AdminReportsRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/print': {
       id: '/admin/print'
       path: '/print'
@@ -360,6 +496,13 @@ declare module '@tanstack/react-router' {
       path: '/menu'
       fullPath: '/admin/menu'
       preLoaderRoute: typeof AdminMenuRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/accounts': {
+      id: '/admin/accounts'
+      path: '/accounts'
+      fullPath: '/admin/accounts'
+      preLoaderRoute: typeof AdminAccountsRouteImport
       parentRoute: typeof AdminRoute
     }
     '/office/waybill/new': {
@@ -397,20 +540,49 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminScanTypeRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/accounts/$id': {
+      id: '/admin/accounts/$id'
+      path: '/$id'
+      fullPath: '/admin/accounts/$id'
+      preLoaderRoute: typeof AdminAccountsIdRouteImport
+      parentRoute: typeof AdminAccountsRoute
+    }
   }
 }
 
+interface AdminAccountsRouteChildren {
+  AdminAccountsIdRoute: typeof AdminAccountsIdRoute
+}
+
+const AdminAccountsRouteChildren: AdminAccountsRouteChildren = {
+  AdminAccountsIdRoute: AdminAccountsIdRoute,
+}
+
+const AdminAccountsRouteWithChildren = AdminAccountsRoute._addFileChildren(
+  AdminAccountsRouteChildren,
+)
+
 interface AdminRouteChildren {
+  AdminAccountsRoute: typeof AdminAccountsRouteWithChildren
   AdminMenuRoute: typeof AdminMenuRoute
   AdminPrintRoute: typeof AdminPrintRoute
+  AdminReportsRoute: typeof AdminReportsRoute
+  AdminSitesRoute: typeof AdminSitesRoute
+  AdminToolsRoute: typeof AdminToolsRoute
+  AdminUsersRoute: typeof AdminUsersRoute
   AdminIndexRoute: typeof AdminIndexRoute
   AdminScanTypeRoute: typeof AdminScanTypeRoute
   AdminWaybillNewRoute: typeof AdminWaybillNewRoute
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
+  AdminAccountsRoute: AdminAccountsRouteWithChildren,
   AdminMenuRoute: AdminMenuRoute,
   AdminPrintRoute: AdminPrintRoute,
+  AdminReportsRoute: AdminReportsRoute,
+  AdminSitesRoute: AdminSitesRoute,
+  AdminToolsRoute: AdminToolsRoute,
+  AdminUsersRoute: AdminUsersRoute,
   AdminIndexRoute: AdminIndexRoute,
   AdminScanTypeRoute: AdminScanTypeRoute,
   AdminWaybillNewRoute: AdminWaybillNewRoute,
@@ -419,10 +591,14 @@ const AdminRouteChildren: AdminRouteChildren = {
 const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
 
 interface DcRouteChildren {
+  DcMenuRoute: typeof DcMenuRoute
+  DcIndexRoute: typeof DcIndexRoute
   DcScanTypeRoute: typeof DcScanTypeRoute
 }
 
 const DcRouteChildren: DcRouteChildren = {
+  DcMenuRoute: DcMenuRoute,
+  DcIndexRoute: DcIndexRoute,
   DcScanTypeRoute: DcScanTypeRoute,
 }
 
