@@ -33,11 +33,11 @@ export function HomeDashboard({ role }: { role: Role }) {
   return (
     <PageLayout withBottomNav>
       {/* Orange header with giant A watermark */}
-      <div className="relative overflow-hidden bg-primary px-4 pt-4 pb-16 text-primary-foreground">
+      <div className="relative overflow-hidden bg-primary px-4 pt-4 pb-8 text-primary-foreground">
         <span
           aria-hidden
-          className="pointer-events-none absolute -right-4 -top-6 select-none font-black italic leading-none text-primary-foreground/10"
-          style={{ fontSize: "10rem", fontFamily: "'Arial Black', system-ui, sans-serif" }}
+          className="pointer-events-none absolute -right-4 -top-4 select-none font-black italic leading-none text-primary-foreground/10"
+          style={{ fontSize: "8rem", fontFamily: "'Arial Black', system-ui, sans-serif" }}
         >
           A
         </span>
@@ -59,7 +59,7 @@ export function HomeDashboard({ role }: { role: Role }) {
       </div>
 
       {/* Cash pending overlap card */}
-      <div className="-mt-10 px-4">
+      <div className="-mt-8 px-4">
         <Link to={`${base}/cash-pending`} className="flex items-center justify-between rounded-2xl bg-card p-4 shadow-md">
           <div>
             <div className="text-sm text-muted-foreground">Cash Pending Settlement</div>
@@ -74,7 +74,7 @@ export function HomeDashboard({ role }: { role: Role }) {
       </div>
 
       {/* Inbound card */}
-      <div className="mt-4 px-4">
+      <div className="mt-3 px-4">
         <div className="rounded-2xl bg-card p-4 shadow-sm">
           <div className="grid grid-cols-[auto_1fr] items-center gap-3">
             <div className="relative">
@@ -91,9 +91,9 @@ export function HomeDashboard({ role }: { role: Role }) {
       </div>
 
       {/* Operations grid */}
-      <div className="mt-3 px-4">
+      <div className="mt-2 px-4">
         <div className="rounded-2xl bg-card p-4 shadow-sm">
-          <div className="grid grid-cols-4 gap-y-5">
+          <div className="grid grid-cols-4 gap-y-4">
             {ops.map(s => (
               <TileLink key={s.key} to={`${base}/ops/${s.slug}`} label={s.label} icon={s.icon} count={(dashboardCounts as Record<string, number>)[s.key] ?? 0} />
             ))}
@@ -102,7 +102,7 @@ export function HomeDashboard({ role }: { role: Role }) {
       </div>
 
       {/* Delivery Monitor row */}
-      <div className="mt-3 px-4">
+      <div className="mt-2 px-4">
         <Link to={`${base}/delivery-monitor`} className="flex items-center justify-between rounded-2xl bg-card p-4 shadow-sm">
           <span className="text-sm font-semibold">Delivery Monitor</span>
           <ChevronRight className="h-4 w-4 text-muted-foreground" />
