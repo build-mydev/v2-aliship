@@ -453,5 +453,93 @@ function FieldBox({ label, scan, selectable }: { label: string; scan?: boolean; 
   );
 }
 
-// silence unused import warning
-void X;
+/* ---------- Exception Entry ---------- */
+
+const EXCEPTION_TYPES = [
+  "Receiver Rejected Parcel",
+  "Rescheduled delivery",
+  "Recipient's Phone Cannot Be Reached",
+  "Damaged/Contaminated",
+  "Self Pick-up",
+  "Address Incorrect",
+  "Other",
+];
+
+function ExceptionEntry({ title, withBottomNav }: { title: string; withBottomNav: boolean }) {
+  const [open, setOpen] = useState(false);
+  const [type, setType] = useState<string | null>(null);
+  return (
+    <PageLayout withBottomNav={withBottomNav}>
+      <SubPageHeader title={title} />
+      <div className="space-y-3 px-4 py-4">
+        <InputRow placeholder="Waybill Number/Bag Number" scan />
+        <SelectField placeholder="Exception Type" value={type} onClick={() => setOpen(true)} focused={!type} />
+        <TextArea placeholder="Reason" />
+        <InputRow placeholder="NotifySite" />
+        <IconTile icon={Camera} label="Take A Picture" />
+        <SaveButton enabled={!!type} />
+      </div>
+      <ScannedBlock count={0} />
+      <SelectSheet open={open} options={EXCEPTION_TYPES} value={type} onSelect={setType} onClose={() => setOpen(false)} />
+    </PageLayout>
+  );
+}
+
+/* ---------- Return Entry ---------- */
+
+const RETURN_TYPES = [
+  "Damaged in Transit",
+  "Wrong Address",
+  "Customer Refused",
+  "Undeliverable",
+  "Return to Sender",
+];
+
+function ReturnEntry({ title, withBottomNav }: { title: string; withBottomNav: boolean }) {
+  const [open, setOpen] = useState(false);
+  const [type, setType] = useState<string | null>(null);
+  return (
+    <PageLayout withBottomNav={withBottomNav}>
+      <SubPageHeader title={title} />
+      <div className="space-y-3 px-4 py-4">
+        <SelectField placeholder="Type" value={type} onClick={() => setOpen(true)} />
+        <TextArea placeholder="Reason" />
+        <InputRow placeholder="Waybill No." scan />
+        <IconTile icon={Camera} label="Take A Picture" />
+        <SaveButton enabled={!!type} />
+      </div>
+      <ScannedBlock count={0} />
+      <SelectSheet open={open} options={RETURN_TYPES} value={type} onSelect={setType} onClose={() => setOpen(false)} />
+    </PageLayout>
+  );
+}
+
+/* ---------- Hold Scan ---------- */
+
+const HOLD_TYPES = [
+  "Short-staffed",
+  "Missed the shutter departure timing",
+  "Outgoing Restriction",
+  "Full Truck",
+  "Weather Delay",
+  "Vehicle Breakdown",
+];
+
+function HoldScan({ title, withBottomNav }: { title: string; withBottomNav: boolean }) {
+  const [open, setOpen] = useState(false);
+  const [type, setType] = useState<string | null>(null);
+  return (
+    <PageLayout withBottomNav={withBottomNav}>
+      <SubPageHeader title={title} />
+      <div className="space-y-3 px-4 py-4">
+        <SelectField placeholder="Type" value={type} onClick={() => setOpen(true)} focused={!type} />
+        <InputRow placeholder="Waybill Number/Bag Number" scan />
+        <TextArea placeholder="Remark" />
+        <SaveButton enabled={!!type} />
+      </div>
+      <ScannedBlock count={0} />
+      <SelectSheet open={open} options={HOLD_TYPES} value={type} onSelect={setType} onClose={() => setOpen(false)} />
+    </PageLayout>
+  );
+}
+
