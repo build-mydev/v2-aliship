@@ -2,9 +2,11 @@ import { useState } from "react";
 import { ScanLine } from "lucide-react";
 import { SubPageHeader } from "./SubPageHeader";
 import { PageLayout } from "./PageLayout";
+import { BarcodeScannerSheet } from "./BarcodeScannerSheet";
 
 export function StaticScanPage({ title }: { title: string }) {
   const [value, setValue] = useState("");
+  const [scanning, setScanning] = useState(false);
   return (
     <PageLayout>
       <SubPageHeader title={title} />
@@ -18,7 +20,14 @@ export function StaticScanPage({ title }: { title: string }) {
               placeholder="Scan or enter number"
               className="flex-1 bg-transparent text-sm outline-none"
             />
-            <ScanLine className="h-5 w-5 text-primary" />
+            <button
+              type="button"
+              onClick={() => setScanning(true)}
+              aria-label="Open scanner"
+              className="rounded-full p-1 text-primary active:scale-95"
+            >
+              <ScanLine className="h-5 w-5" />
+            </button>
           </div>
         </div>
         <button
@@ -31,6 +40,12 @@ export function StaticScanPage({ title }: { title: string }) {
         <div className="mx-4 mt-2 h-px bg-border" />
         <div className="mt-8 text-center text-xs text-muted-foreground">No records</div>
       </div>
+      <BarcodeScannerSheet
+        open={scanning}
+        onClose={() => setScanning(false)}
+        onDetected={v => setValue(v)}
+        title={title}
+      />
     </PageLayout>
   );
 }
