@@ -26,10 +26,10 @@ const ops: StatTile[] = [
 
 export function HomeDashboard({ role }: { role: Role }) {
   const profile = roleProfiles[role];
+  const auth = useAuth();
   const base = role === "super_admin" ? "/admin" : "/office";
-  const employeeNo = (() => {
-    try { return localStorage.getItem("aliship.employeeNo") ?? "254261516"; } catch { return "254261516"; }
-  })();
+  const employeeNo = auth.profile?.employee_no ?? "";
+  const siteName = auth.siteName ?? profile.site;
 
   return (
     <PageLayout withBottomNav>
