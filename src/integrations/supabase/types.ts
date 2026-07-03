@@ -1079,15 +1079,6 @@ export type Database = {
         Args: { p_type?: Database["public"]["Enums"]["waybill_type"] }
         Returns: string
       }
-      has_role: {
-        Args: {
-          _role: Database["public"]["Enums"]["app_role"]
-          _user_id: string
-        }
-        Returns: boolean
-      }
-      is_admin: { Args: { _user_id: string }; Returns: boolean }
-      my_site_id: { Args: never; Returns: string }
     }
     Enums: {
       account_type: "Prepaid" | "Postpaid"

@@ -2,12 +2,6 @@ import { ACTIVE_STATUSES, TERMINAL_STATUSES, EXCEPTION_STATUSES, RETURN_STATUSES
 
 export type Role = "super_admin" | "office" | "dc_admin" | "rider";
 
-export const demoRoles: Record<string, Role> = {
-  ADMIN001: "super_admin",
-  OFFICE001: "office",
-  DC001: "dc_admin",
-  RIDER001: "rider",
-};
 
 export const roleProfiles: Record<Role, { label: string; badge: string; site: string }> = {
   super_admin: { label: "Super Admin", badge: "SUPER ADMIN", site: "HQ · Nairobi" },
@@ -33,12 +27,6 @@ export function logout() {
     .finally(() => { window.location.href = "/"; });
 }
 
-export function getCurrentRole(): Role | null {
-  try {
-    const r = localStorage.getItem("aliship.role") as Role | null;
-    return r ?? null;
-  } catch { return null; }
-}
 
 export type ParcelStatus =
   | "pending" | "in_transit" | "arrived" | "out_for_delivery"
@@ -294,12 +282,3 @@ export const cashPending = {
   ],
 };
 
-export function loginAs(employeeNo: string): Role | null {
-  const role = demoRoles[employeeNo.trim().toUpperCase()];
-  if (!role) return null;
-  try {
-    localStorage.setItem("aliship.role", role);
-    localStorage.setItem("aliship.employeeNo", employeeNo.trim().toUpperCase());
-  } catch {}
-  return role;
-}
