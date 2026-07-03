@@ -143,7 +143,6 @@ export const investigations: {
   { id: "ALS-20260601-9999", status: "Lost", from: "Nairobi CBD", to: "Kisumu Office", lastSeen: "Nairobi DC", daysOpen: 7, lastActionBy: "Super Admin" },
 ];
 
-import { ACTIVE_STATUSES, TERMINAL_STATUSES, EXCEPTION_STATUSES, RETURN_STATUSES, type ParcelStatus as CanonicalParcelStatus } from "@/lib/parcel-status";
 
 export const parcelStatusList: CanonicalParcelStatus[] = [
   ...ACTIVE_STATUSES,
