@@ -11,7 +11,9 @@ import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
-import { AuthProvider } from "@/lib/auth-context";
+import { AuthProvider, useAuth } from "@/lib/auth-context";
+import { AccountPendingSetup } from "@/components/AccountPendingSetup";
+import { useRouterState } from "@tanstack/react-router";
 
 function NotFoundComponent() {
   return (
