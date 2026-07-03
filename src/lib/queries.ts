@@ -311,3 +311,166 @@ export function useTopUpAccount() {
     },
   });
 }
+
+// ================== TARIFFS ==================
+export function useTariffRegions() {
+  return useQuery({
+    queryKey: ["tariff_regions"],
+    queryFn: async () => {
+      const { data, error } = await supabase.from("tariff_regions").select("*").order("name");
+      if (error) throw error;
+      return data ?? [];
+    },
+  });
+}
+export function useTariffTowns() {
+  return useQuery({
+    queryKey: ["tariff_region_towns"],
+    queryFn: async () => {
+      const { data, error } = await supabase.from("tariff_region_towns").select("*").order("name");
+      if (error) throw error;
+      return data ?? [];
+    },
+  });
+}
+export function useTariffMatrix() {
+  return useQuery({
+    queryKey: ["tariffs"],
+    queryFn: async () => {
+      const { data, error } = await supabase.from("tariffs").select("*");
+      if (error) throw error;
+      return data ?? [];
+    },
+  });
+}
+export function useDoorToDoorRates() {
+  return useQuery({
+    queryKey: ["door_to_door_rates"],
+    queryFn: async () => {
+      const { data, error } = await supabase.from("door_to_door_rates").select("*").order("weight_min");
+      if (error) throw error;
+      return data ?? [];
+    },
+  });
+}
+
+export function useUpdateTariffCell() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (p: { id?: string; origin_region_id: string; dest_region_id: string; base_rate: number; extra_kg: number }) => {
+      if (p.id) {
+        const { error } = await supabase.from("tariffs").update({ base_rate: p.base_rate, extra_kg: p.extra_kg }).eq("id", p.id);
+        if (error) throw error;
+      } else {
+        const { error } = await supabase.from("tariffs").insert({
+          origin_region_id: p.origin_region_id, dest_region_id: p.dest_region_id,
+          base_rate: p.base_rate, extra_kg: p.extra_kg, active: true,
+        });
+        if (error) throw error;
+      }
+    },
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["tariffs"] }),
+  });
+}
+export function useUpdateDoorToDoorRate() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (p: { id: string; rate_0_5km: number; rate_5_10km: number; rate_10_20km: number; rate_above_20km: number }) => {
+      const { error } = await supabase.from("door_to_door_rates").update({
+        rate_0_5km: p.rate_0_5km, rate_5_10km: p.rate_5_10km,
+        rate_10_20km: p.rate_10_20km, rate_above_20km: p.rate_above_20km,
+      }).eq("id", p.id);
+      if (error) throw error;
+    },
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["door_to_door_rates"] }),
+  });
+}
+
+// ================== FREIGHT / PARCEL CREATE ==================
+export async function calculateFreight(origin: string, dest: string, weight: number): Promise<number> {
+  const { data, error } = await supabase.rpc("calculate_freight", {
+    p_origin_town: origin, p_dest_town: dest, p_weight: weight,
+  });
+  if (error) throw error;
+  return Number(data ?? 0);
+}
+
+export function useCreateParcel() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (p: {
+      waybill_type: "door_to_door" | "self_pickup" | "return";
+      sender_name: string; sender_phone?: string | null;
+      receiver_name: string; receiver_phone?: string | null; receiver_address?: string | null;
+      receiver_town?: string | null; receiver_county?: string | null;
+      weight_kg: number; pieces?: number;
+      account_id?: string | null;
+      cod_amount?: number; declared_value?: number;
+      freight_amount: number;
+      origin_site_id?: string | null; destination_site_id?: string | null;
+      prohibited_declaration?: boolean;
+    }) => {
+      const { data: wb, error: wbErr } = await supabase.rpc("generate_waybill_number", { p_type: p.waybill_type });
+      if (wbErr) throw wbErr;
+      const { data, error } = await supabase.from("parcels").insert({
+        waybill: wb as string,
+        waybill_type: p.waybill_type,
+        sender_name: p.sender_name, sender_phone: p.sender_phone ?? null,
+        receiver_name: p.receiver_name, receiver_phone: p.receiver_phone ?? null,
+        receiver_address: p.receiver_address ?? null,
+        receiver_town: p.receiver_town ?? null, receiver_county: p.receiver_county ?? null,
+        weight_kg: p.weight_kg, pieces: p.pieces ?? 1,
+        account_id: p.account_id ?? null,
+        cod_amount: p.cod_amount ?? 0, declared_value: p.declared_value ?? 0,
+        freight_amount: p.freight_amount,
+        origin_site_id: p.origin_site_id ?? null,
+        destination_site_id: p.destination_site_id ?? null,
+        current_site_id: p.origin_site_id ?? null,
+        status: "Pending Confirmation",
+        prohibited_declaration: p.prohibited_declaration ?? false,
+      }).select("id, waybill").single();
+      if (error) throw error;
+      return data;
+    },
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["parcels"] });
+      qc.invalidateQueries({ queryKey: ["dashboard-counts"] });
+    },
+  });
+}
+
+// ================== RIDER: UPDATE STATUS + POD ==================
+export async function uploadPodPhoto(parcelId: string, dataUrl: string): Promise<string> {
+  const blob = await (await fetch(dataUrl)).blob();
+  const path = `${parcelId}/${Date.now()}.jpg`;
+  const { error } = await supabase.storage.from("pod-photos").upload(path, blob, { contentType: "image/jpeg", upsert: false });
+  if (error) throw error;
+  return path;
+}
+
+export function useUpdateParcelStatus() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (p: { id: string; status: string; incrementAttempt?: boolean; notes?: string | null; podPath?: string | null }) => {
+      const patch: Record<string, unknown> = { status: p.status };
+      if (p.incrementAttempt) {
+        const { data: cur } = await supabase.from("parcels").select("delivery_attempt_count").eq("id", p.id).maybeSingle();
+        patch.delivery_attempt_count = (cur?.delivery_attempt_count ?? 0) + 1;
+      }
+      const { error } = await supabase.from("parcels").update(patch).eq("id", p.id);
+      if (error) throw error;
+      if (p.podPath || p.notes) {
+        await supabase.from("delivery_attempts").insert({
+          parcel_id: p.id, outcome: p.status, notes: p.notes ?? null, pod_photo_path: p.podPath ?? null,
+        }).then(({ error: e }) => { if (e) console.warn("attempt log failed", e.message); });
+      }
+    },
+    onSuccess: (_r, p) => {
+      qc.invalidateQueries({ queryKey: ["parcel", p.id] });
+      qc.invalidateQueries({ queryKey: ["rider-parcels"] });
+      qc.invalidateQueries({ queryKey: ["rider-stats"] });
+      qc.invalidateQueries({ queryKey: ["parcels"] });
+    },
+  });
+}
+
