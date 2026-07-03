@@ -26,6 +26,7 @@ import { Route as RiderMenuRouteImport } from './routes/rider.menu'
 import { Route as RiderHistoryRouteImport } from './routes/rider.history'
 import { Route as OfficeReportsRouteImport } from './routes/office.reports'
 import { Route as OfficePrintRouteImport } from './routes/office.print'
+import { Route as OfficePendingRouteImport } from './routes/office.pending'
 import { Route as OfficeMenuRouteImport } from './routes/office.menu'
 import { Route as OfficeDeliveryMonitorRouteImport } from './routes/office.delivery-monitor'
 import { Route as OfficeCashPendingRouteImport } from './routes/office.cash-pending'
@@ -139,6 +140,11 @@ const OfficeReportsRoute = OfficeReportsRouteImport.update({
 const OfficePrintRoute = OfficePrintRouteImport.update({
   id: '/print',
   path: '/print',
+  getParentRoute: () => OfficeRoute,
+} as any)
+const OfficePendingRoute = OfficePendingRouteImport.update({
+  id: '/pending',
+  path: '/pending',
   getParentRoute: () => OfficeRoute,
 } as any)
 const OfficeMenuRoute = OfficeMenuRouteImport.update({
@@ -313,6 +319,7 @@ export interface FileRoutesByFullPath {
   '/office/cash-pending': typeof OfficeCashPendingRoute
   '/office/delivery-monitor': typeof OfficeDeliveryMonitorRoute
   '/office/menu': typeof OfficeMenuRoute
+  '/office/pending': typeof OfficePendingRoute
   '/office/print': typeof OfficePrintRoute
   '/office/reports': typeof OfficeReportsRoute
   '/rider/history': typeof RiderHistoryRoute
@@ -357,6 +364,7 @@ export interface FileRoutesByTo {
   '/office/cash-pending': typeof OfficeCashPendingRoute
   '/office/delivery-monitor': typeof OfficeDeliveryMonitorRoute
   '/office/menu': typeof OfficeMenuRoute
+  '/office/pending': typeof OfficePendingRoute
   '/office/print': typeof OfficePrintRoute
   '/office/reports': typeof OfficeReportsRoute
   '/rider/history': typeof RiderHistoryRoute
@@ -406,6 +414,7 @@ export interface FileRoutesById {
   '/office/cash-pending': typeof OfficeCashPendingRoute
   '/office/delivery-monitor': typeof OfficeDeliveryMonitorRoute
   '/office/menu': typeof OfficeMenuRoute
+  '/office/pending': typeof OfficePendingRoute
   '/office/print': typeof OfficePrintRoute
   '/office/reports': typeof OfficeReportsRoute
   '/rider/history': typeof RiderHistoryRoute
@@ -456,6 +465,7 @@ export interface FileRouteTypes {
     | '/office/cash-pending'
     | '/office/delivery-monitor'
     | '/office/menu'
+    | '/office/pending'
     | '/office/print'
     | '/office/reports'
     | '/rider/history'
@@ -500,6 +510,7 @@ export interface FileRouteTypes {
     | '/office/cash-pending'
     | '/office/delivery-monitor'
     | '/office/menu'
+    | '/office/pending'
     | '/office/print'
     | '/office/reports'
     | '/rider/history'
@@ -548,6 +559,7 @@ export interface FileRouteTypes {
     | '/office/cash-pending'
     | '/office/delivery-monitor'
     | '/office/menu'
+    | '/office/pending'
     | '/office/print'
     | '/office/reports'
     | '/rider/history'
@@ -701,6 +713,13 @@ declare module '@tanstack/react-router' {
       path: '/print'
       fullPath: '/office/print'
       preLoaderRoute: typeof OfficePrintRouteImport
+      parentRoute: typeof OfficeRoute
+    }
+    '/office/pending': {
+      id: '/office/pending'
+      path: '/pending'
+      fullPath: '/office/pending'
+      preLoaderRoute: typeof OfficePendingRouteImport
       parentRoute: typeof OfficeRoute
     }
     '/office/menu': {
@@ -985,6 +1004,7 @@ interface OfficeRouteChildren {
   OfficeCashPendingRoute: typeof OfficeCashPendingRoute
   OfficeDeliveryMonitorRoute: typeof OfficeDeliveryMonitorRoute
   OfficeMenuRoute: typeof OfficeMenuRoute
+  OfficePendingRoute: typeof OfficePendingRoute
   OfficePrintRoute: typeof OfficePrintRoute
   OfficeReportsRoute: typeof OfficeReportsRoute
   OfficeIndexRoute: typeof OfficeIndexRoute
@@ -997,6 +1017,7 @@ const OfficeRouteChildren: OfficeRouteChildren = {
   OfficeCashPendingRoute: OfficeCashPendingRoute,
   OfficeDeliveryMonitorRoute: OfficeDeliveryMonitorRoute,
   OfficeMenuRoute: OfficeMenuRoute,
+  OfficePendingRoute: OfficePendingRoute,
   OfficePrintRoute: OfficePrintRoute,
   OfficeReportsRoute: OfficeReportsRoute,
   OfficeIndexRoute: OfficeIndexRoute,

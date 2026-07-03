@@ -487,3 +487,36 @@ export function useUpdateParcelStatus() {
   });
 }
 
+// ================== PENDING CONFIRMATIONS ==================
+export function usePendingConfirmations(siteId: string | null) {
+  return useQuery({
+    queryKey: ["pending-confirmations", siteId],
+    queryFn: async () => {
+      let q = supabase.from("parcels").select("*").eq("status", "Pending Confirmation").order("created_at", { ascending: false });
+      if (siteId) q = q.eq("origin_site_id", siteId);
+      const { data, error } = await q;
+      if (error) throw error;
+      return data ?? [];
+    },
+  });
+}
+
+export function useConfirmParcel() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (p: { id: string; approve: boolean }) => {
+      const status = p.approve ? "Arrived at Origin Office" : "Rejected";
+      const patch: Record<string, unknown> = { status };
+      if (p.approve) { patch.freight_confirmed = true; patch.confirmed_at = new Date().toISOString(); }
+      const { error } = await supabase.from("parcels").update(patch as never).eq("id", p.id);
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["pending-confirmations"] });
+      qc.invalidateQueries({ queryKey: ["parcels"] });
+      qc.invalidateQueries({ queryKey: ["dashboard-counts"] });
+    },
+  });
+}
+
+
