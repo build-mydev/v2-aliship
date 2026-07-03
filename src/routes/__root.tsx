@@ -129,6 +129,12 @@ function SiteGate() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const protectedPrefixes = ["/admin", "/dc", "/office", "/rider"];
   const isProtected = protectedPrefixes.some((p) => pathname === p || pathname.startsWith(p + "/"));
+  if (!loading && isProtected && !session) {
+    if (typeof window !== "undefined" && window.location.pathname !== "/") {
+      window.location.replace("/");
+    }
+    return null;
+  }
   if (!loading && session && needsSiteAssignment && isProtected) {
     return <AccountPendingSetup />;
   }
