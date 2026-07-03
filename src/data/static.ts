@@ -2,12 +2,6 @@ import { ACTIVE_STATUSES, TERMINAL_STATUSES, EXCEPTION_STATUSES, RETURN_STATUSES
 
 export type Role = "super_admin" | "office" | "dc_admin" | "rider";
 
-export const demoRoles: Record<string, Role> = {
-  ADMIN001: "super_admin",
-  OFFICE001: "office",
-  DC001: "dc_admin",
-  RIDER001: "rider",
-};
 
 export const roleProfiles: Record<Role, { label: string; badge: string; site: string }> = {
   super_admin: { label: "Super Admin", badge: "SUPER ADMIN", site: "HQ · Nairobi" },
