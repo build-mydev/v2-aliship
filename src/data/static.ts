@@ -27,12 +27,6 @@ export function logout() {
     .finally(() => { window.location.href = "/"; });
 }
 
-export function getCurrentRole(): Role | null {
-  try {
-    const r = localStorage.getItem("aliship.role") as Role | null;
-    return r ?? null;
-  } catch { return null; }
-}
 
 export type ParcelStatus =
   | "pending" | "in_transit" | "arrived" | "out_for_delivery"
