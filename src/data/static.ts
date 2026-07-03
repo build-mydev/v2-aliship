@@ -239,7 +239,7 @@ export const dcDashboard = {
 };
 
 export const expectedFromOffices = [
-  { office: "Mombasa CBD Office", parcels: 8, status: "In Transit", tone: "warn" as const },
+  { office: "Mombasa CBD Office", parcels: 8, status: "Departed to DC", tone: "warn" as const },
   { office: "Bamburi Office", parcels: 4, status: "Dispatched", tone: "info" as const },
   { office: "Mtwapa Office", parcels: 0, status: "Not yet dispatched", tone: "muted" as const },
 ];
@@ -278,7 +278,7 @@ export const riderParcels: RiderParcel[] = [
 
 export const riderHistory = [
   { id: "ALS-20260601-1234", status: "Delivered", tone: "success", receiver: "JOHN DOE", zone: "Nyali", note: "10:30 AM · Signed" },
-  { id: "ALS-20260601-5678", status: "Attempted", tone: "warn", receiver: "JANE SMITH", zone: "Bamburi", note: "Attempt 2 of 3 · Rescheduled Tomorrow 2PM" },
+  { id: "ALS-20260601-5678", status: "Delivery Attempted", tone: "warn", receiver: "JANE SMITH", zone: "Bamburi", note: "Attempt 2 of 3 · Rescheduled Tomorrow 2PM" },
   { id: "ALS-20260601-9999", status: "Delivered", tone: "success", receiver: "MIKE JONES", zone: "Shanzu", note: "11:45 AM" },
   { id: "ALS-20260601-2345", status: "On Hold - Address Issue", tone: "yellow", receiver: "PAUL K.", zone: "CBD", note: "Wrong address reported" },
   { id: "ALS-20260601-6789", status: "Delivered", tone: "success", receiver: "GRACE N.", zone: "Nyali", note: "14:20 PM" },
