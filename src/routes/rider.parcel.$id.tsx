@@ -2,20 +2,24 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { PageLayout } from "@/components/layout/PageLayout";
 import { SubPageHeader } from "@/components/layout/SubPageHeader";
-import { useParcel } from "@/lib/queries";
-import { Phone, PenTool, AlertTriangle, CheckCircle2, Calendar, Home as HomeIcon, MapPin, Loader2 } from "lucide-react";
+import { useParcel, useUpdateParcelStatus, uploadPodPhoto } from "@/lib/queries";
+import { Phone, AlertTriangle, CheckCircle2, Calendar, Home as HomeIcon, MapPin, Loader2, RotateCcw } from "lucide-react";
 import { FormSheet, Field, Textarea, TextInput } from "@/components/layout/FormSheet";
-import { Button } from "@/components/ui/button";
 import { PhotoCaptureTile } from "@/components/layout/PhotoCaptureTile";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/rider/parcel/$id")({ component: RiderParcelDetail });
 
-type SheetKey = null | "delivered" | "reschedule" | "wrong";
+type SheetKey = null | "delivered" | "reschedule" | "wrong" | "collect" | "return";
 
 function RiderParcelDetail() {
   const { id } = Route.useParams();
   const { data: p, isLoading } = useParcel(id);
   const [sheet, setSheet] = useState<SheetKey>(null);
+  const [notes, setNotes] = useState("");
+  const [photo, setPhoto] = useState<string | null>(null);
+  const [scheduleDate, setScheduleDate] = useState("");
+  const update = useUpdateParcelStatus();
   const maxAttempts = 3;
 
   if (isLoading || !p) {
@@ -29,15 +33,33 @@ function RiderParcelDetail() {
 
   const attempts = p.delivery_attempt_count ?? 0;
   const cod = Number(p.cod_amount);
+  const reachedMax = attempts >= maxAttempts;
+
+  const reset = () => { setSheet(null); setNotes(""); setPhoto(null); setScheduleDate(""); };
+
+  async function apply(status: string, opts: { photo?: boolean; increment?: boolean; note?: string } = {}) {
+    try {
+      let podPath: string | null = null;
+      if (opts.photo && photo) podPath = await uploadPodPhoto(id, photo);
+      await update.mutateAsync({
+        id, status,
+        incrementAttempt: opts.increment,
+        notes: (notes || opts.note) ?? null,
+        podPath,
+      });
+      toast.success(`Marked ${status}`);
+      reset();
+    } catch (e) { toast.error("Update failed", { description: (e as Error).message }); }
+  }
 
   return (
     <PageLayout withBottomNav>
       <SubPageHeader title="Parcel Detail" />
       <div className="space-y-3 px-4 pt-4 pb-24">
         {attempts > 0 && (
-          <div className="flex items-center gap-2 rounded-xl bg-yellow-50 p-3 text-xs text-yellow-800">
+          <div className={"flex items-center gap-2 rounded-xl p-3 text-xs " + (reachedMax ? "bg-destructive/10 text-destructive" : "bg-yellow-50 text-yellow-800")}>
             <AlertTriangle className="h-4 w-4" />
-            Attempt {attempts} of {maxAttempts}
+            Attempt {attempts} of {maxAttempts}{reachedMax ? " — max reached" : ""}
           </div>
         )}
 
@@ -54,6 +76,7 @@ function RiderParcelDetail() {
               </a>
             )}
             <Row label="Address" value={p.receiver_address ?? "—"} />
+            <Row label="Town" value={p.receiver_town ?? "—"} />
             <div className="flex items-center gap-2">
               <span className="text-xs text-muted-foreground">Payment:</span>
               <span className="rounded-full bg-primary/15 px-2 py-0.5 text-xs font-bold text-primary">
@@ -68,35 +91,64 @@ function RiderParcelDetail() {
           <div className="mb-2 text-sm font-semibold">Record Delivery Outcome</div>
           <div className="space-y-2">
             <ActionButton icon={CheckCircle2} label="Delivered" tone="bg-emerald-500 text-white" onClick={() => setSheet("delivered")} />
-            <ActionButton icon={Calendar} label="Reschedule" tone="border border-primary text-primary" onClick={() => setSheet("reschedule")} />
-            <ActionButton icon={HomeIcon} label="Customer Will Collect from Office" tone="border border-primary text-primary" />
-            <ActionButton icon={MapPin} label="Wrong Address" tone="border border-yellow-500 text-yellow-700" onClick={() => setSheet("wrong")} />
+            <ActionButton icon={Calendar} label="Reschedule (Attempt)" tone="border border-primary text-primary" onClick={() => setSheet("reschedule")} disabled={reachedMax} />
+            <ActionButton icon={HomeIcon} label="Customer Will Collect from Office" tone="border border-primary text-primary" onClick={() => setSheet("collect")} />
+            <ActionButton icon={MapPin} label="Wrong Address" tone="border border-yellow-500 text-yellow-700" onClick={() => setSheet("wrong")} disabled={reachedMax} />
+            <ActionButton icon={RotateCcw} label="Return to Sender" tone="border border-destructive text-destructive" onClick={() => setSheet("return")} />
           </div>
         </div>
       </div>
 
-      <FormSheet open={sheet === "delivered"} onOpenChange={o => !o && setSheet(null)} title="Confirm Delivery" saveLabel="Confirm Delivered">
+      <FormSheet
+        open={sheet === "delivered"} onOpenChange={o => !o && reset()}
+        title="Confirm Delivery"
+        saveLabel={update.isPending ? "Saving…" : "Confirm Delivered"}
+        onSave={() => apply("Delivered", { photo: true })}
+      >
         <div className="grid grid-cols-2 gap-2">
-          <PhotoCaptureTile label="Take Photo" size="md" />
-          <IconTile icon={PenTool} label="POD Signature" />
+          <PhotoCaptureTile label="POD Photo" size="md" onCapture={setPhoto} />
         </div>
-        <Field label="Remark"><Textarea placeholder="Optional" /></Field>
+        <Field label="Remark"><Textarea value={notes} onChange={e => setNotes(e.target.value)} placeholder="Optional" /></Field>
         {cod > 0 && (
-          <>
-            <div className="rounded-xl bg-primary/10 p-3 text-sm font-semibold text-primary">COD Collection: KES {cod.toLocaleString()}</div>
-            <Button className="h-11 w-full rounded-full bg-primary text-primary-foreground">Trigger M-Pesa Payment</Button>
-          </>
+          <div className="rounded-xl bg-primary/10 p-3 text-sm font-semibold text-primary">COD Collection: KES {cod.toLocaleString()}</div>
         )}
       </FormSheet>
 
-      <FormSheet open={sheet === "reschedule"} onOpenChange={o => !o && setSheet(null)} title="Reschedule Delivery" saveLabel="Confirm Reschedule">
-        <Field label="Date"><TextInput type="date" /></Field>
-        <Field label="Time"><TextInput type="time" /></Field>
-        <Field label="Note"><Textarea /></Field>
+      <FormSheet
+        open={sheet === "reschedule"} onOpenChange={o => !o && reset()}
+        title="Reschedule Delivery"
+        saveLabel={update.isPending ? "Saving…" : "Confirm Reschedule"}
+        onSave={() => apply("On Hold - Rescheduled", { increment: true, note: `Rescheduled to ${scheduleDate}` })}
+      >
+        <Field label="New Date"><TextInput type="date" value={scheduleDate} onChange={e => setScheduleDate(e.target.value)} /></Field>
+        <Field label="Reason"><Textarea value={notes} onChange={e => setNotes(e.target.value)} /></Field>
       </FormSheet>
 
-      <FormSheet open={sheet === "wrong"} onOpenChange={o => !o && setSheet(null)} title="Report Wrong Address" saveLabel="Submit">
-        <Field label="Notes"><Textarea placeholder="Required" /></Field>
+      <FormSheet
+        open={sheet === "wrong"} onOpenChange={o => !o && reset()}
+        title="Report Wrong Address"
+        saveLabel={update.isPending ? "Saving…" : "Submit"}
+        onSave={() => apply("On Hold - Address Issue", { increment: true })}
+      >
+        <Field label="Notes"><Textarea value={notes} onChange={e => setNotes(e.target.value)} placeholder="Required" /></Field>
+      </FormSheet>
+
+      <FormSheet
+        open={sheet === "collect"} onOpenChange={o => !o && reset()}
+        title="Customer to Collect"
+        saveLabel={update.isPending ? "Saving…" : "Send Back to Office"}
+        onSave={() => apply("Ready for Collection", { note: notes || "Customer collect" })}
+      >
+        <Field label="Notes"><Textarea value={notes} onChange={e => setNotes(e.target.value)} /></Field>
+      </FormSheet>
+
+      <FormSheet
+        open={sheet === "return"} onOpenChange={o => !o && reset()}
+        title="Return to Sender"
+        saveLabel={update.isPending ? "Saving…" : "Initiate Return"}
+        onSave={() => apply("Return Initiated", { note: notes || "Rider initiated return" })}
+      >
+        <Field label="Reason"><Textarea value={notes} onChange={e => setNotes(e.target.value)} placeholder="Required" /></Field>
       </FormSheet>
     </PageLayout>
   );
@@ -111,19 +163,10 @@ function Row({ label, value }: { label: string; value: string }) {
   );
 }
 
-function ActionButton({ icon: Icon, label, tone, onClick }: { icon: React.ComponentType<{ className?: string }>; label: string; tone: string; onClick?: () => void }) {
+function ActionButton({ icon: Icon, label, tone, onClick, disabled }: { icon: React.ComponentType<{ className?: string }>; label: string; tone: string; onClick?: () => void; disabled?: boolean }) {
   return (
-    <button onClick={onClick} className={"flex w-full items-center justify-center gap-2 rounded-full py-3 text-sm font-semibold " + tone}>
+    <button onClick={onClick} disabled={disabled} className={"flex w-full items-center justify-center gap-2 rounded-full py-3 text-sm font-semibold disabled:opacity-40 " + tone}>
       <Icon className="h-4 w-4" /> {label}
-    </button>
-  );
-}
-
-function IconTile({ icon: Icon, label }: { icon: React.ComponentType<{ className?: string }>; label: string }) {
-  return (
-    <button className="flex flex-col items-center gap-1 rounded-xl border border-dashed border-border py-4 text-xs text-muted-foreground">
-      <Icon className="h-5 w-5" />
-      {label}
     </button>
   );
 }
