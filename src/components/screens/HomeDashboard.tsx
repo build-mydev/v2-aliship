@@ -3,6 +3,7 @@ import { PageLayout } from "@/components/layout/PageLayout";
 import { SignOutButton } from "@/components/layout/SignOutButton";
 import { dashboardCounts, roleProfiles } from "@/data/static";
 import type { Role } from "@/data/static";
+import { useAuth } from "@/lib/auth-context";
 import {
   ChevronRight, Archive, PackageOpen, Truck, HelpCircle, Search, PackageCheck, MapPin,
   Settings, type LucideIcon,
