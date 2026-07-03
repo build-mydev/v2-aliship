@@ -282,12 +282,3 @@ export const cashPending = {
   ],
 };
 
-export function loginAs(employeeNo: string): Role | null {
-  const role = demoRoles[employeeNo.trim().toUpperCase()];
-  if (!role) return null;
-  try {
-    localStorage.setItem("aliship.role", role);
-    localStorage.setItem("aliship.employeeNo", employeeNo.trim().toUpperCase());
-  } catch {}
-  return role;
-}
