@@ -141,14 +141,13 @@ export const investigations: {
   { id: "ALS-20260601-9999", status: "Lost", from: "Nairobi CBD", to: "Kisumu Office", lastSeen: "Nairobi DC", daysOpen: 7, lastActionBy: "Super Admin" },
 ];
 
-export const parcelStatusList = [
-  "Pending Confirmation", "Confirmed", "Picked Up", "Arrived at Origin Office",
-  "Departed to DC", "Arrived at DC", "Sorted at DC", "Loaded to Vehicle",
-  "In Transit", "Arrived at Destination DC", "Sorted for Delivery",
-  "Departed for Office", "Arrived at Destination Office", "Ready for Pickup",
-  "Out for Delivery", "Delivered", "Attempted", "Rescheduled", "On Hold - Address",
-  "On Hold - Customer", "Wrong Address", "Return Initiated", "Returned to Sender",
-  "Under Investigation", "Lost", "Damaged", "Cancelled",
+import { ACTIVE_STATUSES, TERMINAL_STATUSES, EXCEPTION_STATUSES, RETURN_STATUSES, type ParcelStatus as CanonicalParcelStatus } from "@/lib/parcel-status";
+
+export const parcelStatusList: CanonicalParcelStatus[] = [
+  ...ACTIVE_STATUSES,
+  ...EXCEPTION_STATUSES,
+  ...RETURN_STATUSES,
+  ...TERMINAL_STATUSES,
 ];
 
 // ===================== Audit =====================
