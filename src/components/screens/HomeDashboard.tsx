@@ -15,7 +15,7 @@ const inbound: StatTile[] = [
   { key: "arrivedPending", label: "Arrived - Pending Processing", icon: Archive, slug: "arrived-pending" },
 ];
 const ops: StatTile[] = [
-  { key: "pendingPickup", label: "Pending Pickup", icon: PackageOpen, slug: "pending-pickup" },
+  { key: "pendingPickup", label: "Pending Confirmation", icon: PackageOpen, slug: "pending-pickup" },
   { key: "outForDelivery", label: "Out For Delivery List", icon: Truck, slug: "out-for-delivery" },
   { key: "todayExceptions", label: "Today's Exceptions", icon: HelpCircle, slug: "today-exceptions" },
   { key: "pendingDecision", label: "Self Pickup Search", icon: Search, slug: "self-pickup-search" },

@@ -300,7 +300,7 @@ function KV({ k, v }: { k: string; v: React.ReactNode }) {
 /* ---------------- dispatcher ---------------- */
 
 const CONFIG: Record<string, { title: string; placeholder?: string; toast?: boolean }> = {
-  "pending-pickup": { title: "Pending Pickup", placeholder: "Waybill No. / Last 4 Digits of Telephone / Receiver." },
+  "pending-pickup": { title: "Pending Confirmation", placeholder: "Waybill No. / Last 4 Digits of Telephone / Receiver." },
   "today-exceptions": { title: "Today's Exceptions", placeholder: "Waybill No. / Last 4 Digits of Telephone / Receiver.", toast: true },
   "self-pickup-search": { title: "Self Pickup Search", placeholder: "Waybill number / Pickup code /last 4 digits of phone number/receiver" },
 };

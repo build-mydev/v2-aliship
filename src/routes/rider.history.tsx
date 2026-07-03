@@ -32,7 +32,7 @@ function RiderHistory() {
           <div className="grid grid-cols-3 text-center text-xs">
             <Cell label="Delivered" value={31} tone="text-emerald-600" />
             <Cell label="Attempted" value={8} tone="text-primary" />
-            <Cell label="Returned" value={2} tone="text-destructive" />
+            <Cell label="Returns" value={2} tone="text-destructive" />
           </div>
         </div>
 
