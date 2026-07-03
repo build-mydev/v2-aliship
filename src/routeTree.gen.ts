@@ -21,6 +21,7 @@ import { Route as DcIndexRouteImport } from './routes/dc.index'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as WaybillSenderRouteImport } from './routes/waybill.sender'
 import { Route as WaybillReceiverRouteImport } from './routes/waybill.receiver'
+import { Route as RiderReportsRouteImport } from './routes/rider.reports'
 import { Route as RiderMenuRouteImport } from './routes/rider.menu'
 import { Route as RiderHistoryRouteImport } from './routes/rider.history'
 import { Route as OfficeReportsRouteImport } from './routes/office.reports'
@@ -114,6 +115,11 @@ const WaybillReceiverRoute = WaybillReceiverRouteImport.update({
   id: '/waybill/receiver',
   path: '/waybill/receiver',
   getParentRoute: () => rootRouteImport,
+} as any)
+const RiderReportsRoute = RiderReportsRouteImport.update({
+  id: '/reports',
+  path: '/reports',
+  getParentRoute: () => RiderRoute,
 } as any)
 const RiderMenuRoute = RiderMenuRouteImport.update({
   id: '/menu',
@@ -311,6 +317,7 @@ export interface FileRoutesByFullPath {
   '/office/reports': typeof OfficeReportsRoute
   '/rider/history': typeof RiderHistoryRoute
   '/rider/menu': typeof RiderMenuRoute
+  '/rider/reports': typeof RiderReportsRoute
   '/waybill/receiver': typeof WaybillReceiverRoute
   '/waybill/sender': typeof WaybillSenderRoute
   '/admin/': typeof AdminIndexRoute
@@ -354,6 +361,7 @@ export interface FileRoutesByTo {
   '/office/reports': typeof OfficeReportsRoute
   '/rider/history': typeof RiderHistoryRoute
   '/rider/menu': typeof RiderMenuRoute
+  '/rider/reports': typeof RiderReportsRoute
   '/waybill/receiver': typeof WaybillReceiverRoute
   '/waybill/sender': typeof WaybillSenderRoute
   '/admin': typeof AdminIndexRoute
@@ -402,6 +410,7 @@ export interface FileRoutesById {
   '/office/reports': typeof OfficeReportsRoute
   '/rider/history': typeof RiderHistoryRoute
   '/rider/menu': typeof RiderMenuRoute
+  '/rider/reports': typeof RiderReportsRoute
   '/waybill/receiver': typeof WaybillReceiverRoute
   '/waybill/sender': typeof WaybillSenderRoute
   '/admin/': typeof AdminIndexRoute
@@ -451,6 +460,7 @@ export interface FileRouteTypes {
     | '/office/reports'
     | '/rider/history'
     | '/rider/menu'
+    | '/rider/reports'
     | '/waybill/receiver'
     | '/waybill/sender'
     | '/admin/'
@@ -494,6 +504,7 @@ export interface FileRouteTypes {
     | '/office/reports'
     | '/rider/history'
     | '/rider/menu'
+    | '/rider/reports'
     | '/waybill/receiver'
     | '/waybill/sender'
     | '/admin'
@@ -541,6 +552,7 @@ export interface FileRouteTypes {
     | '/office/reports'
     | '/rider/history'
     | '/rider/menu'
+    | '/rider/reports'
     | '/waybill/receiver'
     | '/waybill/sender'
     | '/admin/'
@@ -655,6 +667,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/waybill/receiver'
       preLoaderRoute: typeof WaybillReceiverRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/rider/reports': {
+      id: '/rider/reports'
+      path: '/reports'
+      fullPath: '/rider/reports'
+      preLoaderRoute: typeof RiderReportsRouteImport
+      parentRoute: typeof RiderRoute
     }
     '/rider/menu': {
       id: '/rider/menu'
@@ -992,6 +1011,7 @@ const OfficeRouteWithChildren =
 interface RiderRouteChildren {
   RiderHistoryRoute: typeof RiderHistoryRoute
   RiderMenuRoute: typeof RiderMenuRoute
+  RiderReportsRoute: typeof RiderReportsRoute
   RiderIndexRoute: typeof RiderIndexRoute
   RiderParcelIdRoute: typeof RiderParcelIdRoute
   RiderWaybillNewRoute: typeof RiderWaybillNewRoute
@@ -1000,6 +1020,7 @@ interface RiderRouteChildren {
 const RiderRouteChildren: RiderRouteChildren = {
   RiderHistoryRoute: RiderHistoryRoute,
   RiderMenuRoute: RiderMenuRoute,
+  RiderReportsRoute: RiderReportsRoute,
   RiderIndexRoute: RiderIndexRoute,
   RiderParcelIdRoute: RiderParcelIdRoute,
   RiderWaybillNewRoute: RiderWaybillNewRoute,
