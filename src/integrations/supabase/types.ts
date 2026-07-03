@@ -313,6 +313,45 @@ export type Database = {
           },
         ]
       }
+      door_to_door_rates: {
+        Row: {
+          active: boolean
+          created_at: string
+          id: string
+          rate_0_5km: number
+          rate_10_20km: number
+          rate_5_10km: number
+          rate_above_20km: number
+          updated_at: string
+          weight_max: number
+          weight_min: number
+        }
+        Insert: {
+          active?: boolean
+          created_at?: string
+          id?: string
+          rate_0_5km?: number
+          rate_10_20km?: number
+          rate_5_10km?: number
+          rate_above_20km?: number
+          updated_at?: string
+          weight_max: number
+          weight_min: number
+        }
+        Update: {
+          active?: boolean
+          created_at?: string
+          id?: string
+          rate_0_5km?: number
+          rate_10_20km?: number
+          rate_5_10km?: number
+          rate_above_20km?: number
+          updated_at?: string
+          weight_max?: number
+          weight_min?: number
+        }
+        Relationships: []
+      }
       drivers: {
         Row: {
           created_at: string
@@ -982,6 +1021,122 @@ export type Database = {
         }
         Relationships: []
       }
+      tariff_region_towns: {
+        Row: {
+          active: boolean
+          county: string
+          created_at: string
+          id: string
+          name: string
+          region_id: string
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          county: string
+          created_at?: string
+          id?: string
+          name: string
+          region_id: string
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          county?: string
+          created_at?: string
+          id?: string
+          name?: string
+          region_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tariff_region_towns_region_id_fkey"
+            columns: ["region_id"]
+            isOneToOne: false
+            referencedRelation: "tariff_regions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      tariff_regions: {
+        Row: {
+          active: boolean
+          code: string
+          created_at: string
+          description: string | null
+          id: string
+          name: string
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          code: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          name: string
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          code?: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          name?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      tariffs: {
+        Row: {
+          active: boolean
+          base_rate: number
+          created_at: string
+          dest_region_id: string
+          extra_kg: number
+          id: string
+          origin_region_id: string
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          base_rate?: number
+          created_at?: string
+          dest_region_id: string
+          extra_kg?: number
+          id?: string
+          origin_region_id: string
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          base_rate?: number
+          created_at?: string
+          dest_region_id?: string
+          extra_kg?: number
+          id?: string
+          origin_region_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tariffs_dest_region_id_fkey"
+            columns: ["dest_region_id"]
+            isOneToOne: false
+            referencedRelation: "tariff_regions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tariffs_origin_region_id_fkey"
+            columns: ["origin_region_id"]
+            isOneToOne: false
+            referencedRelation: "tariff_regions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       transactions: {
         Row: {
           account_id: string
@@ -991,7 +1146,9 @@ export type Database = {
           created_by: string | null
           id: string
           label: string
+          mpesa_ref: string | null
           reference: string | null
+          type: string
         }
         Insert: {
           account_id: string
@@ -1001,7 +1158,9 @@ export type Database = {
           created_by?: string | null
           id?: string
           label: string
+          mpesa_ref?: string | null
           reference?: string | null
+          type?: string
         }
         Update: {
           account_id?: string
@@ -1011,7 +1170,9 @@ export type Database = {
           created_by?: string | null
           id?: string
           label?: string
+          mpesa_ref?: string | null
           reference?: string | null
+          type?: string
         }
         Relationships: [
           {
@@ -1075,6 +1236,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      calculate_freight: {
+        Args: { p_dest_town: string; p_origin_town: string; p_weight: number }
+        Returns: number
+      }
       generate_waybill_number: {
         Args: { p_type?: Database["public"]["Enums"]["waybill_type"] }
         Returns: string
