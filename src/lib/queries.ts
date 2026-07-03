@@ -452,19 +452,32 @@ export function useUpdateParcelStatus() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (p: { id: string; status: string; incrementAttempt?: boolean; notes?: string | null; podPath?: string | null }) => {
-      const patch: Record<string, unknown> = { status: p.status };
+      let nextAttempt = 0;
       if (p.incrementAttempt) {
         const { data: cur } = await supabase.from("parcels").select("delivery_attempt_count").eq("id", p.id).maybeSingle();
-        patch.delivery_attempt_count = (cur?.delivery_attempt_count ?? 0) + 1;
+        nextAttempt = (cur?.delivery_attempt_count ?? 0) + 1;
+        const { error } = await supabase.from("parcels")
+          .update({ status: p.status as never, delivery_attempt_count: nextAttempt })
+          .eq("id", p.id);
+        if (error) throw error;
+      } else {
+        const { error } = await supabase.from("parcels")
+          .update({ status: p.status as never })
+          .eq("id", p.id);
+        if (error) throw error;
       }
-      const { error } = await supabase.from("parcels").update(patch).eq("id", p.id);
-      if (error) throw error;
-      if (p.podPath || p.notes) {
-        await supabase.from("delivery_attempts").insert({
-          parcel_id: p.id, outcome: p.status, notes: p.notes ?? null, pod_photo_path: p.podPath ?? null,
-        }).then(({ error: e }) => { if (e) console.warn("attempt log failed", e.message); });
+      if (p.notes || p.podPath) {
+        const note = p.podPath ? `${p.notes ?? ""}${p.notes ? " · " : ""}POD:${p.podPath}` : p.notes;
+        const { error: aErr } = await supabase.from("delivery_attempts").insert({
+          parcel_id: p.id,
+          outcome: p.status,
+          attempt_number: nextAttempt || 1,
+          notes: note ?? null,
+        });
+        if (aErr) console.warn("attempt log failed", aErr.message);
       }
     },
+
     onSuccess: (_r, p) => {
       qc.invalidateQueries({ queryKey: ["parcel", p.id] });
       qc.invalidateQueries({ queryKey: ["rider-parcels"] });
