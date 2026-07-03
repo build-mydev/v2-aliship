@@ -26,12 +26,14 @@ export const provisionUser = createServerFn({ method: "POST" })
     return d;
   })
   .handler(async ({ data, context }) => {
-    const { data: isAdmin, error: rErr } = await context.supabase.rpc("has_role", {
-      _user_id: context.userId,
-      _role: "super_admin",
-    });
+    const { data: adminRow, error: rErr } = await context.supabase
+      .from("user_roles")
+      .select("role")
+      .eq("user_id", context.userId)
+      .eq("role", "super_admin")
+      .maybeSingle();
     if (rErr) throw new Error(rErr.message);
-    if (!isAdmin) throw new Error("Forbidden");
+    if (!adminRow) throw new Error("Forbidden");
 
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const email = employeeEmail(data.employeeNo);
