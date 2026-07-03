@@ -43,7 +43,7 @@ export function HomeDashboard({ role }: { role: Role }) {
             <div className="text-sm leading-tight">
               <div className="text-lg font-semibold">{employeeNo}</div>
               <div className="opacity-90">254003</div>
-              <div className="opacity-90">{profile.site}</div>
+              <div className="opacity-90">{siteName}</div>
             </div>
           </div>
           <Link to={role === "super_admin" ? "/admin/settings" : "/admin/settings"} className="opacity-90" aria-label="Settings">
