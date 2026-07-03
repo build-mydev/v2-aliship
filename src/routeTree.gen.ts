@@ -21,15 +21,19 @@ import { Route as DcIndexRouteImport } from './routes/dc.index'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as WaybillSenderRouteImport } from './routes/waybill.sender'
 import { Route as WaybillReceiverRouteImport } from './routes/waybill.receiver'
+import { Route as RiderReportsRouteImport } from './routes/rider.reports'
 import { Route as RiderMenuRouteImport } from './routes/rider.menu'
 import { Route as RiderHistoryRouteImport } from './routes/rider.history'
+import { Route as OfficeReportsRouteImport } from './routes/office.reports'
 import { Route as OfficePrintRouteImport } from './routes/office.print'
 import { Route as OfficeMenuRouteImport } from './routes/office.menu'
 import { Route as OfficeDeliveryMonitorRouteImport } from './routes/office.delivery-monitor'
 import { Route as OfficeCashPendingRouteImport } from './routes/office.cash-pending'
+import { Route as DcReportsRouteImport } from './routes/dc.reports'
 import { Route as DcMenuRouteImport } from './routes/dc.menu'
 import { Route as AdminUsersRouteImport } from './routes/admin.users'
 import { Route as AdminToolsRouteImport } from './routes/admin.tools'
+import { Route as AdminTariffsRouteImport } from './routes/admin.tariffs'
 import { Route as AdminSitesRouteImport } from './routes/admin.sites'
 import { Route as AdminSettingsRouteImport } from './routes/admin.settings'
 import { Route as AdminReportsRouteImport } from './routes/admin.reports'
@@ -112,6 +116,11 @@ const WaybillReceiverRoute = WaybillReceiverRouteImport.update({
   path: '/waybill/receiver',
   getParentRoute: () => rootRouteImport,
 } as any)
+const RiderReportsRoute = RiderReportsRouteImport.update({
+  id: '/reports',
+  path: '/reports',
+  getParentRoute: () => RiderRoute,
+} as any)
 const RiderMenuRoute = RiderMenuRouteImport.update({
   id: '/menu',
   path: '/menu',
@@ -121,6 +130,11 @@ const RiderHistoryRoute = RiderHistoryRouteImport.update({
   id: '/history',
   path: '/history',
   getParentRoute: () => RiderRoute,
+} as any)
+const OfficeReportsRoute = OfficeReportsRouteImport.update({
+  id: '/reports',
+  path: '/reports',
+  getParentRoute: () => OfficeRoute,
 } as any)
 const OfficePrintRoute = OfficePrintRouteImport.update({
   id: '/print',
@@ -142,6 +156,11 @@ const OfficeCashPendingRoute = OfficeCashPendingRouteImport.update({
   path: '/cash-pending',
   getParentRoute: () => OfficeRoute,
 } as any)
+const DcReportsRoute = DcReportsRouteImport.update({
+  id: '/reports',
+  path: '/reports',
+  getParentRoute: () => DcRoute,
+} as any)
 const DcMenuRoute = DcMenuRouteImport.update({
   id: '/menu',
   path: '/menu',
@@ -155,6 +174,11 @@ const AdminUsersRoute = AdminUsersRouteImport.update({
 const AdminToolsRoute = AdminToolsRouteImport.update({
   id: '/tools',
   path: '/tools',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminTariffsRoute = AdminTariffsRouteImport.update({
+  id: '/tariffs',
+  path: '/tariffs',
   getParentRoute: () => AdminRoute,
 } as any)
 const AdminSitesRoute = AdminSitesRouteImport.update({
@@ -281,15 +305,19 @@ export interface FileRoutesByFullPath {
   '/admin/reports': typeof AdminReportsRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/sites': typeof AdminSitesRoute
+  '/admin/tariffs': typeof AdminTariffsRoute
   '/admin/tools': typeof AdminToolsRoute
   '/admin/users': typeof AdminUsersRoute
   '/dc/menu': typeof DcMenuRoute
+  '/dc/reports': typeof DcReportsRoute
   '/office/cash-pending': typeof OfficeCashPendingRoute
   '/office/delivery-monitor': typeof OfficeDeliveryMonitorRoute
   '/office/menu': typeof OfficeMenuRoute
   '/office/print': typeof OfficePrintRoute
+  '/office/reports': typeof OfficeReportsRoute
   '/rider/history': typeof RiderHistoryRoute
   '/rider/menu': typeof RiderMenuRoute
+  '/rider/reports': typeof RiderReportsRoute
   '/waybill/receiver': typeof WaybillReceiverRoute
   '/waybill/sender': typeof WaybillSenderRoute
   '/admin/': typeof AdminIndexRoute
@@ -321,15 +349,19 @@ export interface FileRoutesByTo {
   '/admin/reports': typeof AdminReportsRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/sites': typeof AdminSitesRoute
+  '/admin/tariffs': typeof AdminTariffsRoute
   '/admin/tools': typeof AdminToolsRoute
   '/admin/users': typeof AdminUsersRoute
   '/dc/menu': typeof DcMenuRoute
+  '/dc/reports': typeof DcReportsRoute
   '/office/cash-pending': typeof OfficeCashPendingRoute
   '/office/delivery-monitor': typeof OfficeDeliveryMonitorRoute
   '/office/menu': typeof OfficeMenuRoute
   '/office/print': typeof OfficePrintRoute
+  '/office/reports': typeof OfficeReportsRoute
   '/rider/history': typeof RiderHistoryRoute
   '/rider/menu': typeof RiderMenuRoute
+  '/rider/reports': typeof RiderReportsRoute
   '/waybill/receiver': typeof WaybillReceiverRoute
   '/waybill/sender': typeof WaybillSenderRoute
   '/admin': typeof AdminIndexRoute
@@ -366,15 +398,19 @@ export interface FileRoutesById {
   '/admin/reports': typeof AdminReportsRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/sites': typeof AdminSitesRoute
+  '/admin/tariffs': typeof AdminTariffsRoute
   '/admin/tools': typeof AdminToolsRoute
   '/admin/users': typeof AdminUsersRoute
   '/dc/menu': typeof DcMenuRoute
+  '/dc/reports': typeof DcReportsRoute
   '/office/cash-pending': typeof OfficeCashPendingRoute
   '/office/delivery-monitor': typeof OfficeDeliveryMonitorRoute
   '/office/menu': typeof OfficeMenuRoute
   '/office/print': typeof OfficePrintRoute
+  '/office/reports': typeof OfficeReportsRoute
   '/rider/history': typeof RiderHistoryRoute
   '/rider/menu': typeof RiderMenuRoute
+  '/rider/reports': typeof RiderReportsRoute
   '/waybill/receiver': typeof WaybillReceiverRoute
   '/waybill/sender': typeof WaybillSenderRoute
   '/admin/': typeof AdminIndexRoute
@@ -412,15 +448,19 @@ export interface FileRouteTypes {
     | '/admin/reports'
     | '/admin/settings'
     | '/admin/sites'
+    | '/admin/tariffs'
     | '/admin/tools'
     | '/admin/users'
     | '/dc/menu'
+    | '/dc/reports'
     | '/office/cash-pending'
     | '/office/delivery-monitor'
     | '/office/menu'
     | '/office/print'
+    | '/office/reports'
     | '/rider/history'
     | '/rider/menu'
+    | '/rider/reports'
     | '/waybill/receiver'
     | '/waybill/sender'
     | '/admin/'
@@ -452,15 +492,19 @@ export interface FileRouteTypes {
     | '/admin/reports'
     | '/admin/settings'
     | '/admin/sites'
+    | '/admin/tariffs'
     | '/admin/tools'
     | '/admin/users'
     | '/dc/menu'
+    | '/dc/reports'
     | '/office/cash-pending'
     | '/office/delivery-monitor'
     | '/office/menu'
     | '/office/print'
+    | '/office/reports'
     | '/rider/history'
     | '/rider/menu'
+    | '/rider/reports'
     | '/waybill/receiver'
     | '/waybill/sender'
     | '/admin'
@@ -496,15 +540,19 @@ export interface FileRouteTypes {
     | '/admin/reports'
     | '/admin/settings'
     | '/admin/sites'
+    | '/admin/tariffs'
     | '/admin/tools'
     | '/admin/users'
     | '/dc/menu'
+    | '/dc/reports'
     | '/office/cash-pending'
     | '/office/delivery-monitor'
     | '/office/menu'
     | '/office/print'
+    | '/office/reports'
     | '/rider/history'
     | '/rider/menu'
+    | '/rider/reports'
     | '/waybill/receiver'
     | '/waybill/sender'
     | '/admin/'
@@ -620,6 +668,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof WaybillReceiverRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/rider/reports': {
+      id: '/rider/reports'
+      path: '/reports'
+      fullPath: '/rider/reports'
+      preLoaderRoute: typeof RiderReportsRouteImport
+      parentRoute: typeof RiderRoute
+    }
     '/rider/menu': {
       id: '/rider/menu'
       path: '/menu'
@@ -633,6 +688,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/rider/history'
       preLoaderRoute: typeof RiderHistoryRouteImport
       parentRoute: typeof RiderRoute
+    }
+    '/office/reports': {
+      id: '/office/reports'
+      path: '/reports'
+      fullPath: '/office/reports'
+      preLoaderRoute: typeof OfficeReportsRouteImport
+      parentRoute: typeof OfficeRoute
     }
     '/office/print': {
       id: '/office/print'
@@ -662,6 +724,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OfficeCashPendingRouteImport
       parentRoute: typeof OfficeRoute
     }
+    '/dc/reports': {
+      id: '/dc/reports'
+      path: '/reports'
+      fullPath: '/dc/reports'
+      preLoaderRoute: typeof DcReportsRouteImport
+      parentRoute: typeof DcRoute
+    }
     '/dc/menu': {
       id: '/dc/menu'
       path: '/menu'
@@ -681,6 +750,13 @@ declare module '@tanstack/react-router' {
       path: '/tools'
       fullPath: '/admin/tools'
       preLoaderRoute: typeof AdminToolsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/tariffs': {
+      id: '/admin/tariffs'
+      path: '/tariffs'
+      fullPath: '/admin/tariffs'
+      preLoaderRoute: typeof AdminTariffsRouteImport
       parentRoute: typeof AdminRoute
     }
     '/admin/sites': {
@@ -857,6 +933,7 @@ interface AdminRouteChildren {
   AdminReportsRoute: typeof AdminReportsRoute
   AdminSettingsRoute: typeof AdminSettingsRoute
   AdminSitesRoute: typeof AdminSitesRoute
+  AdminTariffsRoute: typeof AdminTariffsRoute
   AdminToolsRoute: typeof AdminToolsRoute
   AdminUsersRoute: typeof AdminUsersRoute
   AdminIndexRoute: typeof AdminIndexRoute
@@ -877,6 +954,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminReportsRoute: AdminReportsRoute,
   AdminSettingsRoute: AdminSettingsRoute,
   AdminSitesRoute: AdminSitesRoute,
+  AdminTariffsRoute: AdminTariffsRoute,
   AdminToolsRoute: AdminToolsRoute,
   AdminUsersRoute: AdminUsersRoute,
   AdminIndexRoute: AdminIndexRoute,
@@ -889,12 +967,14 @@ const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
 
 interface DcRouteChildren {
   DcMenuRoute: typeof DcMenuRoute
+  DcReportsRoute: typeof DcReportsRoute
   DcIndexRoute: typeof DcIndexRoute
   DcScanTypeRoute: typeof DcScanTypeRoute
 }
 
 const DcRouteChildren: DcRouteChildren = {
   DcMenuRoute: DcMenuRoute,
+  DcReportsRoute: DcReportsRoute,
   DcIndexRoute: DcIndexRoute,
   DcScanTypeRoute: DcScanTypeRoute,
 }
@@ -906,6 +986,7 @@ interface OfficeRouteChildren {
   OfficeDeliveryMonitorRoute: typeof OfficeDeliveryMonitorRoute
   OfficeMenuRoute: typeof OfficeMenuRoute
   OfficePrintRoute: typeof OfficePrintRoute
+  OfficeReportsRoute: typeof OfficeReportsRoute
   OfficeIndexRoute: typeof OfficeIndexRoute
   OfficeOpsSlugRoute: typeof OfficeOpsSlugRoute
   OfficeScanTypeRoute: typeof OfficeScanTypeRoute
@@ -917,6 +998,7 @@ const OfficeRouteChildren: OfficeRouteChildren = {
   OfficeDeliveryMonitorRoute: OfficeDeliveryMonitorRoute,
   OfficeMenuRoute: OfficeMenuRoute,
   OfficePrintRoute: OfficePrintRoute,
+  OfficeReportsRoute: OfficeReportsRoute,
   OfficeIndexRoute: OfficeIndexRoute,
   OfficeOpsSlugRoute: OfficeOpsSlugRoute,
   OfficeScanTypeRoute: OfficeScanTypeRoute,
@@ -929,6 +1011,7 @@ const OfficeRouteWithChildren =
 interface RiderRouteChildren {
   RiderHistoryRoute: typeof RiderHistoryRoute
   RiderMenuRoute: typeof RiderMenuRoute
+  RiderReportsRoute: typeof RiderReportsRoute
   RiderIndexRoute: typeof RiderIndexRoute
   RiderParcelIdRoute: typeof RiderParcelIdRoute
   RiderWaybillNewRoute: typeof RiderWaybillNewRoute
@@ -937,6 +1020,7 @@ interface RiderRouteChildren {
 const RiderRouteChildren: RiderRouteChildren = {
   RiderHistoryRoute: RiderHistoryRoute,
   RiderMenuRoute: RiderMenuRoute,
+  RiderReportsRoute: RiderReportsRoute,
   RiderIndexRoute: RiderIndexRoute,
   RiderParcelIdRoute: RiderParcelIdRoute,
   RiderWaybillNewRoute: RiderWaybillNewRoute,
