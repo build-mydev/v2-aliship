@@ -28,6 +28,7 @@ import { Route as OfficePrintRouteImport } from './routes/office.print'
 import { Route as OfficeMenuRouteImport } from './routes/office.menu'
 import { Route as OfficeDeliveryMonitorRouteImport } from './routes/office.delivery-monitor'
 import { Route as OfficeCashPendingRouteImport } from './routes/office.cash-pending'
+import { Route as DcReportsRouteImport } from './routes/dc.reports'
 import { Route as DcMenuRouteImport } from './routes/dc.menu'
 import { Route as AdminUsersRouteImport } from './routes/admin.users'
 import { Route as AdminToolsRouteImport } from './routes/admin.tools'
@@ -148,6 +149,11 @@ const OfficeCashPendingRoute = OfficeCashPendingRouteImport.update({
   id: '/cash-pending',
   path: '/cash-pending',
   getParentRoute: () => OfficeRoute,
+} as any)
+const DcReportsRoute = DcReportsRouteImport.update({
+  id: '/reports',
+  path: '/reports',
+  getParentRoute: () => DcRoute,
 } as any)
 const DcMenuRoute = DcMenuRouteImport.update({
   id: '/menu',
@@ -297,6 +303,7 @@ export interface FileRoutesByFullPath {
   '/admin/tools': typeof AdminToolsRoute
   '/admin/users': typeof AdminUsersRoute
   '/dc/menu': typeof DcMenuRoute
+  '/dc/reports': typeof DcReportsRoute
   '/office/cash-pending': typeof OfficeCashPendingRoute
   '/office/delivery-monitor': typeof OfficeDeliveryMonitorRoute
   '/office/menu': typeof OfficeMenuRoute
@@ -339,6 +346,7 @@ export interface FileRoutesByTo {
   '/admin/tools': typeof AdminToolsRoute
   '/admin/users': typeof AdminUsersRoute
   '/dc/menu': typeof DcMenuRoute
+  '/dc/reports': typeof DcReportsRoute
   '/office/cash-pending': typeof OfficeCashPendingRoute
   '/office/delivery-monitor': typeof OfficeDeliveryMonitorRoute
   '/office/menu': typeof OfficeMenuRoute
@@ -386,6 +394,7 @@ export interface FileRoutesById {
   '/admin/tools': typeof AdminToolsRoute
   '/admin/users': typeof AdminUsersRoute
   '/dc/menu': typeof DcMenuRoute
+  '/dc/reports': typeof DcReportsRoute
   '/office/cash-pending': typeof OfficeCashPendingRoute
   '/office/delivery-monitor': typeof OfficeDeliveryMonitorRoute
   '/office/menu': typeof OfficeMenuRoute
@@ -434,6 +443,7 @@ export interface FileRouteTypes {
     | '/admin/tools'
     | '/admin/users'
     | '/dc/menu'
+    | '/dc/reports'
     | '/office/cash-pending'
     | '/office/delivery-monitor'
     | '/office/menu'
@@ -476,6 +486,7 @@ export interface FileRouteTypes {
     | '/admin/tools'
     | '/admin/users'
     | '/dc/menu'
+    | '/dc/reports'
     | '/office/cash-pending'
     | '/office/delivery-monitor'
     | '/office/menu'
@@ -522,6 +533,7 @@ export interface FileRouteTypes {
     | '/admin/tools'
     | '/admin/users'
     | '/dc/menu'
+    | '/dc/reports'
     | '/office/cash-pending'
     | '/office/delivery-monitor'
     | '/office/menu'
@@ -692,6 +704,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/office/cash-pending'
       preLoaderRoute: typeof OfficeCashPendingRouteImport
       parentRoute: typeof OfficeRoute
+    }
+    '/dc/reports': {
+      id: '/dc/reports'
+      path: '/reports'
+      fullPath: '/dc/reports'
+      preLoaderRoute: typeof DcReportsRouteImport
+      parentRoute: typeof DcRoute
     }
     '/dc/menu': {
       id: '/dc/menu'
@@ -929,12 +948,14 @@ const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
 
 interface DcRouteChildren {
   DcMenuRoute: typeof DcMenuRoute
+  DcReportsRoute: typeof DcReportsRoute
   DcIndexRoute: typeof DcIndexRoute
   DcScanTypeRoute: typeof DcScanTypeRoute
 }
 
 const DcRouteChildren: DcRouteChildren = {
   DcMenuRoute: DcMenuRoute,
+  DcReportsRoute: DcReportsRoute,
   DcIndexRoute: DcIndexRoute,
   DcScanTypeRoute: DcScanTypeRoute,
 }
