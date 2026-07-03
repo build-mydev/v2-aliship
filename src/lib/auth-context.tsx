@@ -55,28 +55,27 @@ async function loadContext(uid: string): Promise<LoadedContext> {
   // Preferred: user_sites join
   const { data: userSites } = await supabase
     .from("user_sites")
-    .select("site_id, sites!inner(id, name, site_type)")
+    .select("site_id, sites!inner(id, name, type)")
     .eq("user_id", uid)
     .limit(1);
 
   const row = userSites?.[0] as
-    | { site_id: string; sites: { id: string; name: string; site_type: SiteType } | null }
+    | { site_id: string; sites: { id: string; name: string; type: SiteType } | null }
     | undefined;
   if (row?.sites) {
     siteId = row.sites.id;
     siteName = row.sites.name;
-    siteType = row.sites.site_type;
+    siteType = row.sites.type;
   } else if (profile?.site_id) {
-    // Fallback to profiles.site_id
     const { data: site } = await supabase
       .from("sites")
-      .select("id, name, site_type")
+      .select("id, name, type")
       .eq("id", profile.site_id)
       .maybeSingle();
     if (site) {
       siteId = site.id;
       siteName = site.name;
-      siteType = site.site_type as SiteType;
+      siteType = site.type as SiteType;
     }
   }
 
