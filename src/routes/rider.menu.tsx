@@ -2,14 +2,18 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { HeroBanner } from "@/components/layout/HeroBanner";
 import { PageLayout } from "@/components/layout/PageLayout";
 import { SignOutButton } from "@/components/layout/SignOutButton";
-import { users } from "@/data/static";
+import { useAuth } from "@/lib/auth-context";
+import { useMyRiderStats } from "@/lib/queries";
+import { initialsOf } from "@/lib/roles";
 import { ChevronRight, FilePlus, History, MapPin, AlertTriangle } from "lucide-react";
 
 export const Route = createFileRoute("/rider/menu")({ component: RiderMenu });
 
 function RiderMenu() {
-  const me = users.find(u => u.employeeNo === "RID001") ?? users[3];
-  const used = 8, cap = me.maxParcels ?? 15;
+  const { profile, siteName } = useAuth();
+  const { data: stats } = useMyRiderStats();
+  const cap = 15;
+  const used = stats?.pending ?? 0;
   const pct = Math.round((used / cap) * 100);
   const warn = pct >= 80;
 
@@ -19,16 +23,15 @@ function RiderMenu() {
       <div className="space-y-3 px-4 pt-4 pb-24">
         <div className="rounded-2xl bg-card p-4 shadow-sm">
           <div className="flex items-center gap-3">
-            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary text-base font-bold text-primary-foreground">{me.initials}</div>
+            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary text-base font-bold text-primary-foreground">{initialsOf(profile?.full_name ?? "?")}</div>
             <div>
-              <div className="text-base font-bold">{me.name}</div>
-              <div className="text-xs text-muted-foreground">Employee: {me.employeeNo}</div>
+              <div className="text-base font-bold">{profile?.full_name ?? "—"}</div>
+              <div className="text-xs text-muted-foreground">Employee: {profile?.employee_no ?? "—"}</div>
             </div>
           </div>
           <div className="mt-3 space-y-1 text-xs text-muted-foreground">
-            <div>Site: <span className="text-foreground">{me.site} Office</span></div>
-            <div>Vehicle: <span className="text-foreground">{me.vehicle} (Max {me.maxParcels} parcels)</span></div>
-            <div>Zones: <span className="text-foreground">{me.zones?.join(", ")}</span></div>
+            <div>Site: <span className="text-foreground">{siteName ?? "—"}</span></div>
+            <div>Phone: <span className="text-foreground">{profile?.phone ?? "—"}</span></div>
           </div>
         </div>
 
@@ -42,7 +45,7 @@ function RiderMenu() {
           <div className="mb-1 text-sm font-semibold">Today's Capacity</div>
           <div className="mb-2 text-xs text-muted-foreground">{used} / {cap} parcels ({pct}%)</div>
           <div className="h-2 rounded-full bg-muted">
-            <div className="h-2 rounded-full bg-primary" style={{ width: `${pct}%` }} />
+            <div className="h-2 rounded-full bg-primary" style={{ width: `${Math.min(pct, 100)}%` }} />
           </div>
           {warn && (
             <div className="mt-3 flex items-center gap-2 rounded-xl bg-yellow-50 p-2 text-xs text-yellow-800">

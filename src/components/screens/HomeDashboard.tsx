@@ -1,9 +1,10 @@
 import { Link } from "@tanstack/react-router";
 import { PageLayout } from "@/components/layout/PageLayout";
 import { SignOutButton } from "@/components/layout/SignOutButton";
-import { dashboardCounts, roleProfiles } from "@/data/static";
+import { roleProfiles } from "@/data/static";
 import type { Role } from "@/data/static";
 import { useAuth } from "@/lib/auth-context";
+import { useDashboardCounts } from "@/lib/queries";
 import {
   ChevronRight, Archive, PackageOpen, Truck, HelpCircle, Search, PackageCheck, MapPin,
   Settings, type LucideIcon,
@@ -30,6 +31,10 @@ export function HomeDashboard({ role }: { role: Role }) {
   const base = role === "super_admin" ? "/admin" : "/office";
   const employeeNo = auth.profile?.employee_no ?? "";
   const siteName = auth.siteName ?? profile.site;
+  // Super admins see everything (siteId = null). Others are scoped to their site.
+  const scopeSite = role === "super_admin" ? null : (auth.profile?.site_id ?? null);
+  const { data: counts } = useDashboardCounts(scopeSite);
+  const get = (k: string) => (counts as Record<string, number> | undefined)?.[k] ?? 0;
 
   return (
     <PageLayout withBottomNav>
@@ -42,11 +47,11 @@ export function HomeDashboard({ role }: { role: Role }) {
             </div>
             <div className="text-sm leading-tight">
               <div className="text-lg font-semibold">{employeeNo}</div>
-              <div className="opacity-90">254003</div>
+              <div className="opacity-90">{profile.badge}</div>
               <div className="opacity-90">{siteName}</div>
             </div>
           </div>
-          <Link to={role === "super_admin" ? "/admin/settings" : "/admin/settings"} className="opacity-90" aria-label="Settings">
+          <Link to="/admin/settings" className="opacity-90" aria-label="Settings">
             <Settings className="h-6 w-6" />
           </Link>
         </div>
@@ -58,26 +63,17 @@ export function HomeDashboard({ role }: { role: Role }) {
           <div>
             <div className="text-sm text-muted-foreground">Cash Pending Settlement</div>
             <div className="mt-1 text-2xl font-bold text-primary">
-              {dashboardCounts.cashPendingSettlement.toLocaleString()}
+              KES {get("cashPendingSettlement").toLocaleString()}
             </div>
           </div>
           <div className="flex flex-col items-end gap-1">
             <span className="flex items-center text-sm text-muted-foreground">
               View Details <ChevronRight className="h-4 w-4" />
             </span>
-            <svg width="64" height="40" viewBox="0 0 64 40" fill="none" className="mt-1 opacity-60">
-              <ellipse cx="46" cy="33" rx="8" ry="5" fill="currentColor" className="text-primary/30" />
-              <circle cx="14" cy="30" r="5" stroke="currentColor" strokeWidth="2" className="text-primary" />
-              <circle cx="46" cy="30" r="5" stroke="currentColor" strokeWidth="2" className="text-primary" />
-              <path d="M8 30h12l6-12h16l4 8h4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-primary" />
-              <circle cx="28" cy="14" r="4" fill="currentColor" className="text-primary" />
-              <path d="M28 18v4l-2 4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" className="text-primary" />
-            </svg>
           </div>
         </Link>
       </div>
 
-      {/* Inbound card */}
       <div className="mt-3 px-4">
         <div className="rounded-2xl bg-card p-4 shadow-sm">
           <div className="grid grid-cols-[auto_1fr] items-center gap-3">
@@ -87,25 +83,23 @@ export function HomeDashboard({ role }: { role: Role }) {
             </div>
             <div className="grid grid-cols-2 gap-2">
               {inbound.map(s => (
-                <TileLink key={s.key} to={`${base}/ops/${s.slug}`} label={s.label} icon={s.icon} count={(dashboardCounts as Record<string, number>)[s.key] ?? 0} />
+                <TileLink key={s.key} to={`${base}/ops/${s.slug}`} label={s.label} icon={s.icon} count={get(s.key)} />
               ))}
             </div>
           </div>
         </div>
       </div>
 
-      {/* Operations grid */}
       <div className="mt-2 px-4">
         <div className="rounded-2xl bg-card p-4 shadow-sm">
           <div className="grid grid-cols-4 gap-y-4">
             {ops.map(s => (
-              <TileLink key={s.key} to={`${base}/ops/${s.slug}`} label={s.label} icon={s.icon} count={(dashboardCounts as Record<string, number>)[s.key] ?? 0} />
+              <TileLink key={s.key} to={`${base}/ops/${s.slug}`} label={s.label} icon={s.icon} count={get(s.key)} />
             ))}
           </div>
         </div>
       </div>
 
-      {/* Delivery Monitor row */}
       <div className="mt-2 px-4">
         <Link to={`${base}/delivery-monitor`} className="flex items-center justify-between rounded-2xl bg-card p-4 shadow-sm">
           <span className="text-sm font-semibold">Delivery Monitor</span>
