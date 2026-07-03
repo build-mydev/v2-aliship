@@ -11,7 +11,9 @@ import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
-import { AuthProvider } from "@/lib/auth-context";
+import { AuthProvider, useAuth } from "@/lib/auth-context";
+import { AccountPendingSetup } from "@/components/AccountPendingSetup";
+import { useRouterState } from "@tanstack/react-router";
 
 function NotFoundComponent() {
   return (
@@ -118,6 +120,17 @@ function RootShell({ children }: { children: ReactNode }) {
   );
 }
 
+function SiteGate() {
+  const { loading, session, needsSiteAssignment } = useAuth();
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const protectedPrefixes = ["/admin", "/dc", "/office", "/rider"];
+  const isProtected = protectedPrefixes.some((p) => pathname === p || pathname.startsWith(p + "/"));
+  if (!loading && session && needsSiteAssignment && isProtected) {
+    return <AccountPendingSetup />;
+  }
+  return <Outlet />;
+}
+
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
 
@@ -125,7 +138,7 @@ function RootComponent() {
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
         {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-        <Outlet />
+        <SiteGate />
       </AuthProvider>
     </QueryClientProvider>
   );
