@@ -23,6 +23,7 @@ import { Route as WaybillSenderRouteImport } from './routes/waybill.sender'
 import { Route as WaybillReceiverRouteImport } from './routes/waybill.receiver'
 import { Route as RiderMenuRouteImport } from './routes/rider.menu'
 import { Route as RiderHistoryRouteImport } from './routes/rider.history'
+import { Route as OfficeReportsRouteImport } from './routes/office.reports'
 import { Route as OfficePrintRouteImport } from './routes/office.print'
 import { Route as OfficeMenuRouteImport } from './routes/office.menu'
 import { Route as OfficeDeliveryMonitorRouteImport } from './routes/office.delivery-monitor'
@@ -122,6 +123,11 @@ const RiderHistoryRoute = RiderHistoryRouteImport.update({
   id: '/history',
   path: '/history',
   getParentRoute: () => RiderRoute,
+} as any)
+const OfficeReportsRoute = OfficeReportsRouteImport.update({
+  id: '/reports',
+  path: '/reports',
+  getParentRoute: () => OfficeRoute,
 } as any)
 const OfficePrintRoute = OfficePrintRouteImport.update({
   id: '/print',
@@ -295,6 +301,7 @@ export interface FileRoutesByFullPath {
   '/office/delivery-monitor': typeof OfficeDeliveryMonitorRoute
   '/office/menu': typeof OfficeMenuRoute
   '/office/print': typeof OfficePrintRoute
+  '/office/reports': typeof OfficeReportsRoute
   '/rider/history': typeof RiderHistoryRoute
   '/rider/menu': typeof RiderMenuRoute
   '/waybill/receiver': typeof WaybillReceiverRoute
@@ -336,6 +343,7 @@ export interface FileRoutesByTo {
   '/office/delivery-monitor': typeof OfficeDeliveryMonitorRoute
   '/office/menu': typeof OfficeMenuRoute
   '/office/print': typeof OfficePrintRoute
+  '/office/reports': typeof OfficeReportsRoute
   '/rider/history': typeof RiderHistoryRoute
   '/rider/menu': typeof RiderMenuRoute
   '/waybill/receiver': typeof WaybillReceiverRoute
@@ -382,6 +390,7 @@ export interface FileRoutesById {
   '/office/delivery-monitor': typeof OfficeDeliveryMonitorRoute
   '/office/menu': typeof OfficeMenuRoute
   '/office/print': typeof OfficePrintRoute
+  '/office/reports': typeof OfficeReportsRoute
   '/rider/history': typeof RiderHistoryRoute
   '/rider/menu': typeof RiderMenuRoute
   '/waybill/receiver': typeof WaybillReceiverRoute
@@ -429,6 +438,7 @@ export interface FileRouteTypes {
     | '/office/delivery-monitor'
     | '/office/menu'
     | '/office/print'
+    | '/office/reports'
     | '/rider/history'
     | '/rider/menu'
     | '/waybill/receiver'
@@ -470,6 +480,7 @@ export interface FileRouteTypes {
     | '/office/delivery-monitor'
     | '/office/menu'
     | '/office/print'
+    | '/office/reports'
     | '/rider/history'
     | '/rider/menu'
     | '/waybill/receiver'
@@ -515,6 +526,7 @@ export interface FileRouteTypes {
     | '/office/delivery-monitor'
     | '/office/menu'
     | '/office/print'
+    | '/office/reports'
     | '/rider/history'
     | '/rider/menu'
     | '/waybill/receiver'
@@ -645,6 +657,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/rider/history'
       preLoaderRoute: typeof RiderHistoryRouteImport
       parentRoute: typeof RiderRoute
+    }
+    '/office/reports': {
+      id: '/office/reports'
+      path: '/reports'
+      fullPath: '/office/reports'
+      preLoaderRoute: typeof OfficeReportsRouteImport
+      parentRoute: typeof OfficeRoute
     }
     '/office/print': {
       id: '/office/print'
@@ -927,6 +946,7 @@ interface OfficeRouteChildren {
   OfficeDeliveryMonitorRoute: typeof OfficeDeliveryMonitorRoute
   OfficeMenuRoute: typeof OfficeMenuRoute
   OfficePrintRoute: typeof OfficePrintRoute
+  OfficeReportsRoute: typeof OfficeReportsRoute
   OfficeIndexRoute: typeof OfficeIndexRoute
   OfficeOpsSlugRoute: typeof OfficeOpsSlugRoute
   OfficeScanTypeRoute: typeof OfficeScanTypeRoute
@@ -938,6 +958,7 @@ const OfficeRouteChildren: OfficeRouteChildren = {
   OfficeDeliveryMonitorRoute: OfficeDeliveryMonitorRoute,
   OfficeMenuRoute: OfficeMenuRoute,
   OfficePrintRoute: OfficePrintRoute,
+  OfficeReportsRoute: OfficeReportsRoute,
   OfficeIndexRoute: OfficeIndexRoute,
   OfficeOpsSlugRoute: OfficeOpsSlugRoute,
   OfficeScanTypeRoute: OfficeScanTypeRoute,
