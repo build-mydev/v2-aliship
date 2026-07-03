@@ -30,6 +30,7 @@ import { Route as OfficeCashPendingRouteImport } from './routes/office.cash-pend
 import { Route as DcMenuRouteImport } from './routes/dc.menu'
 import { Route as AdminUsersRouteImport } from './routes/admin.users'
 import { Route as AdminToolsRouteImport } from './routes/admin.tools'
+import { Route as AdminTariffsRouteImport } from './routes/admin.tariffs'
 import { Route as AdminSitesRouteImport } from './routes/admin.sites'
 import { Route as AdminSettingsRouteImport } from './routes/admin.settings'
 import { Route as AdminReportsRouteImport } from './routes/admin.reports'
@@ -157,6 +158,11 @@ const AdminToolsRoute = AdminToolsRouteImport.update({
   path: '/tools',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminTariffsRoute = AdminTariffsRouteImport.update({
+  id: '/tariffs',
+  path: '/tariffs',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminSitesRoute = AdminSitesRouteImport.update({
   id: '/sites',
   path: '/sites',
@@ -281,6 +287,7 @@ export interface FileRoutesByFullPath {
   '/admin/reports': typeof AdminReportsRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/sites': typeof AdminSitesRoute
+  '/admin/tariffs': typeof AdminTariffsRoute
   '/admin/tools': typeof AdminToolsRoute
   '/admin/users': typeof AdminUsersRoute
   '/dc/menu': typeof DcMenuRoute
@@ -321,6 +328,7 @@ export interface FileRoutesByTo {
   '/admin/reports': typeof AdminReportsRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/sites': typeof AdminSitesRoute
+  '/admin/tariffs': typeof AdminTariffsRoute
   '/admin/tools': typeof AdminToolsRoute
   '/admin/users': typeof AdminUsersRoute
   '/dc/menu': typeof DcMenuRoute
@@ -366,6 +374,7 @@ export interface FileRoutesById {
   '/admin/reports': typeof AdminReportsRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/sites': typeof AdminSitesRoute
+  '/admin/tariffs': typeof AdminTariffsRoute
   '/admin/tools': typeof AdminToolsRoute
   '/admin/users': typeof AdminUsersRoute
   '/dc/menu': typeof DcMenuRoute
@@ -412,6 +421,7 @@ export interface FileRouteTypes {
     | '/admin/reports'
     | '/admin/settings'
     | '/admin/sites'
+    | '/admin/tariffs'
     | '/admin/tools'
     | '/admin/users'
     | '/dc/menu'
@@ -452,6 +462,7 @@ export interface FileRouteTypes {
     | '/admin/reports'
     | '/admin/settings'
     | '/admin/sites'
+    | '/admin/tariffs'
     | '/admin/tools'
     | '/admin/users'
     | '/dc/menu'
@@ -496,6 +507,7 @@ export interface FileRouteTypes {
     | '/admin/reports'
     | '/admin/settings'
     | '/admin/sites'
+    | '/admin/tariffs'
     | '/admin/tools'
     | '/admin/users'
     | '/dc/menu'
@@ -683,6 +695,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminToolsRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/tariffs': {
+      id: '/admin/tariffs'
+      path: '/tariffs'
+      fullPath: '/admin/tariffs'
+      preLoaderRoute: typeof AdminTariffsRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/sites': {
       id: '/admin/sites'
       path: '/sites'
@@ -857,6 +876,7 @@ interface AdminRouteChildren {
   AdminReportsRoute: typeof AdminReportsRoute
   AdminSettingsRoute: typeof AdminSettingsRoute
   AdminSitesRoute: typeof AdminSitesRoute
+  AdminTariffsRoute: typeof AdminTariffsRoute
   AdminToolsRoute: typeof AdminToolsRoute
   AdminUsersRoute: typeof AdminUsersRoute
   AdminIndexRoute: typeof AdminIndexRoute
@@ -877,6 +897,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminReportsRoute: AdminReportsRoute,
   AdminSettingsRoute: AdminSettingsRoute,
   AdminSitesRoute: AdminSitesRoute,
+  AdminTariffsRoute: AdminTariffsRoute,
   AdminToolsRoute: AdminToolsRoute,
   AdminUsersRoute: AdminUsersRoute,
   AdminIndexRoute: AdminIndexRoute,
