@@ -496,7 +496,14 @@ export function usePendingConfirmations(siteId: string | null) {
       if (siteId) q = q.eq("origin_site_id", siteId);
       const { data, error } = await q;
       if (error) throw error;
-      return data ?? [];
+      const rows = data ?? [];
+      const creatorIds = Array.from(new Set(rows.map(r => r.created_by).filter(Boolean))) as string[];
+      let creators: Record<string, string> = {};
+      if (creatorIds.length) {
+        const { data: profs } = await supabase.from("profiles").select("user_id, full_name").in("user_id", creatorIds);
+        creators = Object.fromEntries((profs ?? []).map(p => [p.user_id, p.full_name]));
+      }
+      return rows.map(r => ({ ...r, created_by_name: r.created_by ? creators[r.created_by] ?? null : null }));
     },
   });
 }
@@ -504,10 +511,30 @@ export function usePendingConfirmations(siteId: string | null) {
 export function useConfirmParcel() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: async (p: { id: string; approve: boolean }) => {
-      const status = p.approve ? "Arrived at Origin Office" : "Rejected";
-      const patch: Record<string, unknown> = { status };
-      if (p.approve) { patch.freight_confirmed = true; patch.confirmed_at = new Date().toISOString(); }
+    mutationFn: async (p: {
+      id: string;
+      approve: boolean;
+      weight_kg?: number;
+      freight_amount?: number;
+      payment_status?: string;
+      cod_amount?: number;
+      reason?: string;
+    }) => {
+      const patch: Record<string, unknown> = {
+        status: p.approve ? "Arrived at Origin Office" : "Rejected",
+      };
+      if (p.approve) {
+        patch.freight_confirmed = true;
+        patch.confirmed_at = new Date().toISOString();
+        const { data: u } = await supabase.auth.getUser();
+        if (u.user?.id) patch.confirmed_by = u.user.id;
+        if (p.weight_kg !== undefined) patch.weight_kg = p.weight_kg;
+        if (p.freight_amount !== undefined) patch.freight_amount = p.freight_amount;
+        if (p.payment_status) patch.payment_status = p.payment_status;
+        if (p.cod_amount !== undefined) patch.cod_amount = p.cod_amount;
+      } else if (p.reason) {
+        patch.return_reason = p.reason;
+      }
       const { error } = await supabase.from("parcels").update(patch as never).eq("id", p.id);
       if (error) throw error;
     },
@@ -518,5 +545,78 @@ export function useConfirmParcel() {
     },
   });
 }
+
+// ================== MANIFESTS ==================
+export function useOriginManifests(siteId: string | null) {
+  return useQuery({
+    queryKey: ["manifests", "origin", siteId],
+    enabled: !!siteId,
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("manifests").select("id, manifest_number, destination_site_id, status")
+        .eq("origin_site_id", siteId!).in("status", ["draft", "sealed"])
+        .order("created_at", { ascending: false });
+      if (error) throw error;
+      return data ?? [];
+    },
+  });
+}
+
+// ================== DEPARTURE SCAN ==================
+export async function fetchParcelByWaybill(waybill: string) {
+  const { data, error } = await supabase.from("parcels").select("*").eq("waybill", waybill).maybeSingle();
+  if (error) throw error;
+  return data;
+}
+
+function nextDepartureStatus(current: string, nextSiteType: string | null): string | null {
+  switch (current) {
+    case "Arrived at Origin Office": return "Departed to DC";
+    case "Sorted at DC":
+      if (nextSiteType === "dc") return "Departed to Destination DC";
+      return "Departed to Site Office";
+    case "Sorted at Destination DC": return "Departed to Site Office";
+    default: return null;
+  }
+}
+
+export function useDepartureScan() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (p: {
+      parcel: { id: string; waybill: string; status: string; current_site_id: string | null };
+      nextSiteId: string;
+      nextSiteType: string | null;
+      manifestId?: string | null;
+      siteId: string | null;
+    }) => {
+      const to = nextDepartureStatus(p.parcel.status, p.nextSiteType);
+      if (!to) throw new Error(`Cannot depart from status "${p.parcel.status}"`);
+      const { data: u } = await supabase.auth.getUser();
+      const actor = u.user?.id ?? null;
+
+      const patch: Record<string, unknown> = { status: to, destination_site_id: p.nextSiteId };
+      if (p.nextSiteType === "dc" && p.parcel.status === "Sorted at DC") patch.destination_dc_id = p.nextSiteId;
+      const { error } = await supabase.from("parcels").update(patch as never).eq("id", p.parcel.id);
+      if (error) throw error;
+
+      await supabase.from("scan_events").insert({
+        parcel_id: p.parcel.id,
+        waybill: p.parcel.waybill,
+        event_type: "departure",
+        from_status: p.parcel.status as never,
+        to_status: to as never,
+        site_id: p.siteId,
+        actor_id: actor,
+        notes: p.manifestId ? `manifest:${p.manifestId}` : null,
+      });
+      return { waybill: p.parcel.waybill, to };
+    },
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["parcels"] });
+    },
+  });
+}
+
 
 
