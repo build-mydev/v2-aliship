@@ -203,6 +203,7 @@ function ArrivalScan({ title, withBottomNav }: { title: string; withBottomNav: b
           </button>
         }
       />
+      <InlineScanner onDetected={() => {}} />
       <div className="px-4 py-4 space-y-3">
         <div className="grid grid-cols-[1fr_auto] gap-2">
           <InputRow placeholder="Weight per piece" suffix="KG" />
