@@ -435,37 +435,12 @@ function SaveButtonLabel({ label }: { label: string }) {
   );
 }
 
-/* ---------- Departure (kept) ---------- */
+/* ---------- Departure (real DB) ---------- */
 
 function DepartureScan({ title, withBottomNav }: { title: string; withBottomNav: boolean }) {
-  return (
-    <PageLayout withBottomNav={withBottomNav}>
-      <SubPageHeader title={title} />
-      <div className="space-y-3 px-4 py-4">
-        <div className="grid grid-cols-2 gap-2">
-          <FieldBox label="Task Order" scan />
-          <FieldBox label="Next Site" selectable />
-        </div>
-        <FieldBox label="Waybill / Bag Number" scan />
-        <SaveButton />
-      </div>
-      <ScannedBlock count={0} />
-    </PageLayout>
-  );
+  return <DepartureScanReal title={title} withBottomNav={withBottomNav} />;
 }
 
-function FieldBox({ label, scan, selectable }: { label: string; scan?: boolean; selectable?: boolean }) {
-  return (
-    <div className="rounded-2xl bg-card p-3 shadow-sm">
-      <label className="block text-[10px] font-medium uppercase tracking-wide text-muted-foreground">{label}</label>
-      <div className="flex items-center gap-2">
-        <input placeholder={scan ? "Scan or enter" : "Select"} className="flex-1 bg-transparent py-1 text-sm outline-none" />
-        {scan && <ScanLine className="h-4 w-4 text-primary" />}
-        {selectable && <ChevronDown className="h-4 w-4 text-muted-foreground" />}
-      </div>
-    </div>
-  );
-}
 
 /* ---------- Exception Entry ---------- */
 
