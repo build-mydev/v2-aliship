@@ -3,9 +3,11 @@ import { PageLayout } from "@/components/layout/PageLayout";
 import { SubPageHeader } from "@/components/layout/SubPageHeader";
 import { StaticScanPage } from "@/components/layout/StaticScanPage";
 import { StickyActionBar } from "@/components/layout/StickyActionBar";
-import { ScanLine, ChevronDown, Camera, PenLine, Calendar, X } from "lucide-react";
+import { ChevronDown, Camera, PenLine, Calendar, X } from "lucide-react";
 import { PhotoCaptureTile } from "@/components/layout/PhotoCaptureTile";
-import { BarcodeScannerSheet } from "@/components/layout/BarcodeScannerSheet";
+import { InlineScanner } from "@/components/layout/InlineScanner";
+import { DepartureScanReal } from "@/components/screens/DepartureScanReal";
+
 
 const LABELS: Record<string, string> = {
   departure: "Departure Scan",
@@ -127,10 +129,11 @@ function TextArea({ placeholder }: { placeholder: string }) {
 /* ---------- Shared primitives ---------- */
 
 function InputRow({
-  placeholder, suffix, scan, chevron, focused,
-}: { placeholder: string; suffix?: string; scan?: boolean; chevron?: boolean; focused?: boolean }) {
-  const [value, setValue] = useState("");
-  const [scanning, setScanning] = useState(false);
+  placeholder, suffix, chevron, focused, value: propValue, onChange,
+}: { placeholder: string; suffix?: string; scan?: boolean; chevron?: boolean; focused?: boolean; value?: string; onChange?: (v: string) => void }) {
+  const [internal, setInternal] = useState("");
+  const value = propValue ?? internal;
+  const setValue = onChange ?? setInternal;
   return (
     <div
       className={
@@ -145,28 +148,11 @@ function InputRow({
         className="flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground"
       />
       {suffix && <span className="text-xs font-medium text-muted-foreground">{suffix}</span>}
-      {scan && (
-        <>
-          <button
-            type="button"
-            onClick={() => setScanning(true)}
-            aria-label="Open scanner"
-            className="rounded-full p-1 text-primary active:scale-95"
-          >
-            <ScanLine className="h-5 w-5" />
-          </button>
-          <BarcodeScannerSheet
-            open={scanning}
-            onClose={() => setScanning(false)}
-            onDetected={v => setValue(v)}
-            title={placeholder}
-          />
-        </>
-      )}
       {chevron && <ChevronDown className="h-4 w-4 text-muted-foreground" />}
     </div>
   );
 }
+
 
 function SaveButton({ enabled = false }: { enabled?: boolean }) {
   return (
@@ -217,6 +203,7 @@ function ArrivalScan({ title, withBottomNav }: { title: string; withBottomNav: b
           </button>
         }
       />
+      <InlineScanner onDetected={() => {}} />
       <div className="px-4 py-4 space-y-3">
         <div className="grid grid-cols-[1fr_auto] gap-2">
           <InputRow placeholder="Weight per piece" suffix="KG" />
@@ -241,6 +228,7 @@ function CollectionScan({ title, withBottomNav }: { title: string; withBottomNav
   return (
     <PageLayout withBottomNav={withBottomNav}>
       <SubPageHeader title={title} />
+      <InlineScanner onDetected={() => {}} />
       <div className="px-4 py-4 space-y-3">
         <InputRow placeholder="Rack Number" scan />
         <InputRow placeholder="Waybill No." scan />
@@ -257,6 +245,7 @@ function OutDeliveryScan({ title, withBottomNav }: { title: string; withBottomNa
   return (
     <PageLayout withBottomNav={withBottomNav}>
       <SubPageHeader title={title} />
+      <InlineScanner onDetected={() => {}} />
       <div className="px-4 py-4 space-y-3">
         <InputRow placeholder="Rider Name" focused />
         <InputRow placeholder="Waybill No." scan />
@@ -273,6 +262,7 @@ function DeliveredScan({ title, withBottomNav }: { title: string; withBottomNav:
   return (
     <PageLayout withBottomNav={withBottomNav}>
       <SubPageHeader title={title} />
+      <InlineScanner onDetected={() => {}} />
       <div className="px-4 py-4 space-y-3">
         <div className="grid grid-cols-[1fr_auto] gap-2">
           <InputRow placeholder="Delivered By" />
@@ -318,6 +308,7 @@ function PaymentScan({ title, withBottomNav }: { title: string; withBottomNav: b
   return (
     <PageLayout withBottomNav={withBottomNav} withStickyAction={tab === "initiate"}>
       <SubPageHeader title={title} />
+      <InlineScanner onDetected={() => {}} />
       <div className="flex border-b border-border bg-card">
         {([
           ["initiate", "Initiate Payment Collection"],
@@ -449,37 +440,12 @@ function SaveButtonLabel({ label }: { label: string }) {
   );
 }
 
-/* ---------- Departure (kept) ---------- */
+/* ---------- Departure (real DB) ---------- */
 
 function DepartureScan({ title, withBottomNav }: { title: string; withBottomNav: boolean }) {
-  return (
-    <PageLayout withBottomNav={withBottomNav}>
-      <SubPageHeader title={title} />
-      <div className="space-y-3 px-4 py-4">
-        <div className="grid grid-cols-2 gap-2">
-          <FieldBox label="Task Order" scan />
-          <FieldBox label="Next Site" selectable />
-        </div>
-        <FieldBox label="Waybill / Bag Number" scan />
-        <SaveButton />
-      </div>
-      <ScannedBlock count={0} />
-    </PageLayout>
-  );
+  return <DepartureScanReal title={title} withBottomNav={withBottomNav} />;
 }
 
-function FieldBox({ label, scan, selectable }: { label: string; scan?: boolean; selectable?: boolean }) {
-  return (
-    <div className="rounded-2xl bg-card p-3 shadow-sm">
-      <label className="block text-[10px] font-medium uppercase tracking-wide text-muted-foreground">{label}</label>
-      <div className="flex items-center gap-2">
-        <input placeholder={scan ? "Scan or enter" : "Select"} className="flex-1 bg-transparent py-1 text-sm outline-none" />
-        {scan && <ScanLine className="h-4 w-4 text-primary" />}
-        {selectable && <ChevronDown className="h-4 w-4 text-muted-foreground" />}
-      </div>
-    </div>
-  );
-}
 
 /* ---------- Exception Entry ---------- */
 
@@ -499,6 +465,7 @@ function ExceptionEntry({ title, withBottomNav }: { title: string; withBottomNav
   return (
     <PageLayout withBottomNav={withBottomNav}>
       <SubPageHeader title={title} />
+      <InlineScanner onDetected={() => {}} />
       <div className="space-y-3 px-4 py-4">
         <InputRow placeholder="Waybill Number/Bag Number" scan />
         <SelectField placeholder="Exception Type" value={type} onClick={() => setOpen(true)} focused={!type} />
@@ -530,6 +497,7 @@ function ReturnEntry({ title, withBottomNav }: { title: string; withBottomNav: b
   return (
     <PageLayout withBottomNav={withBottomNav}>
       <SubPageHeader title={title} />
+      <InlineScanner onDetected={() => {}} />
       <div className="space-y-3 px-4 py-4">
         <SelectField placeholder="Type" value={type} onClick={() => setOpen(true)} />
         <TextArea placeholder="Reason" />
@@ -560,6 +528,7 @@ function HoldScan({ title, withBottomNav }: { title: string; withBottomNav: bool
   return (
     <PageLayout withBottomNav={withBottomNav}>
       <SubPageHeader title={title} />
+      <InlineScanner onDetected={() => {}} />
       <div className="space-y-3 px-4 py-4">
         <SelectField placeholder="Type" value={type} onClick={() => setOpen(true)} focused={!type} />
         <InputRow placeholder="Waybill Number/Bag Number" scan />
