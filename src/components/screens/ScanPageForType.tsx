@@ -129,10 +129,11 @@ function TextArea({ placeholder }: { placeholder: string }) {
 /* ---------- Shared primitives ---------- */
 
 function InputRow({
-  placeholder, suffix, scan, chevron, focused,
-}: { placeholder: string; suffix?: string; scan?: boolean; chevron?: boolean; focused?: boolean }) {
-  const [value, setValue] = useState("");
-  const [scanning, setScanning] = useState(false);
+  placeholder, suffix, chevron, focused, value: propValue, onChange,
+}: { placeholder: string; suffix?: string; scan?: boolean; chevron?: boolean; focused?: boolean; value?: string; onChange?: (v: string) => void }) {
+  const [internal, setInternal] = useState("");
+  const value = propValue ?? internal;
+  const setValue = onChange ?? setInternal;
   return (
     <div
       className={
@@ -147,28 +148,11 @@ function InputRow({
         className="flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground"
       />
       {suffix && <span className="text-xs font-medium text-muted-foreground">{suffix}</span>}
-      {scan && (
-        <>
-          <button
-            type="button"
-            onClick={() => setScanning(true)}
-            aria-label="Open scanner"
-            className="rounded-full p-1 text-primary active:scale-95"
-          >
-            <ScanLine className="h-5 w-5" />
-          </button>
-          <BarcodeScannerSheet
-            open={scanning}
-            onClose={() => setScanning(false)}
-            onDetected={v => setValue(v)}
-            title={placeholder}
-          />
-        </>
-      )}
       {chevron && <ChevronDown className="h-4 w-4 text-muted-foreground" />}
     </div>
   );
 }
+
 
 function SaveButton({ enabled = false }: { enabled?: boolean }) {
   return (
