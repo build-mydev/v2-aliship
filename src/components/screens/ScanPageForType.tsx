@@ -3,9 +3,11 @@ import { PageLayout } from "@/components/layout/PageLayout";
 import { SubPageHeader } from "@/components/layout/SubPageHeader";
 import { StaticScanPage } from "@/components/layout/StaticScanPage";
 import { StickyActionBar } from "@/components/layout/StickyActionBar";
-import { ScanLine, ChevronDown, Camera, PenLine, Calendar, X } from "lucide-react";
+import { ChevronDown, Camera, PenLine, Calendar, X } from "lucide-react";
 import { PhotoCaptureTile } from "@/components/layout/PhotoCaptureTile";
-import { BarcodeScannerSheet } from "@/components/layout/BarcodeScannerSheet";
+import { InlineScanner } from "@/components/layout/InlineScanner";
+import { DepartureScanReal } from "@/components/screens/DepartureScanReal";
+
 
 const LABELS: Record<string, string> = {
   departure: "Departure Scan",
