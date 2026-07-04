@@ -227,6 +227,7 @@ function CollectionScan({ title, withBottomNav }: { title: string; withBottomNav
   return (
     <PageLayout withBottomNav={withBottomNav}>
       <SubPageHeader title={title} />
+      <InlineScanner onDetected={() => {}} />
       <div className="px-4 py-4 space-y-3">
         <InputRow placeholder="Rack Number" scan />
         <InputRow placeholder="Waybill No." scan />
@@ -243,6 +244,7 @@ function OutDeliveryScan({ title, withBottomNav }: { title: string; withBottomNa
   return (
     <PageLayout withBottomNav={withBottomNav}>
       <SubPageHeader title={title} />
+      <InlineScanner onDetected={() => {}} />
       <div className="px-4 py-4 space-y-3">
         <InputRow placeholder="Rider Name" focused />
         <InputRow placeholder="Waybill No." scan />
@@ -259,6 +261,7 @@ function DeliveredScan({ title, withBottomNav }: { title: string; withBottomNav:
   return (
     <PageLayout withBottomNav={withBottomNav}>
       <SubPageHeader title={title} />
+      <InlineScanner onDetected={() => {}} />
       <div className="px-4 py-4 space-y-3">
         <div className="grid grid-cols-[1fr_auto] gap-2">
           <InputRow placeholder="Delivered By" />
@@ -304,6 +307,7 @@ function PaymentScan({ title, withBottomNav }: { title: string; withBottomNav: b
   return (
     <PageLayout withBottomNav={withBottomNav} withStickyAction={tab === "initiate"}>
       <SubPageHeader title={title} />
+      <InlineScanner onDetected={() => {}} />
       <div className="flex border-b border-border bg-card">
         {([
           ["initiate", "Initiate Payment Collection"],
@@ -460,6 +464,7 @@ function ExceptionEntry({ title, withBottomNav }: { title: string; withBottomNav
   return (
     <PageLayout withBottomNav={withBottomNav}>
       <SubPageHeader title={title} />
+      <InlineScanner onDetected={() => {}} />
       <div className="space-y-3 px-4 py-4">
         <InputRow placeholder="Waybill Number/Bag Number" scan />
         <SelectField placeholder="Exception Type" value={type} onClick={() => setOpen(true)} focused={!type} />
@@ -491,6 +496,7 @@ function ReturnEntry({ title, withBottomNav }: { title: string; withBottomNav: b
   return (
     <PageLayout withBottomNav={withBottomNav}>
       <SubPageHeader title={title} />
+      <InlineScanner onDetected={() => {}} />
       <div className="space-y-3 px-4 py-4">
         <SelectField placeholder="Type" value={type} onClick={() => setOpen(true)} />
         <TextArea placeholder="Reason" />
@@ -521,6 +527,7 @@ function HoldScan({ title, withBottomNav }: { title: string; withBottomNav: bool
   return (
     <PageLayout withBottomNav={withBottomNav}>
       <SubPageHeader title={title} />
+      <InlineScanner onDetected={() => {}} />
       <div className="space-y-3 px-4 py-4">
         <SelectField placeholder="Type" value={type} onClick={() => setOpen(true)} focused={!type} />
         <InputRow placeholder="Waybill Number/Bag Number" scan />
