@@ -281,7 +281,7 @@ function DeliveredScan({ title, withBottomNav }: { title: string; withBottomNav:
   return (
     <PageLayout withBottomNav={withBottomNav}>
       <SubPageHeader title={title} />
-      <InlineScanner open={scanOpen} onClose={() => setScanOpen(false)} onDetected={code => push(code, meta())} />
+      <InlineScanner open={scanOpen} onClose={() => setScanOpen(false)} onDetected={code => { push(code, meta()); setScanOpen(false); }} />
       <div className="px-4 py-4 space-y-3">
         <div className="grid grid-cols-[1fr_auto] gap-2">
           <InputRow placeholder="Delivered By" value={by} onChange={setBy} />
