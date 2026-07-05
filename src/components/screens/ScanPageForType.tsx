@@ -215,7 +215,7 @@ function ArrivalScan({ title, withBottomNav }: { title: string; withBottomNav: b
             <span className="text-sm text-muted-foreground">Lock</span>
           </label>
         </div>
-        <InputRow placeholder="Waybill Number/Bag Number" scan value={manual} onChange={setManual} onEnter={() => add()} />
+        <InputRow placeholder="Waybill Number/Bag Number" scan onScanClick={() => setScanOpen(true)} value={manual} onChange={setManual} onEnter={() => add()} />
         <PhotoCaptureTile label="Take A Picture" />
         <SaveButton enabled={manual.length > 0} onClick={() => add()} />
       </div>
@@ -481,7 +481,7 @@ function ExceptionEntry({ title, withBottomNav }: { title: string; withBottomNav
       <SubPageHeader title={title} />
       <InlineScanner open={scanOpen} onClose={() => setScanOpen(false)} onDetected={code => { push(code, type ?? undefined); setScanOpen(false); }} />
       <div className="space-y-3 px-4 py-4">
-        <InputRow placeholder="Waybill Number/Bag Number" scan value={manual} onChange={setManual} onEnter={() => add()} />
+        <InputRow placeholder="Waybill Number/Bag Number" scan onScanClick={() => setScanOpen(true)} value={manual} onChange={setManual} onEnter={() => add()} />
         <SelectField placeholder="Exception Type" value={type} onClick={() => setOpen(true)} focused={!type} />
         <TextArea placeholder="Reason" />
         <InputRow placeholder="NotifySite" />
@@ -552,7 +552,7 @@ function HoldScan({ title, withBottomNav }: { title: string; withBottomNav: bool
       <InlineScanner open={scanOpen} onClose={() => setScanOpen(false)} onDetected={code => { push(code, type ?? undefined); setScanOpen(false); }} />
       <div className="space-y-3 px-4 py-4">
         <SelectField placeholder="Type" value={type} onClick={() => setOpen(true)} focused={!type} />
-        <InputRow placeholder="Waybill Number/Bag Number" scan value={manual} onChange={setManual} onEnter={() => add()} />
+        <InputRow placeholder="Waybill Number/Bag Number" scan onScanClick={() => setScanOpen(true)} value={manual} onChange={setManual} onEnter={() => add()} />
         <TextArea placeholder="Remark" />
         <SaveButton enabled={!!type && manual.length > 0} onClick={() => add()} />
       </div>
