@@ -3,7 +3,7 @@ import { PageLayout } from "@/components/layout/PageLayout";
 import { SubPageHeader } from "@/components/layout/SubPageHeader";
 import { StaticScanPage } from "@/components/layout/StaticScanPage";
 import { StickyActionBar } from "@/components/layout/StickyActionBar";
-import { ChevronDown, Camera, PenLine, Calendar, X } from "lucide-react";
+import { ChevronDown, Camera, PenLine, Calendar, X, ScanLine } from "lucide-react";
 import { PhotoCaptureTile } from "@/components/layout/PhotoCaptureTile";
 import { InlineScanner } from "@/components/layout/InlineScanner";
 import { ScannedList, useScannedList } from "@/components/layout/ScannedList";
