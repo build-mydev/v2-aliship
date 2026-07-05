@@ -80,7 +80,7 @@ export function DepartureScanReal({ title, withBottomNav = true }: { title: stri
   return (
     <PageLayout withBottomNav={withBottomNav}>
       <SubPageHeader title={title} />
-      <InlineScanner onDetected={handleScan} invalidPulse={invalidTick > 0 ? Boolean(invalidTick) : undefined} />
+      <InlineScanner open={scanOpen} onClose={() => setScanOpen(false)} onDetected={handleScan} invalidPulse={invalidTick > 0 ? Boolean(invalidTick) : undefined} />
       <div className="space-y-3 px-4 pt-3 pb-6">
         <Select label="Task Order / Manifest (optional)" value={manifestId} onChange={setManifestId}
           options={[

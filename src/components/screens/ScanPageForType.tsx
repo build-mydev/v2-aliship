@@ -206,7 +206,7 @@ function ArrivalScan({ title, withBottomNav }: { title: string; withBottomNav: b
           </button>
         }
       />
-      <InlineScanner onDetected={code => { push(code); setScanOpen(false); }} />
+      <InlineScanner open={scanOpen} onClose={() => setScanOpen(false)} onDetected={code => { push(code); setScanOpen(false); }} />
       <div className="px-4 py-4 space-y-3">
         <div className="grid grid-cols-[1fr_auto] gap-2">
           <InputRow placeholder="Weight per piece" suffix="KG" />
@@ -235,7 +235,7 @@ function CollectionScan({ title, withBottomNav }: { title: string; withBottomNav
   return (
     <PageLayout withBottomNav={withBottomNav}>
       <SubPageHeader title={title} />
-      <InlineScanner onDetected={code => { push(code, rack ? `Rack: ${rack}` : undefined); setScanOpen(false); }} />
+      <InlineScanner open={scanOpen} onClose={() => setScanOpen(false)} onDetected={code => { push(code, rack ? `Rack: ${rack}` : undefined); setScanOpen(false); }} />
       <div className="px-4 py-4 space-y-3">
         <InputRow placeholder="Rack Number" scan onScanClick={() => setScanOpen(true)} value={rack} onChange={setRack} />
         <InputRow placeholder="Waybill No." scan onScanClick={() => setScanOpen(true)} value={manual} onChange={setManual} onEnter={() => add()} />
@@ -257,7 +257,7 @@ function OutDeliveryScan({ title, withBottomNav }: { title: string; withBottomNa
   return (
     <PageLayout withBottomNav={withBottomNav}>
       <SubPageHeader title={title} />
-      <InlineScanner onDetected={code => { push(code, rider ? `Rider: ${rider}` : undefined); setScanOpen(false); }} />
+      <InlineScanner open={scanOpen} onClose={() => setScanOpen(false)} onDetected={code => { push(code, rider ? `Rider: ${rider}` : undefined); setScanOpen(false); }} />
       <div className="px-4 py-4 space-y-3">
         <InputRow placeholder="Rider Name" focused value={rider} onChange={setRider} />
         <InputRow placeholder="Waybill No." scan onScanClick={() => setScanOpen(true)} value={manual} onChange={setManual} onEnter={() => add()} />
@@ -281,7 +281,7 @@ function DeliveredScan({ title, withBottomNav }: { title: string; withBottomNav:
   return (
     <PageLayout withBottomNav={withBottomNav}>
       <SubPageHeader title={title} />
-      <InlineScanner onDetected={code => push(code, meta())} />
+      <InlineScanner open={scanOpen} onClose={() => setScanOpen(false)} onDetected={code => push(code, meta())} />
       <div className="px-4 py-4 space-y-3">
         <div className="grid grid-cols-[1fr_auto] gap-2">
           <InputRow placeholder="Delivered By" value={by} onChange={setBy} />
@@ -317,7 +317,7 @@ function PaymentScan({ title, withBottomNav }: { title: string; withBottomNav: b
   return (
     <PageLayout withBottomNav={withBottomNav} withStickyAction={tab === "initiate"}>
       <SubPageHeader title={title} />
-      <InlineScanner onDetected={code => { push(code); setScanOpen(false); }} />
+      <InlineScanner open={scanOpen} onClose={() => setScanOpen(false)} onDetected={code => { push(code); setScanOpen(false); }} />
       <div className="flex border-b border-border bg-card">
         {([
           ["initiate", "Initiate Payment Collection"],
@@ -479,7 +479,7 @@ function ExceptionEntry({ title, withBottomNav }: { title: string; withBottomNav
   return (
     <PageLayout withBottomNav={withBottomNav}>
       <SubPageHeader title={title} />
-      <InlineScanner onDetected={code => { push(code, type ?? undefined); setScanOpen(false); }} />
+      <InlineScanner open={scanOpen} onClose={() => setScanOpen(false)} onDetected={code => { push(code, type ?? undefined); setScanOpen(false); }} />
       <div className="space-y-3 px-4 py-4">
         <InputRow placeholder="Waybill Number/Bag Number" scan value={manual} onChange={setManual} onEnter={() => add()} />
         <SelectField placeholder="Exception Type" value={type} onClick={() => setOpen(true)} focused={!type} />
@@ -514,7 +514,7 @@ function ReturnEntry({ title, withBottomNav }: { title: string; withBottomNav: b
   return (
     <PageLayout withBottomNav={withBottomNav}>
       <SubPageHeader title={title} />
-      <InlineScanner onDetected={code => { push(code, type ?? undefined); setScanOpen(false); }} />
+      <InlineScanner open={scanOpen} onClose={() => setScanOpen(false)} onDetected={code => { push(code, type ?? undefined); setScanOpen(false); }} />
       <div className="space-y-3 px-4 py-4">
         <SelectField placeholder="Type" value={type} onClick={() => setOpen(true)} />
         <TextArea placeholder="Reason" />
@@ -549,7 +549,7 @@ function HoldScan({ title, withBottomNav }: { title: string; withBottomNav: bool
   return (
     <PageLayout withBottomNav={withBottomNav}>
       <SubPageHeader title={title} />
-      <InlineScanner onDetected={code => { push(code, type ?? undefined); setScanOpen(false); }} />
+      <InlineScanner open={scanOpen} onClose={() => setScanOpen(false)} onDetected={code => { push(code, type ?? undefined); setScanOpen(false); }} />
       <div className="space-y-3 px-4 py-4">
         <SelectField placeholder="Type" value={type} onClick={() => setOpen(true)} focused={!type} />
         <InputRow placeholder="Waybill Number/Bag Number" scan value={manual} onChange={setManual} onEnter={() => add()} />
