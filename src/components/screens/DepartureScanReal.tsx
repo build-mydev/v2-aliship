@@ -30,6 +30,7 @@ export function DepartureScanReal({ title, withBottomNav = true }: { title: stri
   const [rows, setRows] = useState<ScannedRow[]>([]);
   const [busy, setBusy] = useState(false);
   const [invalidTick, setInvalidTick] = useState(0);
+  const [scanOpen, setScanOpen] = useState(false);
 
   const nextSiteOptions = useMemo(() => {
     if (role === "office") return sites.filter(s => s.type === "dc" || s.type === "hq");
