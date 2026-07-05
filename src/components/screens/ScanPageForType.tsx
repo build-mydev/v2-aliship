@@ -132,8 +132,8 @@ function TextArea({ placeholder, value, onChange }: { placeholder: string; value
 /* ---------- Shared primitives ---------- */
 
 function InputRow({
-  placeholder, suffix, chevron, focused, value: propValue, onChange, onEnter,
-}: { placeholder: string; suffix?: string; scan?: boolean; chevron?: boolean; focused?: boolean; value?: string; onChange?: (v: string) => void; onEnter?: () => void }) {
+  placeholder, suffix, chevron, focused, value: propValue, onChange, onEnter, scan, onScanClick,
+}: { placeholder: string; suffix?: string; scan?: boolean; chevron?: boolean; focused?: boolean; value?: string; onChange?: (v: string) => void; onEnter?: () => void; onScanClick?: () => void }) {
   const [internal, setInternal] = useState("");
   const value = propValue ?? internal;
   const setValue = onChange ?? setInternal;
@@ -152,6 +152,11 @@ function InputRow({
         className="flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground"
       />
       {suffix && <span className="text-xs font-medium text-muted-foreground">{suffix}</span>}
+      {scan && onScanClick && (
+        <button type="button" onClick={onScanClick} aria-label="Open scanner" className="rounded-full p-1 text-primary active:scale-95">
+          <ScanLine className="h-5 w-5" />
+        </button>
+      )}
       {chevron && <ChevronDown className="h-4 w-4 text-muted-foreground" />}
     </div>
   );
