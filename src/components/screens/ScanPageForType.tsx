@@ -3,7 +3,7 @@ import { PageLayout } from "@/components/layout/PageLayout";
 import { SubPageHeader } from "@/components/layout/SubPageHeader";
 import { StaticScanPage } from "@/components/layout/StaticScanPage";
 import { StickyActionBar } from "@/components/layout/StickyActionBar";
-import { ChevronDown, Camera, PenLine, Calendar, X } from "lucide-react";
+import { ChevronDown, Camera, PenLine, Calendar, X, ScanLine } from "lucide-react";
 import { PhotoCaptureTile } from "@/components/layout/PhotoCaptureTile";
 import { InlineScanner } from "@/components/layout/InlineScanner";
 import { ScannedList, useScannedList } from "@/components/layout/ScannedList";
@@ -132,8 +132,8 @@ function TextArea({ placeholder, value, onChange }: { placeholder: string; value
 /* ---------- Shared primitives ---------- */
 
 function InputRow({
-  placeholder, suffix, chevron, focused, value: propValue, onChange, onEnter,
-}: { placeholder: string; suffix?: string; scan?: boolean; chevron?: boolean; focused?: boolean; value?: string; onChange?: (v: string) => void; onEnter?: () => void }) {
+  placeholder, suffix, chevron, focused, value: propValue, onChange, onEnter, scan, onScanClick,
+}: { placeholder: string; suffix?: string; scan?: boolean; chevron?: boolean; focused?: boolean; value?: string; onChange?: (v: string) => void; onEnter?: () => void; onScanClick?: () => void }) {
   const [internal, setInternal] = useState("");
   const value = propValue ?? internal;
   const setValue = onChange ?? setInternal;
@@ -152,6 +152,11 @@ function InputRow({
         className="flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground"
       />
       {suffix && <span className="text-xs font-medium text-muted-foreground">{suffix}</span>}
+      {scan && onScanClick && (
+        <button type="button" onClick={onScanClick} aria-label="Open scanner" className="rounded-full p-1 text-primary active:scale-95">
+          <ScanLine className="h-5 w-5" />
+        </button>
+      )}
       {chevron && <ChevronDown className="h-4 w-4 text-muted-foreground" />}
     </div>
   );
@@ -187,6 +192,7 @@ function IconTile({ icon: Icon, label, iconClass = "text-muted-foreground" }: {
 /* ---------- 1. Arrival ---------- */
 
 function ArrivalScan({ title, withBottomNav }: { title: string; withBottomNav: boolean }) {
+  const [scanOpen, setScanOpen] = useState(false);
   const { rows, push, remove } = useScannedList();
   const [manual, setManual] = useState("");
   const add = (v?: string) => { const c = (v ?? manual).trim(); if (!c) return; push(c); setManual(""); };
@@ -200,7 +206,7 @@ function ArrivalScan({ title, withBottomNav }: { title: string; withBottomNav: b
           </button>
         }
       />
-      <InlineScanner onDetected={code => push(code)} />
+      <InlineScanner open={scanOpen} onClose={() => setScanOpen(false)} onDetected={code => { push(code); setScanOpen(false); }} />
       <div className="px-4 py-4 space-y-3">
         <div className="grid grid-cols-[1fr_auto] gap-2">
           <InputRow placeholder="Weight per piece" suffix="KG" />
@@ -209,7 +215,7 @@ function ArrivalScan({ title, withBottomNav }: { title: string; withBottomNav: b
             <span className="text-sm text-muted-foreground">Lock</span>
           </label>
         </div>
-        <InputRow placeholder="Waybill Number/Bag Number" scan value={manual} onChange={setManual} onEnter={() => add()} />
+        <InputRow placeholder="Waybill Number/Bag Number" scan onScanClick={() => setScanOpen(true)} value={manual} onChange={setManual} onEnter={() => add()} />
         <PhotoCaptureTile label="Take A Picture" />
         <SaveButton enabled={manual.length > 0} onClick={() => add()} />
       </div>
@@ -221,6 +227,7 @@ function ArrivalScan({ title, withBottomNav }: { title: string; withBottomNav: b
 /* ---------- 2. Ready for Collection ---------- */
 
 function CollectionScan({ title, withBottomNav }: { title: string; withBottomNav: boolean }) {
+  const [scanOpen, setScanOpen] = useState(false);
   const { rows, push, remove } = useScannedList();
   const [rack, setRack] = useState("");
   const [manual, setManual] = useState("");
@@ -228,10 +235,10 @@ function CollectionScan({ title, withBottomNav }: { title: string; withBottomNav
   return (
     <PageLayout withBottomNav={withBottomNav}>
       <SubPageHeader title={title} />
-      <InlineScanner onDetected={code => push(code, rack ? `Rack: ${rack}` : undefined)} />
+      <InlineScanner open={scanOpen} onClose={() => setScanOpen(false)} onDetected={code => { push(code, rack ? `Rack: ${rack}` : undefined); setScanOpen(false); }} />
       <div className="px-4 py-4 space-y-3">
-        <InputRow placeholder="Rack Number" scan value={rack} onChange={setRack} />
-        <InputRow placeholder="Waybill No." scan value={manual} onChange={setManual} onEnter={() => add()} />
+        <InputRow placeholder="Rack Number" scan onScanClick={() => setScanOpen(true)} value={rack} onChange={setRack} />
+        <InputRow placeholder="Waybill No." scan onScanClick={() => setScanOpen(true)} value={manual} onChange={setManual} onEnter={() => add()} />
         <SaveButton enabled={manual.length > 0} onClick={() => add()} />
       </div>
       <ScannedList rows={rows} onRemove={remove} />
@@ -242,6 +249,7 @@ function CollectionScan({ title, withBottomNav }: { title: string; withBottomNav
 /* ---------- 3. Out of Delivery ---------- */
 
 function OutDeliveryScan({ title, withBottomNav }: { title: string; withBottomNav: boolean }) {
+  const [scanOpen, setScanOpen] = useState(false);
   const { rows, push, remove } = useScannedList();
   const [rider, setRider] = useState("");
   const [manual, setManual] = useState("");
@@ -249,10 +257,10 @@ function OutDeliveryScan({ title, withBottomNav }: { title: string; withBottomNa
   return (
     <PageLayout withBottomNav={withBottomNav}>
       <SubPageHeader title={title} />
-      <InlineScanner onDetected={code => push(code, rider ? `Rider: ${rider}` : undefined)} />
+      <InlineScanner open={scanOpen} onClose={() => setScanOpen(false)} onDetected={code => { push(code, rider ? `Rider: ${rider}` : undefined); setScanOpen(false); }} />
       <div className="px-4 py-4 space-y-3">
         <InputRow placeholder="Rider Name" focused value={rider} onChange={setRider} />
-        <InputRow placeholder="Waybill No." scan value={manual} onChange={setManual} onEnter={() => add()} />
+        <InputRow placeholder="Waybill No." scan onScanClick={() => setScanOpen(true)} value={manual} onChange={setManual} onEnter={() => add()} />
         <SaveButton enabled={manual.length > 0} onClick={() => add()} />
       </div>
       <ScannedList rows={rows} onRemove={remove} />
@@ -263,6 +271,7 @@ function OutDeliveryScan({ title, withBottomNav }: { title: string; withBottomNa
 /* ---------- 4. Delivered ---------- */
 
 function DeliveredScan({ title, withBottomNav }: { title: string; withBottomNav: boolean }) {
+  const [scanOpen, setScanOpen] = useState(false);
   const { rows, push, remove } = useScannedList();
   const [by, setBy] = useState("");
   const [remark, setRemark] = useState("");
@@ -272,7 +281,7 @@ function DeliveredScan({ title, withBottomNav }: { title: string; withBottomNav:
   return (
     <PageLayout withBottomNav={withBottomNav}>
       <SubPageHeader title={title} />
-      <InlineScanner onDetected={code => push(code, meta())} />
+      <InlineScanner open={scanOpen} onClose={() => setScanOpen(false)} onDetected={code => { push(code, meta()); setScanOpen(false); }} />
       <div className="px-4 py-4 space-y-3">
         <div className="grid grid-cols-[1fr_auto] gap-2">
           <InputRow placeholder="Delivered By" value={by} onChange={setBy} />
@@ -282,7 +291,7 @@ function DeliveredScan({ title, withBottomNav }: { title: string; withBottomNav:
           </label>
         </div>
         <InputRow placeholder="Remark" focused value={remark} onChange={setRemark} />
-        <InputRow placeholder="Waybill No." scan value={manual} onChange={setManual} onEnter={() => add()} />
+        <InputRow placeholder="Waybill No." scan onScanClick={() => setScanOpen(true)} value={manual} onChange={setManual} onEnter={() => add()} />
         <div className="flex gap-2">
           <PhotoCaptureTile label="Take A Picture" />
           <IconTile icon={PenLine} label="POD Signature" iconClass="text-primary" />
@@ -297,6 +306,7 @@ function DeliveredScan({ title, withBottomNav }: { title: string; withBottomNav:
 /* ---------- 5. Online Payment Collection ---------- */
 
 function PaymentScan({ title, withBottomNav }: { title: string; withBottomNav: boolean }) {
+  const [scanOpen, setScanOpen] = useState(false);
   const [tab, setTab] = useState<"initiate" | "record">("initiate");
   const [showModal, setShowModal] = useState(false);
   const [selected, setSelected] = useState(true);
@@ -307,7 +317,7 @@ function PaymentScan({ title, withBottomNav }: { title: string; withBottomNav: b
   return (
     <PageLayout withBottomNav={withBottomNav} withStickyAction={tab === "initiate"}>
       <SubPageHeader title={title} />
-      <InlineScanner onDetected={code => push(code)} />
+      <InlineScanner open={scanOpen} onClose={() => setScanOpen(false)} onDetected={code => { push(code); setScanOpen(false); }} />
       <div className="flex border-b border-border bg-card">
         {([
           ["initiate", "Initiate Payment Collection"],
@@ -330,7 +340,7 @@ function PaymentScan({ title, withBottomNav }: { title: string; withBottomNav: b
       {tab === "initiate" ? (
         <>
           <div className="px-4 py-4 space-y-3">
-            <InputRow placeholder="Waybill No." scan value={manual} onChange={setManual} onEnter={() => add()} />
+            <InputRow placeholder="Waybill No." scan onScanClick={() => setScanOpen(true)} value={manual} onChange={setManual} onEnter={() => add()} />
             <SaveButtonLabel label="Add" onClick={() => add()} />
           </div>
           <ScannedList rows={rows} onRemove={remove} />
@@ -460,6 +470,7 @@ const EXCEPTION_TYPES = [
 ];
 
 function ExceptionEntry({ title, withBottomNav }: { title: string; withBottomNav: boolean }) {
+  const [scanOpen, setScanOpen] = useState(false);
   const [open, setOpen] = useState(false);
   const [type, setType] = useState<string | null>(null);
   const { rows, push, remove } = useScannedList();
@@ -468,9 +479,9 @@ function ExceptionEntry({ title, withBottomNav }: { title: string; withBottomNav
   return (
     <PageLayout withBottomNav={withBottomNav}>
       <SubPageHeader title={title} />
-      <InlineScanner onDetected={code => push(code, type ?? undefined)} />
+      <InlineScanner open={scanOpen} onClose={() => setScanOpen(false)} onDetected={code => { push(code, type ?? undefined); setScanOpen(false); }} />
       <div className="space-y-3 px-4 py-4">
-        <InputRow placeholder="Waybill Number/Bag Number" scan value={manual} onChange={setManual} onEnter={() => add()} />
+        <InputRow placeholder="Waybill Number/Bag Number" scan onScanClick={() => setScanOpen(true)} value={manual} onChange={setManual} onEnter={() => add()} />
         <SelectField placeholder="Exception Type" value={type} onClick={() => setOpen(true)} focused={!type} />
         <TextArea placeholder="Reason" />
         <InputRow placeholder="NotifySite" />
@@ -494,6 +505,7 @@ const RETURN_TYPES = [
 ];
 
 function ReturnEntry({ title, withBottomNav }: { title: string; withBottomNav: boolean }) {
+  const [scanOpen, setScanOpen] = useState(false);
   const [open, setOpen] = useState(false);
   const [type, setType] = useState<string | null>(null);
   const { rows, push, remove } = useScannedList();
@@ -502,11 +514,11 @@ function ReturnEntry({ title, withBottomNav }: { title: string; withBottomNav: b
   return (
     <PageLayout withBottomNav={withBottomNav}>
       <SubPageHeader title={title} />
-      <InlineScanner onDetected={code => push(code, type ?? undefined)} />
+      <InlineScanner open={scanOpen} onClose={() => setScanOpen(false)} onDetected={code => { push(code, type ?? undefined); setScanOpen(false); }} />
       <div className="space-y-3 px-4 py-4">
         <SelectField placeholder="Type" value={type} onClick={() => setOpen(true)} />
         <TextArea placeholder="Reason" />
-        <InputRow placeholder="Waybill No." scan value={manual} onChange={setManual} onEnter={() => add()} />
+        <InputRow placeholder="Waybill No." scan onScanClick={() => setScanOpen(true)} value={manual} onChange={setManual} onEnter={() => add()} />
         <PhotoCaptureTile label="Take A Picture" />
         <SaveButton enabled={!!type && manual.length > 0} onClick={() => add()} />
       </div>
@@ -528,6 +540,7 @@ const HOLD_TYPES = [
 ];
 
 function HoldScan({ title, withBottomNav }: { title: string; withBottomNav: boolean }) {
+  const [scanOpen, setScanOpen] = useState(false);
   const [open, setOpen] = useState(false);
   const [type, setType] = useState<string | null>(null);
   const { rows, push, remove } = useScannedList();
@@ -536,10 +549,10 @@ function HoldScan({ title, withBottomNav }: { title: string; withBottomNav: bool
   return (
     <PageLayout withBottomNav={withBottomNav}>
       <SubPageHeader title={title} />
-      <InlineScanner onDetected={code => push(code, type ?? undefined)} />
+      <InlineScanner open={scanOpen} onClose={() => setScanOpen(false)} onDetected={code => { push(code, type ?? undefined); setScanOpen(false); }} />
       <div className="space-y-3 px-4 py-4">
         <SelectField placeholder="Type" value={type} onClick={() => setOpen(true)} focused={!type} />
-        <InputRow placeholder="Waybill Number/Bag Number" scan value={manual} onChange={setManual} onEnter={() => add()} />
+        <InputRow placeholder="Waybill Number/Bag Number" scan onScanClick={() => setScanOpen(true)} value={manual} onChange={setManual} onEnter={() => add()} />
         <TextArea placeholder="Remark" />
         <SaveButton enabled={!!type && manual.length > 0} onClick={() => add()} />
       </div>

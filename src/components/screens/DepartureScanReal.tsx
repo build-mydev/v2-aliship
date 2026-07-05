@@ -30,6 +30,7 @@ export function DepartureScanReal({ title, withBottomNav = true }: { title: stri
   const [rows, setRows] = useState<ScannedRow[]>([]);
   const [busy, setBusy] = useState(false);
   const [invalidTick, setInvalidTick] = useState(0);
+  const [scanOpen, setScanOpen] = useState(false);
 
   const nextSiteOptions = useMemo(() => {
     if (role === "office") return sites.filter(s => s.type === "dc" || s.type === "hq");
@@ -80,7 +81,7 @@ export function DepartureScanReal({ title, withBottomNav = true }: { title: stri
   return (
     <PageLayout withBottomNav={withBottomNav}>
       <SubPageHeader title={title} />
-      <InlineScanner onDetected={handleScan} invalidPulse={invalidTick > 0 ? Boolean(invalidTick) : undefined} />
+      <InlineScanner open={scanOpen} onClose={() => setScanOpen(false)} onDetected={handleScan} invalidPulse={invalidTick > 0 ? Boolean(invalidTick) : undefined} />
       <div className="space-y-3 px-4 pt-3 pb-6">
         <Select label="Task Order / Manifest (optional)" value={manifestId} onChange={setManifestId}
           options={[
@@ -106,6 +107,10 @@ export function DepartureScanReal({ title, withBottomNav = true }: { title: stri
           <input value={manual} onChange={e => setManual(e.target.value)}
             placeholder="Waybill / Bag number (manual)"
             className="flex-1 rounded-xl border border-border bg-card px-3 py-2.5 text-sm outline-none" />
+          <button type="button" onClick={() => setScanOpen(true)}
+            className="rounded-full border border-primary px-3 py-2 text-xs font-semibold text-primary">
+            Scan
+          </button>
           <button onClick={() => { if (manual.trim()) { handleScan(manual.trim()); setManual(""); } }}
             className="rounded-full bg-primary px-5 py-2 text-xs font-semibold text-primary-foreground">
             Add

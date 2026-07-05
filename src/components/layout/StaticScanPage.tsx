@@ -7,12 +7,17 @@ import { ScannedList, useScannedList } from "./ScannedList";
 
 export function StaticScanPage({ title, withBottomNav = true }: { title: string; withBottomNav?: boolean }) {
   const [value, setValue] = useState("");
+  const [scanOpen, setScanOpen] = useState(false);
   const { rows, push, remove } = useScannedList();
   const add = (v?: string) => { const c = (v ?? value).trim(); if (!c) return; push(c); setValue(""); };
   return (
     <PageLayout withBottomNav={withBottomNav}>
       <SubPageHeader title={title} />
-      <InlineScanner onDetected={code => push(code)} />
+      <InlineScanner
+        open={scanOpen}
+        onClose={() => setScanOpen(false)}
+        onDetected={code => { push(code); setScanOpen(false); }}
+      />
       <div className="px-4 py-4">
         <div className="rounded-2xl bg-card p-4 shadow-sm">
           <label className="mb-1 block text-xs font-medium text-muted-foreground">Waybill / Bag Number</label>
@@ -24,7 +29,9 @@ export function StaticScanPage({ title, withBottomNav = true }: { title: string;
               placeholder="Scan or enter number"
               className="flex-1 bg-transparent text-sm outline-none"
             />
-            <ScanLine className="h-5 w-5 text-primary" />
+            <button type="button" onClick={() => setScanOpen(s => !s)} aria-label="Open scanner" className="rounded-full p-1 text-primary active:scale-95">
+              <ScanLine className="h-5 w-5" />
+            </button>
           </div>
         </div>
         <button
