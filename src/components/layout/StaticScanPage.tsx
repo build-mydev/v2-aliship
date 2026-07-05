@@ -2,14 +2,17 @@ import { useState } from "react";
 import { ScanLine } from "lucide-react";
 import { SubPageHeader } from "./SubPageHeader";
 import { PageLayout } from "./PageLayout";
-import { BarcodeScannerSheet } from "./BarcodeScannerSheet";
+import { InlineScanner } from "./InlineScanner";
+import { ScannedList, useScannedList } from "./ScannedList";
 
-export function StaticScanPage({ title }: { title: string }) {
+export function StaticScanPage({ title, withBottomNav = true }: { title: string; withBottomNav?: boolean }) {
   const [value, setValue] = useState("");
-  const [scanning, setScanning] = useState(false);
+  const { rows, push, remove } = useScannedList();
+  const add = (v?: string) => { const c = (v ?? value).trim(); if (!c) return; push(c); setValue(""); };
   return (
-    <PageLayout>
+    <PageLayout withBottomNav={withBottomNav}>
       <SubPageHeader title={title} />
+      <InlineScanner onDetected={code => push(code)} />
       <div className="px-4 py-4">
         <div className="rounded-2xl bg-card p-4 shadow-sm">
           <label className="mb-1 block text-xs font-medium text-muted-foreground">Waybill / Bag Number</label>
@@ -17,35 +20,21 @@ export function StaticScanPage({ title }: { title: string }) {
             <input
               value={value}
               onChange={e => setValue(e.target.value)}
+              onKeyDown={e => { if (e.key === "Enter") { e.preventDefault(); add(); } }}
               placeholder="Scan or enter number"
               className="flex-1 bg-transparent text-sm outline-none"
             />
-            <button
-              type="button"
-              onClick={() => setScanning(true)}
-              aria-label="Open scanner"
-              className="rounded-full p-1 text-primary active:scale-95"
-            >
-              <ScanLine className="h-5 w-5" />
-            </button>
+            <ScanLine className="h-5 w-5 text-primary" />
           </div>
         </div>
         <button
-          onClick={() => setValue("")}
+          onClick={() => add()}
           className="mx-auto mt-6 block rounded-full bg-primary px-10 py-3 text-sm font-semibold text-primary-foreground shadow"
         >
           Save
         </button>
-        <div className="mt-6 text-center text-xs font-medium text-muted-foreground">Scanned 0</div>
-        <div className="mx-4 mt-2 h-px bg-border" />
-        <div className="mt-8 text-center text-xs text-muted-foreground">No records</div>
       </div>
-      <BarcodeScannerSheet
-        open={scanning}
-        onClose={() => setScanning(false)}
-        onDetected={v => setValue(v)}
-        title={title}
-      />
+      <ScannedList rows={rows} onRemove={remove} />
     </PageLayout>
   );
 }
