@@ -481,6 +481,8 @@ export function DeliveryMonitorScreen() {
   const [cod, setCod] = useState<"yes" | "no" | null>(null);
   const [ret, setRet] = useState<"yes" | "no" | null>(null);
   const [expanded, setExpanded] = useState<Record<number, Cat | null>>({});
+  const [dmStart, setDmStart] = useState("2026-07-01 00:00:00");
+  const [dmEnd, setDmEnd] = useState("2026-07-01 23:59:59");
 
   return (
     <PageLayout>
