@@ -39,8 +39,8 @@ export function PrintScreen() {
         {tab === "query" ? (
           <>
             <div className="grid grid-cols-2 gap-2">
-              <DateField label="Start" value="2026-07-01 00:00:00" />
-              <DateField label="End" value="2026-07-01 23:59:59" />
+              <DateTimeField label="Start" value={start} onChange={setStart} />
+              <DateTimeField label="End" value={end} onChange={setEnd} />
             </div>
             <div className="mt-3 grid grid-cols-2 gap-2">
               <SelectField label="Status" value="All" />
