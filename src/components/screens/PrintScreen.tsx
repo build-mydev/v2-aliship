@@ -2,6 +2,7 @@ import { PageLayout } from "@/components/layout/PageLayout";
 import { SubPageHeader } from "@/components/layout/SubPageHeader";
 import { StickyActionBar } from "@/components/layout/StickyActionBar";
 import { BarcodeScannerSheet } from "@/components/layout/BarcodeScannerSheet";
+import { DateTimeField } from "@/components/ui/DateTimeField";
 import { ScanLine, Bluetooth } from "lucide-react";
 import { useState } from "react";
 
@@ -12,6 +13,8 @@ export function PrintScreen() {
   const [queryValue, setQueryValue] = useState("");
   const [scanValue, setScanValue] = useState("");
   const [scanning, setScanning] = useState<null | "query" | "scan">(null);
+  const [start, setStart] = useState("2026-07-01 00:00:00");
+  const [end, setEnd] = useState("2026-07-01 23:59:59");
 
   return (
     <PageLayout withBottomNav withStickyAction>
@@ -36,8 +39,8 @@ export function PrintScreen() {
         {tab === "query" ? (
           <>
             <div className="grid grid-cols-2 gap-2">
-              <DateField label="Start" value="2026-07-01 00:00:00" />
-              <DateField label="End" value="2026-07-01 23:59:59" />
+              <DateTimeField label="Start" value={start} onChange={setStart} />
+              <DateTimeField label="End" value={end} onChange={setEnd} />
             </div>
             <div className="mt-3 grid grid-cols-2 gap-2">
               <SelectField label="Status" value="All" />
@@ -107,14 +110,8 @@ export function PrintScreen() {
   );
 }
 
-function DateField({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="rounded-2xl bg-card p-3 shadow-sm">
-      <label className="block text-[10px] font-medium uppercase tracking-wide text-muted-foreground">{label}</label>
-      <div className="py-1 text-xs">{value}</div>
-    </div>
-  );
-}
+
+
 function SelectField({ label, value }: { label: string; value: string }) {
   return (
     <div className="rounded-2xl bg-card p-3 shadow-sm">

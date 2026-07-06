@@ -3,6 +3,7 @@ import { Link } from "@tanstack/react-router";
 import { SubPageHeader } from "@/components/layout/SubPageHeader";
 import { PageLayout } from "@/components/layout/PageLayout";
 import { Search, ScanLine, ChevronDown, ChevronRight, ArrowDown, Package, FileText, MousePointer2, Mail, CheckCircle2, User, Calendar, Phone, Box } from "lucide-react";
+import { DateTimeField } from "@/components/ui/DateTimeField";
 
 
 /* ---------------- shared bits ---------------- */
@@ -144,6 +145,8 @@ function ArrivedPendingScreen() {
 }
 
 function WorkLogScreen() {
+  const [wlStart, setWlStart] = useState("2026-06-25 00:00:00");
+  const [wlEnd, setWlEnd] = useState("2026-07-01 23:59:59");
   const items = [
     ["Pick up", 0], ["Departure", 21], ["Truck Departure", 0], ["Truck Arrival", 0],
     ["Arrival", 115], ["Delivery", 178], ["Signed", 30], ["Return Collection", 0],
@@ -153,16 +156,10 @@ function WorkLogScreen() {
     <PageLayout>
       <SubPageHeader title="Work Log" />
       <div className="bg-card p-4 shadow-sm">
-        <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-3 rounded-lg border border-border p-3 text-sm">
-          <div>
-            <div className="text-xs text-muted-foreground">Start Time</div>
-            <div className="font-medium">2026-06-25 00:00:00</div>
-          </div>
+        <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-2">
+          <DateTimeField label="Start Time" value={wlStart} onChange={setWlStart} />
           <span className="text-muted-foreground">—</span>
-          <div>
-            <div className="text-xs text-muted-foreground">End Time</div>
-            <div className="font-medium">2026-07-01 23:59:59</div>
-          </div>
+          <DateTimeField label="End Time" value={wlEnd} onChange={setWlEnd} />
         </div>
       </div>
       <div className="mt-2 bg-card">
@@ -484,6 +481,8 @@ export function DeliveryMonitorScreen() {
   const [cod, setCod] = useState<"yes" | "no" | null>(null);
   const [ret, setRet] = useState<"yes" | "no" | null>(null);
   const [expanded, setExpanded] = useState<Record<number, Cat | null>>({});
+  const [dmStart, setDmStart] = useState("2026-07-01 00:00:00");
+  const [dmEnd, setDmEnd] = useState("2026-07-01 23:59:59");
 
   return (
     <PageLayout>
@@ -569,9 +568,9 @@ export function DeliveryMonitorScreen() {
               </button>
             </div>
             <div className="mt-3 grid grid-cols-[1fr_auto_1fr] items-center gap-2 text-sm">
-              <div className="rounded-md border border-border px-3 py-3">2026-07-01 00:00:00</div>
+              <DateTimeField value={dmStart} onChange={setDmStart} />
               <span>—</span>
-              <div className="rounded-md border border-border px-3 py-3">2026-07-01 23:59:59</div>
+              <DateTimeField value={dmEnd} onChange={setDmEnd} />
             </div>
             <div className="mt-4 grid grid-cols-2 gap-3">
               <div>
