@@ -110,8 +110,7 @@ export function PrintScreen() {
   );
 }
 
-function DateField_unused() { return null; }
-void DateField_unused;
+
 
 function SelectField({ label, value }: { label: string; value: string }) {
   return (
