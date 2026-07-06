@@ -73,7 +73,7 @@ export function InlineScanner({ open, onClose, onDetected, cooldownMs = 1500, in
   return (
     <>
       {/* Camera rectangle at top */}
-      <div className="fixed left-0 right-0 z-40" style={{ top: 56, height: "42vh" }}>
+      <div className="fixed left-0 right-0 z-40" style={{ top: 56, height: "28vh" }}>
         <div className="relative h-full w-full overflow-hidden bg-black">
           <video ref={videoRef} className="absolute inset-0 h-full w-full object-cover" muted playsInline />
           {/* horizontal scan line, centered */}
@@ -102,7 +102,7 @@ export function InlineScanner({ open, onClose, onDetected, cooldownMs = 1500, in
         aria-label="Close scanner"
         onClick={onClose}
         className="fixed inset-x-0 bottom-0 z-30 bg-black/25"
-        style={{ top: `calc(56px + 42vh)` }}
+        style={{ top: `calc(56px + 28vh)` }}
       />
     </>
   );
