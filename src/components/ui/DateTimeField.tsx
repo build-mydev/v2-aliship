@@ -19,10 +19,8 @@ export function DateTimeField({
   const inputVal = value ? value.replace(" ", "T").slice(0, 16) : "";
 
   const open = () => {
-    const el = ref.current;
+    const el = ref.current as (HTMLInputElement & { showPicker?: () => void }) | null;
     if (!el) return;
-    // showPicker() works on Chromium mobile & desktop
-    // @ts-expect-error not in older lib.dom
     if (typeof el.showPicker === "function") el.showPicker();
     else el.focus();
   };
