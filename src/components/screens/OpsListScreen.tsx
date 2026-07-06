@@ -568,9 +568,9 @@ export function DeliveryMonitorScreen() {
               </button>
             </div>
             <div className="mt-3 grid grid-cols-[1fr_auto_1fr] items-center gap-2 text-sm">
-              <div className="rounded-md border border-border px-3 py-3">2026-07-01 00:00:00</div>
+              <DateTimeField value={dmStart} onChange={setDmStart} />
               <span>—</span>
-              <div className="rounded-md border border-border px-3 py-3">2026-07-01 23:59:59</div>
+              <DateTimeField value={dmEnd} onChange={setDmEnd} />
             </div>
             <div className="mt-4 grid grid-cols-2 gap-3">
               <div>
