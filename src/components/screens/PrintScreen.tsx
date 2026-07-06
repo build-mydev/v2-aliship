@@ -110,14 +110,9 @@ export function PrintScreen() {
   );
 }
 
-function DateField({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="rounded-2xl bg-card p-3 shadow-sm">
-      <label className="block text-[10px] font-medium uppercase tracking-wide text-muted-foreground">{label}</label>
-      <div className="py-1 text-xs">{value}</div>
-    </div>
-  );
-}
+function DateField_unused() { return null; }
+void DateField_unused;
+
 function SelectField({ label, value }: { label: string; value: string }) {
   return (
     <div className="rounded-2xl bg-card p-3 shadow-sm">
