@@ -13,6 +13,8 @@ export function PrintScreen() {
   const [queryValue, setQueryValue] = useState("");
   const [scanValue, setScanValue] = useState("");
   const [scanning, setScanning] = useState<null | "query" | "scan">(null);
+  const [start, setStart] = useState("2026-07-01 00:00:00");
+  const [end, setEnd] = useState("2026-07-01 23:59:59");
 
   return (
     <PageLayout withBottomNav withStickyAction>
