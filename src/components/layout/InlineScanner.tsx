@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { BrowserMultiFormatReader, type IScannerControls } from "@zxing/browser";
-import { X } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 
 type Props = {
   open: boolean;
@@ -11,9 +11,10 @@ type Props = {
 };
 
 /**
- * Inline continuous barcode/QR scanner.
- * Rendered ONLY when `open` is true. Sits at top of page as a rectangle
- * (max 40vh). Closes via X button. Supports QR + 1D barcodes.
+ * Full-screen camera OVERLAY (fixed position). Renders only when `open`.
+ * Shows a rectangular target with orange corner brackets. Continuous
+ * scanning; flashes corners green on valid, red on invalid. Back arrow
+ * closes the overlay and returns to the underlying fields view.
  */
 export function InlineScanner({ open, onClose, onDetected, cooldownMs = 1500, invalidPulse }: Props) {
   const videoRef = useRef<HTMLVideoElement | null>(null);
@@ -25,7 +26,7 @@ export function InlineScanner({ open, onClose, onDetected, cooldownMs = 1500, in
   useEffect(() => {
     if (invalidPulse) {
       setFlash("err");
-      const t = setTimeout(() => setFlash(null), 350);
+      const t = setTimeout(() => setFlash(null), 400);
       return () => clearTimeout(t);
     }
   }, [invalidPulse]);
@@ -45,7 +46,7 @@ export function InlineScanner({ open, onClose, onDetected, cooldownMs = 1500, in
           if (lastRef.current && lastRef.current.code === code && now - lastRef.current.ts < cooldownMs) return;
           lastRef.current = { code, ts: now };
           setFlash("ok");
-          setTimeout(() => setFlash(null), 350);
+          setTimeout(() => setFlash(null), 400);
           onDetected(code);
         });
         if (cancelled) { controls.stop(); return; }
@@ -63,43 +64,48 @@ export function InlineScanner({ open, onClose, onDetected, cooldownMs = 1500, in
 
   if (!open) return null;
 
-  const ring =
-    flash === "ok" ? "ring-4 ring-emerald-500" :
-    flash === "err" ? "ring-4 ring-destructive" :
-    "ring-1 ring-border";
+  const cornerColor =
+    flash === "ok" ? "border-emerald-500" :
+    flash === "err" ? "border-destructive" :
+    "border-[#FF6600]";
+  const glow =
+    flash === "ok" ? "shadow-[0_0_18px_#10b981]" :
+    flash === "err" ? "shadow-[0_0_18px_hsl(var(--destructive))]" :
+    "";
 
   return (
-    <div className="px-4 pt-3">
-      <div className={`relative w-full overflow-hidden rounded-2xl bg-black ${ring} transition-shadow`} style={{ height: "38vh", maxHeight: 320 }}>
-        <video ref={videoRef} className="absolute inset-0 h-full w-full object-cover" muted playsInline />
+    <div className="fixed inset-0 z-[70] bg-black">
+      <video ref={videoRef} className="absolute inset-0 h-full w-full object-cover" muted playsInline />
+      {/* dim overlay */}
+      <div className="absolute inset-0 bg-black/40" />
+
+      {/* top bar */}
+      <div className="absolute inset-x-0 top-0 z-10 flex items-center gap-3 px-4 pt-[max(env(safe-area-inset-top),12px)] pb-3">
         <button
           onClick={onClose}
           aria-label="Close scanner"
-          className="absolute right-2 top-2 z-10 grid h-8 w-8 place-items-center rounded-full bg-black/60 text-white active:scale-95"
+          className="grid h-10 w-10 place-items-center rounded-full bg-black/60 text-white active:scale-95"
         >
-          <X className="h-4 w-4" />
+          <ArrowLeft className="h-5 w-5" />
         </button>
-        <div className="pointer-events-none absolute inset-4 rounded-xl">
-          <span className="absolute -left-0.5 -top-0.5 h-6 w-6 rounded-tl-xl border-l-4 border-t-4 border-primary" />
-          <span className="absolute -right-0.5 -top-0.5 h-6 w-6 rounded-tr-xl border-r-4 border-t-4 border-primary" />
-          <span className="absolute -bottom-0.5 -left-0.5 h-6 w-6 rounded-bl-xl border-b-4 border-l-4 border-primary" />
-          <span className="absolute -bottom-0.5 -right-0.5 h-6 w-6 rounded-br-xl border-b-4 border-r-4 border-primary" />
-        </div>
-        <div className="pointer-events-none absolute inset-x-6 top-0 h-0.5 animate-[scanline_2.4s_ease-in-out_infinite] bg-[#FF6600] shadow-[0_0_10px_#FF6600]" />
-        {error && (
-          <div className="absolute inset-x-4 top-4 rounded-lg bg-destructive/90 px-3 py-2 text-center text-xs text-destructive-foreground">
-            {error}
-          </div>
-        )}
-        <div className="absolute inset-x-0 bottom-2 text-center text-[11px] text-white/80">Align QR or barcode inside the frame</div>
+        <div className="text-sm font-medium text-white/90">Point camera at barcode or QR</div>
       </div>
-      <style>{`
-        @keyframes scanline {
-          0% { transform: translateY(0); }
-          50% { transform: translateY(calc(38vh - 8px)); }
-          100% { transform: translateY(0); }
-        }
-      `}</style>
+
+      {/* target rectangle with corner brackets, centered */}
+      <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" style={{ width: "70vw", height: "40vh", maxWidth: 520 }}>
+        <div className={`relative h-full w-full rounded-md transition-shadow ${glow}`}>
+          <span className={`absolute -left-1 -top-1 h-8 w-8 rounded-tl-md border-l-4 border-t-4 ${cornerColor}`} />
+          <span className={`absolute -right-1 -top-1 h-8 w-8 rounded-tr-md border-r-4 border-t-4 ${cornerColor}`} />
+          <span className={`absolute -bottom-1 -left-1 h-8 w-8 rounded-bl-md border-b-4 border-l-4 ${cornerColor}`} />
+          <span className={`absolute -bottom-1 -right-1 h-8 w-8 rounded-br-md border-b-4 border-r-4 ${cornerColor}`} />
+        </div>
+      </div>
+
+      {error && (
+        <div className="absolute inset-x-6 bottom-24 rounded-lg bg-destructive/90 px-3 py-2 text-center text-xs text-destructive-foreground">
+          {error}
+        </div>
+      )}
     </div>
   );
 }

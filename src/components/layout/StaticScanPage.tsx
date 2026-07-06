@@ -16,7 +16,7 @@ export function StaticScanPage({ title, withBottomNav = true }: { title: string;
       <InlineScanner
         open={scanOpen}
         onClose={() => setScanOpen(false)}
-        onDetected={code => { push(code); setScanOpen(false); }}
+        onDetected={code => { push(code); }}
       />
       <div className="px-4 py-4">
         <div className="rounded-2xl bg-card p-4 shadow-sm">
