@@ -385,6 +385,50 @@ export type Database = {
         }
         Relationships: []
       }
+      kenya_counties: {
+        Row: {
+          id: number
+          name: string
+        }
+        Insert: {
+          id: number
+          name: string
+        }
+        Update: {
+          id?: number
+          name?: string
+        }
+        Relationships: []
+      }
+      kenya_locations: {
+        Row: {
+          constituency: string
+          county_id: number | null
+          id: number
+          ward: string
+        }
+        Insert: {
+          constituency: string
+          county_id?: number | null
+          id: number
+          ward: string
+        }
+        Update: {
+          constituency?: string
+          county_id?: number | null
+          id?: number
+          ward?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "kenya_locations_county_id_fkey"
+            columns: ["county_id"]
+            isOneToOne: false
+            referencedRelation: "kenya_counties"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       manifest_parcels: {
         Row: {
           confirmed_at: string | null
