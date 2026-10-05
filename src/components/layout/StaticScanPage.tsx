@@ -27,7 +27,7 @@ export function StaticScanPage({ title, withBottomNav = true }: { title: string;
               onChange={e => setValue(e.target.value)}
               onKeyDown={e => { if (e.key === "Enter") { e.preventDefault(); add(); } }}
               placeholder="Scan or enter number"
-              className="flex-1 bg-transparent text-sm outline-none"
+              className="min-w-0 flex-1 bg-transparent text-sm outline-none"
             />
             <button type="button" onClick={() => setScanOpen(s => !s)} aria-label="Open scanner" className="rounded-full p-1 text-primary active:scale-95">
               <ScanLine className="h-5 w-5" />
