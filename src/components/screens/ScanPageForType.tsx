@@ -149,7 +149,7 @@ function InputRow({
         onChange={e => setValue(e.target.value)}
         onKeyDown={e => { if (e.key === "Enter" && onEnter) { e.preventDefault(); onEnter(); } }}
         placeholder={placeholder}
-        className="flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground"
+        className="min-w-0 flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground"
       />
       {suffix && <span className="text-xs font-medium text-muted-foreground">{suffix}</span>}
       {scan && onScanClick && (
@@ -201,14 +201,14 @@ function ArrivalScan({ title, withBottomNav }: { title: string; withBottomNav: b
       <SubPageHeader
         title={title}
         right={
-          <button className="whitespace-nowrap rounded-full border border-primary-foreground px-2 py-1 text-[10px] font-semibold leading-tight text-primary-foreground">
+          <button className="shrink-0 whitespace-nowrap rounded-full border border-primary-foreground px-2 py-0.5 text-[9px] font-semibold leading-tight text-primary-foreground">
             Search the<br />Bluetooth
           </button>
         }
       />
       <InlineScanner open={scanOpen} onClose={() => setScanOpen(false)} onDetected={code => { push(code); }} />
       <div className="px-4 py-4 space-y-3">
-        <div className="grid grid-cols-[1fr_auto] gap-2">
+        <div className="grid grid-cols-[minmax(0,1fr)_auto] gap-2">
           <InputRow placeholder="Weight per piece" suffix="KG" />
           <label className="flex items-center gap-2 rounded-xl border border-border bg-muted/40 px-3">
             <input type="checkbox" className="h-4 w-4 accent-[color:var(--primary)]" />
@@ -283,7 +283,7 @@ function DeliveredScan({ title, withBottomNav }: { title: string; withBottomNav:
       <SubPageHeader title={title} />
       <InlineScanner open={scanOpen} onClose={() => setScanOpen(false)} onDetected={code => { push(code, meta()); }} />
       <div className="px-4 py-4 space-y-3">
-        <div className="grid grid-cols-[1fr_auto] gap-2">
+        <div className="grid grid-cols-[minmax(0,1fr)_auto] gap-2">
           <InputRow placeholder="Delivered By" value={by} onChange={setBy} />
           <label className="flex items-center gap-2 rounded-xl border border-border bg-muted/40 px-3">
             <input type="checkbox" defaultChecked className="h-4 w-4 accent-[color:var(--primary)]" />
