@@ -9,72 +9,57 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as RiderRouteImport } from './routes/rider'
-import { Route as OfficeRouteImport } from './routes/office'
-import { Route as DcRouteImport } from './routes/dc'
-import { Route as ChangePasswordRouteImport } from './routes/change-password'
-import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as RiderIndexRouteImport } from './routes/rider.index'
-import { Route as OfficeIndexRouteImport } from './routes/office.index'
-import { Route as DcIndexRouteImport } from './routes/dc.index'
+import { Route as AdminRouteImport } from './routes/admin'
+import { Route as ChangePasswordRouteImport } from './routes/change-password'
+import { Route as DcRouteImport } from './routes/dc'
+import { Route as OfficeRouteImport } from './routes/office'
+import { Route as RiderRouteImport } from './routes/rider'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
-import { Route as WaybillSenderRouteImport } from './routes/waybill.sender'
-import { Route as WaybillReceiverRouteImport } from './routes/waybill.receiver'
-import { Route as RiderReportsRouteImport } from './routes/rider.reports'
-import { Route as RiderMenuRouteImport } from './routes/rider.menu'
-import { Route as RiderHistoryRouteImport } from './routes/rider.history'
-import { Route as OfficeReportsRouteImport } from './routes/office.reports'
-import { Route as OfficePrintRouteImport } from './routes/office.print'
-import { Route as OfficePendingRouteImport } from './routes/office.pending'
-import { Route as OfficeMenuRouteImport } from './routes/office.menu'
-import { Route as OfficeDeliveryMonitorRouteImport } from './routes/office.delivery-monitor'
-import { Route as OfficeCashPendingRouteImport } from './routes/office.cash-pending'
-import { Route as DcReportsRouteImport } from './routes/dc.reports'
-import { Route as DcMenuRouteImport } from './routes/dc.menu'
-import { Route as AdminUsersRouteImport } from './routes/admin.users'
-import { Route as AdminToolsRouteImport } from './routes/admin.tools'
-import { Route as AdminTariffsRouteImport } from './routes/admin.tariffs'
-import { Route as AdminSitesRouteImport } from './routes/admin.sites'
-import { Route as AdminSettingsRouteImport } from './routes/admin.settings'
-import { Route as AdminReportsRouteImport } from './routes/admin.reports'
-import { Route as AdminPrintRouteImport } from './routes/admin.print'
-import { Route as AdminMenuRouteImport } from './routes/admin.menu'
-import { Route as AdminInvestigationsRouteImport } from './routes/admin.investigations'
-import { Route as AdminImpersonateRouteImport } from './routes/admin.impersonate'
-import { Route as AdminDeliveryMonitorRouteImport } from './routes/admin.delivery-monitor'
-import { Route as AdminCashPendingRouteImport } from './routes/admin.cash-pending'
-import { Route as AdminAuditRouteImport } from './routes/admin.audit'
 import { Route as AdminAccountsRouteImport } from './routes/admin.accounts'
-import { Route as RiderWaybillNewRouteImport } from './routes/rider.waybill.new'
-import { Route as RiderParcelIdRouteImport } from './routes/rider.parcel.$id'
-import { Route as OfficeWaybillNewRouteImport } from './routes/office.waybill.new'
-import { Route as OfficeScanTypeRouteImport } from './routes/office.scan.$type'
-import { Route as OfficeOpsSlugRouteImport } from './routes/office.ops.$slug'
-import { Route as DcScanTypeRouteImport } from './routes/dc.scan.$type'
-import { Route as AdminWaybillNewRouteImport } from './routes/admin.waybill.new'
-import { Route as AdminScanTypeRouteImport } from './routes/admin.scan.$type'
-import { Route as AdminOpsSlugRouteImport } from './routes/admin.ops.$slug'
+import { Route as AdminAuditRouteImport } from './routes/admin.audit'
+import { Route as AdminCashPendingRouteImport } from './routes/admin.cash-pending'
+import { Route as AdminDeliveryMonitorRouteImport } from './routes/admin.delivery-monitor'
+import { Route as AdminImpersonateRouteImport } from './routes/admin.impersonate'
+import { Route as AdminInvestigationsRouteImport } from './routes/admin.investigations'
+import { Route as AdminMenuRouteImport } from './routes/admin.menu'
+import { Route as AdminPrintRouteImport } from './routes/admin.print'
+import { Route as AdminReportsRouteImport } from './routes/admin.reports'
+import { Route as AdminSettingsRouteImport } from './routes/admin.settings'
+import { Route as AdminSitesRouteImport } from './routes/admin.sites'
+import { Route as AdminTariffsRouteImport } from './routes/admin.tariffs'
+import { Route as AdminToolsRouteImport } from './routes/admin.tools'
+import { Route as AdminUsersRouteImport } from './routes/admin.users'
+import { Route as DcIndexRouteImport } from './routes/dc.index'
+import { Route as DcMenuRouteImport } from './routes/dc.menu'
+import { Route as DcReportsRouteImport } from './routes/dc.reports'
+import { Route as OfficeIndexRouteImport } from './routes/office.index'
+import { Route as OfficeCashPendingRouteImport } from './routes/office.cash-pending'
+import { Route as OfficeDeliveryMonitorRouteImport } from './routes/office.delivery-monitor'
+import { Route as OfficeMenuRouteImport } from './routes/office.menu'
+import { Route as OfficePendingRouteImport } from './routes/office.pending'
+import { Route as OfficePrintRouteImport } from './routes/office.print'
+import { Route as OfficeReportsRouteImport } from './routes/office.reports'
+import { Route as RiderIndexRouteImport } from './routes/rider.index'
+import { Route as RiderHistoryRouteImport } from './routes/rider.history'
+import { Route as RiderMenuRouteImport } from './routes/rider.menu'
+import { Route as RiderReportsRouteImport } from './routes/rider.reports'
+import { Route as WaybillReceiverRouteImport } from './routes/waybill.receiver'
+import { Route as WaybillSenderRouteImport } from './routes/waybill.sender'
 import { Route as AdminAccountsIdRouteImport } from './routes/admin.accounts.$id'
+import { Route as AdminOpsSlugRouteImport } from './routes/admin.ops.$slug'
+import { Route as AdminScanTypeRouteImport } from './routes/admin.scan.$type'
+import { Route as AdminWaybillNewRouteImport } from './routes/admin.waybill.new'
+import { Route as DcScanTypeRouteImport } from './routes/dc.scan.$type'
+import { Route as OfficeOpsSlugRouteImport } from './routes/office.ops.$slug'
+import { Route as OfficeScanTypeRouteImport } from './routes/office.scan.$type'
+import { Route as OfficeWaybillNewRouteImport } from './routes/office.waybill.new'
+import { Route as RiderParcelIdRouteImport } from './routes/rider.parcel.$id'
+import { Route as RiderWaybillNewRouteImport } from './routes/rider.waybill.new'
 
-const RiderRoute = RiderRouteImport.update({
-  id: '/rider',
-  path: '/rider',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const OfficeRoute = OfficeRouteImport.update({
-  id: '/office',
-  path: '/office',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const DcRoute = DcRouteImport.update({
-  id: '/dc',
-  path: '/dc',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ChangePasswordRoute = ChangePasswordRouteImport.update({
-  id: '/change-password',
-  path: '/change-password',
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminRoute = AdminRouteImport.update({
@@ -82,159 +67,29 @@ const AdminRoute = AdminRouteImport.update({
   path: '/admin',
   getParentRoute: () => rootRouteImport,
 } as any)
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
+const ChangePasswordRoute = ChangePasswordRouteImport.update({
+  id: '/change-password',
+  path: '/change-password',
   getParentRoute: () => rootRouteImport,
 } as any)
-const RiderIndexRoute = RiderIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => RiderRoute,
+const DcRoute = DcRouteImport.update({
+  id: '/dc',
+  path: '/dc',
+  getParentRoute: () => rootRouteImport,
 } as any)
-const OfficeIndexRoute = OfficeIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => OfficeRoute,
+const OfficeRoute = OfficeRouteImport.update({
+  id: '/office',
+  path: '/office',
+  getParentRoute: () => rootRouteImport,
 } as any)
-const DcIndexRoute = DcIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => DcRoute,
+const RiderRoute = RiderRouteImport.update({
+  id: '/rider',
+  path: '/rider',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const AdminIndexRoute = AdminIndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => AdminRoute,
-} as any)
-const WaybillSenderRoute = WaybillSenderRouteImport.update({
-  id: '/waybill/sender',
-  path: '/waybill/sender',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const WaybillReceiverRoute = WaybillReceiverRouteImport.update({
-  id: '/waybill/receiver',
-  path: '/waybill/receiver',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const RiderReportsRoute = RiderReportsRouteImport.update({
-  id: '/reports',
-  path: '/reports',
-  getParentRoute: () => RiderRoute,
-} as any)
-const RiderMenuRoute = RiderMenuRouteImport.update({
-  id: '/menu',
-  path: '/menu',
-  getParentRoute: () => RiderRoute,
-} as any)
-const RiderHistoryRoute = RiderHistoryRouteImport.update({
-  id: '/history',
-  path: '/history',
-  getParentRoute: () => RiderRoute,
-} as any)
-const OfficeReportsRoute = OfficeReportsRouteImport.update({
-  id: '/reports',
-  path: '/reports',
-  getParentRoute: () => OfficeRoute,
-} as any)
-const OfficePrintRoute = OfficePrintRouteImport.update({
-  id: '/print',
-  path: '/print',
-  getParentRoute: () => OfficeRoute,
-} as any)
-const OfficePendingRoute = OfficePendingRouteImport.update({
-  id: '/pending',
-  path: '/pending',
-  getParentRoute: () => OfficeRoute,
-} as any)
-const OfficeMenuRoute = OfficeMenuRouteImport.update({
-  id: '/menu',
-  path: '/menu',
-  getParentRoute: () => OfficeRoute,
-} as any)
-const OfficeDeliveryMonitorRoute = OfficeDeliveryMonitorRouteImport.update({
-  id: '/delivery-monitor',
-  path: '/delivery-monitor',
-  getParentRoute: () => OfficeRoute,
-} as any)
-const OfficeCashPendingRoute = OfficeCashPendingRouteImport.update({
-  id: '/cash-pending',
-  path: '/cash-pending',
-  getParentRoute: () => OfficeRoute,
-} as any)
-const DcReportsRoute = DcReportsRouteImport.update({
-  id: '/reports',
-  path: '/reports',
-  getParentRoute: () => DcRoute,
-} as any)
-const DcMenuRoute = DcMenuRouteImport.update({
-  id: '/menu',
-  path: '/menu',
-  getParentRoute: () => DcRoute,
-} as any)
-const AdminUsersRoute = AdminUsersRouteImport.update({
-  id: '/users',
-  path: '/users',
-  getParentRoute: () => AdminRoute,
-} as any)
-const AdminToolsRoute = AdminToolsRouteImport.update({
-  id: '/tools',
-  path: '/tools',
-  getParentRoute: () => AdminRoute,
-} as any)
-const AdminTariffsRoute = AdminTariffsRouteImport.update({
-  id: '/tariffs',
-  path: '/tariffs',
-  getParentRoute: () => AdminRoute,
-} as any)
-const AdminSitesRoute = AdminSitesRouteImport.update({
-  id: '/sites',
-  path: '/sites',
-  getParentRoute: () => AdminRoute,
-} as any)
-const AdminSettingsRoute = AdminSettingsRouteImport.update({
-  id: '/settings',
-  path: '/settings',
-  getParentRoute: () => AdminRoute,
-} as any)
-const AdminReportsRoute = AdminReportsRouteImport.update({
-  id: '/reports',
-  path: '/reports',
-  getParentRoute: () => AdminRoute,
-} as any)
-const AdminPrintRoute = AdminPrintRouteImport.update({
-  id: '/print',
-  path: '/print',
-  getParentRoute: () => AdminRoute,
-} as any)
-const AdminMenuRoute = AdminMenuRouteImport.update({
-  id: '/menu',
-  path: '/menu',
-  getParentRoute: () => AdminRoute,
-} as any)
-const AdminInvestigationsRoute = AdminInvestigationsRouteImport.update({
-  id: '/investigations',
-  path: '/investigations',
-  getParentRoute: () => AdminRoute,
-} as any)
-const AdminImpersonateRoute = AdminImpersonateRouteImport.update({
-  id: '/impersonate',
-  path: '/impersonate',
-  getParentRoute: () => AdminRoute,
-} as any)
-const AdminDeliveryMonitorRoute = AdminDeliveryMonitorRouteImport.update({
-  id: '/delivery-monitor',
-  path: '/delivery-monitor',
-  getParentRoute: () => AdminRoute,
-} as any)
-const AdminCashPendingRoute = AdminCashPendingRouteImport.update({
-  id: '/cash-pending',
-  path: '/cash-pending',
-  getParentRoute: () => AdminRoute,
-} as any)
-const AdminAuditRoute = AdminAuditRouteImport.update({
-  id: '/audit',
-  path: '/audit',
   getParentRoute: () => AdminRoute,
 } as any)
 const AdminAccountsRoute = AdminAccountsRouteImport.update({
@@ -242,39 +97,159 @@ const AdminAccountsRoute = AdminAccountsRouteImport.update({
   path: '/accounts',
   getParentRoute: () => AdminRoute,
 } as any)
-const RiderWaybillNewRoute = RiderWaybillNewRouteImport.update({
-  id: '/waybill/new',
-  path: '/waybill/new',
-  getParentRoute: () => RiderRoute,
+const AdminAuditRoute = AdminAuditRouteImport.update({
+  id: '/audit',
+  path: '/audit',
+  getParentRoute: () => AdminRoute,
 } as any)
-const RiderParcelIdRoute = RiderParcelIdRouteImport.update({
-  id: '/parcel/$id',
-  path: '/parcel/$id',
-  getParentRoute: () => RiderRoute,
+const AdminCashPendingRoute = AdminCashPendingRouteImport.update({
+  id: '/cash-pending',
+  path: '/cash-pending',
+  getParentRoute: () => AdminRoute,
 } as any)
-const OfficeWaybillNewRoute = OfficeWaybillNewRouteImport.update({
-  id: '/waybill/new',
-  path: '/waybill/new',
-  getParentRoute: () => OfficeRoute,
+const AdminDeliveryMonitorRoute = AdminDeliveryMonitorRouteImport.update({
+  id: '/delivery-monitor',
+  path: '/delivery-monitor',
+  getParentRoute: () => AdminRoute,
 } as any)
-const OfficeScanTypeRoute = OfficeScanTypeRouteImport.update({
-  id: '/scan/$type',
-  path: '/scan/$type',
-  getParentRoute: () => OfficeRoute,
+const AdminImpersonateRoute = AdminImpersonateRouteImport.update({
+  id: '/impersonate',
+  path: '/impersonate',
+  getParentRoute: () => AdminRoute,
 } as any)
-const OfficeOpsSlugRoute = OfficeOpsSlugRouteImport.update({
-  id: '/ops/$slug',
-  path: '/ops/$slug',
-  getParentRoute: () => OfficeRoute,
+const AdminInvestigationsRoute = AdminInvestigationsRouteImport.update({
+  id: '/investigations',
+  path: '/investigations',
+  getParentRoute: () => AdminRoute,
 } as any)
-const DcScanTypeRoute = DcScanTypeRouteImport.update({
-  id: '/scan/$type',
-  path: '/scan/$type',
+const AdminMenuRoute = AdminMenuRouteImport.update({
+  id: '/menu',
+  path: '/menu',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminPrintRoute = AdminPrintRouteImport.update({
+  id: '/print',
+  path: '/print',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminReportsRoute = AdminReportsRouteImport.update({
+  id: '/reports',
+  path: '/reports',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminSettingsRoute = AdminSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminSitesRoute = AdminSitesRouteImport.update({
+  id: '/sites',
+  path: '/sites',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminTariffsRoute = AdminTariffsRouteImport.update({
+  id: '/tariffs',
+  path: '/tariffs',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminToolsRoute = AdminToolsRouteImport.update({
+  id: '/tools',
+  path: '/tools',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminUsersRoute = AdminUsersRouteImport.update({
+  id: '/users',
+  path: '/users',
+  getParentRoute: () => AdminRoute,
+} as any)
+const DcIndexRoute = DcIndexRouteImport.update({
+  id: '/',
+  path: '/',
   getParentRoute: () => DcRoute,
 } as any)
-const AdminWaybillNewRoute = AdminWaybillNewRouteImport.update({
-  id: '/waybill/new',
-  path: '/waybill/new',
+const DcMenuRoute = DcMenuRouteImport.update({
+  id: '/menu',
+  path: '/menu',
+  getParentRoute: () => DcRoute,
+} as any)
+const DcReportsRoute = DcReportsRouteImport.update({
+  id: '/reports',
+  path: '/reports',
+  getParentRoute: () => DcRoute,
+} as any)
+const OfficeIndexRoute = OfficeIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => OfficeRoute,
+} as any)
+const OfficeCashPendingRoute = OfficeCashPendingRouteImport.update({
+  id: '/cash-pending',
+  path: '/cash-pending',
+  getParentRoute: () => OfficeRoute,
+} as any)
+const OfficeDeliveryMonitorRoute = OfficeDeliveryMonitorRouteImport.update({
+  id: '/delivery-monitor',
+  path: '/delivery-monitor',
+  getParentRoute: () => OfficeRoute,
+} as any)
+const OfficeMenuRoute = OfficeMenuRouteImport.update({
+  id: '/menu',
+  path: '/menu',
+  getParentRoute: () => OfficeRoute,
+} as any)
+const OfficePendingRoute = OfficePendingRouteImport.update({
+  id: '/pending',
+  path: '/pending',
+  getParentRoute: () => OfficeRoute,
+} as any)
+const OfficePrintRoute = OfficePrintRouteImport.update({
+  id: '/print',
+  path: '/print',
+  getParentRoute: () => OfficeRoute,
+} as any)
+const OfficeReportsRoute = OfficeReportsRouteImport.update({
+  id: '/reports',
+  path: '/reports',
+  getParentRoute: () => OfficeRoute,
+} as any)
+const RiderIndexRoute = RiderIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => RiderRoute,
+} as any)
+const RiderHistoryRoute = RiderHistoryRouteImport.update({
+  id: '/history',
+  path: '/history',
+  getParentRoute: () => RiderRoute,
+} as any)
+const RiderMenuRoute = RiderMenuRouteImport.update({
+  id: '/menu',
+  path: '/menu',
+  getParentRoute: () => RiderRoute,
+} as any)
+const RiderReportsRoute = RiderReportsRouteImport.update({
+  id: '/reports',
+  path: '/reports',
+  getParentRoute: () => RiderRoute,
+} as any)
+const WaybillReceiverRoute = WaybillReceiverRouteImport.update({
+  id: '/waybill/receiver',
+  path: '/waybill/receiver',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const WaybillSenderRoute = WaybillSenderRouteImport.update({
+  id: '/waybill/sender',
+  path: '/waybill/sender',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminAccountsIdRoute = AdminAccountsIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => AdminAccountsRoute,
+} as any)
+const AdminOpsSlugRoute = AdminOpsSlugRouteImport.update({
+  id: '/ops/$slug',
+  path: '/ops/$slug',
   getParentRoute: () => AdminRoute,
 } as any)
 const AdminScanTypeRoute = AdminScanTypeRouteImport.update({
@@ -282,15 +257,40 @@ const AdminScanTypeRoute = AdminScanTypeRouteImport.update({
   path: '/scan/$type',
   getParentRoute: () => AdminRoute,
 } as any)
-const AdminOpsSlugRoute = AdminOpsSlugRouteImport.update({
-  id: '/ops/$slug',
-  path: '/ops/$slug',
+const AdminWaybillNewRoute = AdminWaybillNewRouteImport.update({
+  id: '/waybill/new',
+  path: '/waybill/new',
   getParentRoute: () => AdminRoute,
 } as any)
-const AdminAccountsIdRoute = AdminAccountsIdRouteImport.update({
-  id: '/$id',
-  path: '/$id',
-  getParentRoute: () => AdminAccountsRoute,
+const DcScanTypeRoute = DcScanTypeRouteImport.update({
+  id: '/scan/$type',
+  path: '/scan/$type',
+  getParentRoute: () => DcRoute,
+} as any)
+const OfficeOpsSlugRoute = OfficeOpsSlugRouteImport.update({
+  id: '/ops/$slug',
+  path: '/ops/$slug',
+  getParentRoute: () => OfficeRoute,
+} as any)
+const OfficeScanTypeRoute = OfficeScanTypeRouteImport.update({
+  id: '/scan/$type',
+  path: '/scan/$type',
+  getParentRoute: () => OfficeRoute,
+} as any)
+const OfficeWaybillNewRoute = OfficeWaybillNewRouteImport.update({
+  id: '/waybill/new',
+  path: '/waybill/new',
+  getParentRoute: () => OfficeRoute,
+} as any)
+const RiderParcelIdRoute = RiderParcelIdRouteImport.update({
+  id: '/parcel/$id',
+  path: '/parcel/$id',
+  getParentRoute: () => RiderRoute,
+} as any)
+const RiderWaybillNewRoute = RiderWaybillNewRouteImport.update({
+  id: '/waybill/new',
+  path: '/waybill/new',
+  getParentRoute: () => RiderRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
@@ -596,32 +596,11 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/rider': {
-      id: '/rider'
-      path: '/rider'
-      fullPath: '/rider'
-      preLoaderRoute: typeof RiderRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/office': {
-      id: '/office'
-      path: '/office'
-      fullPath: '/office'
-      preLoaderRoute: typeof OfficeRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/dc': {
-      id: '/dc'
-      path: '/dc'
-      fullPath: '/dc'
-      preLoaderRoute: typeof DcRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/change-password': {
-      id: '/change-password'
-      path: '/change-password'
-      fullPath: '/change-password'
-      preLoaderRoute: typeof ChangePasswordRouteImport
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin': {
@@ -631,221 +610,39 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
+    '/change-password': {
+      id: '/change-password'
+      path: '/change-password'
+      fullPath: '/change-password'
+      preLoaderRoute: typeof ChangePasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/rider/': {
-      id: '/rider/'
-      path: '/'
-      fullPath: '/rider/'
-      preLoaderRoute: typeof RiderIndexRouteImport
-      parentRoute: typeof RiderRoute
+    '/dc': {
+      id: '/dc'
+      path: '/dc'
+      fullPath: '/dc'
+      preLoaderRoute: typeof DcRouteImport
+      parentRoute: typeof rootRouteImport
     }
-    '/office/': {
-      id: '/office/'
-      path: '/'
-      fullPath: '/office/'
-      preLoaderRoute: typeof OfficeIndexRouteImport
-      parentRoute: typeof OfficeRoute
+    '/office': {
+      id: '/office'
+      path: '/office'
+      fullPath: '/office'
+      preLoaderRoute: typeof OfficeRouteImport
+      parentRoute: typeof rootRouteImport
     }
-    '/dc/': {
-      id: '/dc/'
-      path: '/'
-      fullPath: '/dc/'
-      preLoaderRoute: typeof DcIndexRouteImport
-      parentRoute: typeof DcRoute
+    '/rider': {
+      id: '/rider'
+      path: '/rider'
+      fullPath: '/rider'
+      preLoaderRoute: typeof RiderRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/admin/': {
       id: '/admin/'
       path: '/'
       fullPath: '/admin/'
       preLoaderRoute: typeof AdminIndexRouteImport
-      parentRoute: typeof AdminRoute
-    }
-    '/waybill/sender': {
-      id: '/waybill/sender'
-      path: '/waybill/sender'
-      fullPath: '/waybill/sender'
-      preLoaderRoute: typeof WaybillSenderRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/waybill/receiver': {
-      id: '/waybill/receiver'
-      path: '/waybill/receiver'
-      fullPath: '/waybill/receiver'
-      preLoaderRoute: typeof WaybillReceiverRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/rider/reports': {
-      id: '/rider/reports'
-      path: '/reports'
-      fullPath: '/rider/reports'
-      preLoaderRoute: typeof RiderReportsRouteImport
-      parentRoute: typeof RiderRoute
-    }
-    '/rider/menu': {
-      id: '/rider/menu'
-      path: '/menu'
-      fullPath: '/rider/menu'
-      preLoaderRoute: typeof RiderMenuRouteImport
-      parentRoute: typeof RiderRoute
-    }
-    '/rider/history': {
-      id: '/rider/history'
-      path: '/history'
-      fullPath: '/rider/history'
-      preLoaderRoute: typeof RiderHistoryRouteImport
-      parentRoute: typeof RiderRoute
-    }
-    '/office/reports': {
-      id: '/office/reports'
-      path: '/reports'
-      fullPath: '/office/reports'
-      preLoaderRoute: typeof OfficeReportsRouteImport
-      parentRoute: typeof OfficeRoute
-    }
-    '/office/print': {
-      id: '/office/print'
-      path: '/print'
-      fullPath: '/office/print'
-      preLoaderRoute: typeof OfficePrintRouteImport
-      parentRoute: typeof OfficeRoute
-    }
-    '/office/pending': {
-      id: '/office/pending'
-      path: '/pending'
-      fullPath: '/office/pending'
-      preLoaderRoute: typeof OfficePendingRouteImport
-      parentRoute: typeof OfficeRoute
-    }
-    '/office/menu': {
-      id: '/office/menu'
-      path: '/menu'
-      fullPath: '/office/menu'
-      preLoaderRoute: typeof OfficeMenuRouteImport
-      parentRoute: typeof OfficeRoute
-    }
-    '/office/delivery-monitor': {
-      id: '/office/delivery-monitor'
-      path: '/delivery-monitor'
-      fullPath: '/office/delivery-monitor'
-      preLoaderRoute: typeof OfficeDeliveryMonitorRouteImport
-      parentRoute: typeof OfficeRoute
-    }
-    '/office/cash-pending': {
-      id: '/office/cash-pending'
-      path: '/cash-pending'
-      fullPath: '/office/cash-pending'
-      preLoaderRoute: typeof OfficeCashPendingRouteImport
-      parentRoute: typeof OfficeRoute
-    }
-    '/dc/reports': {
-      id: '/dc/reports'
-      path: '/reports'
-      fullPath: '/dc/reports'
-      preLoaderRoute: typeof DcReportsRouteImport
-      parentRoute: typeof DcRoute
-    }
-    '/dc/menu': {
-      id: '/dc/menu'
-      path: '/menu'
-      fullPath: '/dc/menu'
-      preLoaderRoute: typeof DcMenuRouteImport
-      parentRoute: typeof DcRoute
-    }
-    '/admin/users': {
-      id: '/admin/users'
-      path: '/users'
-      fullPath: '/admin/users'
-      preLoaderRoute: typeof AdminUsersRouteImport
-      parentRoute: typeof AdminRoute
-    }
-    '/admin/tools': {
-      id: '/admin/tools'
-      path: '/tools'
-      fullPath: '/admin/tools'
-      preLoaderRoute: typeof AdminToolsRouteImport
-      parentRoute: typeof AdminRoute
-    }
-    '/admin/tariffs': {
-      id: '/admin/tariffs'
-      path: '/tariffs'
-      fullPath: '/admin/tariffs'
-      preLoaderRoute: typeof AdminTariffsRouteImport
-      parentRoute: typeof AdminRoute
-    }
-    '/admin/sites': {
-      id: '/admin/sites'
-      path: '/sites'
-      fullPath: '/admin/sites'
-      preLoaderRoute: typeof AdminSitesRouteImport
-      parentRoute: typeof AdminRoute
-    }
-    '/admin/settings': {
-      id: '/admin/settings'
-      path: '/settings'
-      fullPath: '/admin/settings'
-      preLoaderRoute: typeof AdminSettingsRouteImport
-      parentRoute: typeof AdminRoute
-    }
-    '/admin/reports': {
-      id: '/admin/reports'
-      path: '/reports'
-      fullPath: '/admin/reports'
-      preLoaderRoute: typeof AdminReportsRouteImport
-      parentRoute: typeof AdminRoute
-    }
-    '/admin/print': {
-      id: '/admin/print'
-      path: '/print'
-      fullPath: '/admin/print'
-      preLoaderRoute: typeof AdminPrintRouteImport
-      parentRoute: typeof AdminRoute
-    }
-    '/admin/menu': {
-      id: '/admin/menu'
-      path: '/menu'
-      fullPath: '/admin/menu'
-      preLoaderRoute: typeof AdminMenuRouteImport
-      parentRoute: typeof AdminRoute
-    }
-    '/admin/investigations': {
-      id: '/admin/investigations'
-      path: '/investigations'
-      fullPath: '/admin/investigations'
-      preLoaderRoute: typeof AdminInvestigationsRouteImport
-      parentRoute: typeof AdminRoute
-    }
-    '/admin/impersonate': {
-      id: '/admin/impersonate'
-      path: '/impersonate'
-      fullPath: '/admin/impersonate'
-      preLoaderRoute: typeof AdminImpersonateRouteImport
-      parentRoute: typeof AdminRoute
-    }
-    '/admin/delivery-monitor': {
-      id: '/admin/delivery-monitor'
-      path: '/delivery-monitor'
-      fullPath: '/admin/delivery-monitor'
-      preLoaderRoute: typeof AdminDeliveryMonitorRouteImport
-      parentRoute: typeof AdminRoute
-    }
-    '/admin/cash-pending': {
-      id: '/admin/cash-pending'
-      path: '/cash-pending'
-      fullPath: '/admin/cash-pending'
-      preLoaderRoute: typeof AdminCashPendingRouteImport
-      parentRoute: typeof AdminRoute
-    }
-    '/admin/audit': {
-      id: '/admin/audit'
-      path: '/audit'
-      fullPath: '/admin/audit'
-      preLoaderRoute: typeof AdminAuditRouteImport
       parentRoute: typeof AdminRoute
     }
     '/admin/accounts': {
@@ -855,53 +652,221 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminAccountsRouteImport
       parentRoute: typeof AdminRoute
     }
-    '/rider/waybill/new': {
-      id: '/rider/waybill/new'
-      path: '/waybill/new'
-      fullPath: '/rider/waybill/new'
-      preLoaderRoute: typeof RiderWaybillNewRouteImport
-      parentRoute: typeof RiderRoute
+    '/admin/audit': {
+      id: '/admin/audit'
+      path: '/audit'
+      fullPath: '/admin/audit'
+      preLoaderRoute: typeof AdminAuditRouteImport
+      parentRoute: typeof AdminRoute
     }
-    '/rider/parcel/$id': {
-      id: '/rider/parcel/$id'
-      path: '/parcel/$id'
-      fullPath: '/rider/parcel/$id'
-      preLoaderRoute: typeof RiderParcelIdRouteImport
-      parentRoute: typeof RiderRoute
+    '/admin/cash-pending': {
+      id: '/admin/cash-pending'
+      path: '/cash-pending'
+      fullPath: '/admin/cash-pending'
+      preLoaderRoute: typeof AdminCashPendingRouteImport
+      parentRoute: typeof AdminRoute
     }
-    '/office/waybill/new': {
-      id: '/office/waybill/new'
-      path: '/waybill/new'
-      fullPath: '/office/waybill/new'
-      preLoaderRoute: typeof OfficeWaybillNewRouteImport
-      parentRoute: typeof OfficeRoute
+    '/admin/delivery-monitor': {
+      id: '/admin/delivery-monitor'
+      path: '/delivery-monitor'
+      fullPath: '/admin/delivery-monitor'
+      preLoaderRoute: typeof AdminDeliveryMonitorRouteImport
+      parentRoute: typeof AdminRoute
     }
-    '/office/scan/$type': {
-      id: '/office/scan/$type'
-      path: '/scan/$type'
-      fullPath: '/office/scan/$type'
-      preLoaderRoute: typeof OfficeScanTypeRouteImport
-      parentRoute: typeof OfficeRoute
+    '/admin/impersonate': {
+      id: '/admin/impersonate'
+      path: '/impersonate'
+      fullPath: '/admin/impersonate'
+      preLoaderRoute: typeof AdminImpersonateRouteImport
+      parentRoute: typeof AdminRoute
     }
-    '/office/ops/$slug': {
-      id: '/office/ops/$slug'
-      path: '/ops/$slug'
-      fullPath: '/office/ops/$slug'
-      preLoaderRoute: typeof OfficeOpsSlugRouteImport
-      parentRoute: typeof OfficeRoute
+    '/admin/investigations': {
+      id: '/admin/investigations'
+      path: '/investigations'
+      fullPath: '/admin/investigations'
+      preLoaderRoute: typeof AdminInvestigationsRouteImport
+      parentRoute: typeof AdminRoute
     }
-    '/dc/scan/$type': {
-      id: '/dc/scan/$type'
-      path: '/scan/$type'
-      fullPath: '/dc/scan/$type'
-      preLoaderRoute: typeof DcScanTypeRouteImport
+    '/admin/menu': {
+      id: '/admin/menu'
+      path: '/menu'
+      fullPath: '/admin/menu'
+      preLoaderRoute: typeof AdminMenuRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/print': {
+      id: '/admin/print'
+      path: '/print'
+      fullPath: '/admin/print'
+      preLoaderRoute: typeof AdminPrintRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/reports': {
+      id: '/admin/reports'
+      path: '/reports'
+      fullPath: '/admin/reports'
+      preLoaderRoute: typeof AdminReportsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/settings': {
+      id: '/admin/settings'
+      path: '/settings'
+      fullPath: '/admin/settings'
+      preLoaderRoute: typeof AdminSettingsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/sites': {
+      id: '/admin/sites'
+      path: '/sites'
+      fullPath: '/admin/sites'
+      preLoaderRoute: typeof AdminSitesRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/tariffs': {
+      id: '/admin/tariffs'
+      path: '/tariffs'
+      fullPath: '/admin/tariffs'
+      preLoaderRoute: typeof AdminTariffsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/tools': {
+      id: '/admin/tools'
+      path: '/tools'
+      fullPath: '/admin/tools'
+      preLoaderRoute: typeof AdminToolsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/users': {
+      id: '/admin/users'
+      path: '/users'
+      fullPath: '/admin/users'
+      preLoaderRoute: typeof AdminUsersRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/dc/': {
+      id: '/dc/'
+      path: '/'
+      fullPath: '/dc/'
+      preLoaderRoute: typeof DcIndexRouteImport
       parentRoute: typeof DcRoute
     }
-    '/admin/waybill/new': {
-      id: '/admin/waybill/new'
-      path: '/waybill/new'
-      fullPath: '/admin/waybill/new'
-      preLoaderRoute: typeof AdminWaybillNewRouteImport
+    '/dc/menu': {
+      id: '/dc/menu'
+      path: '/menu'
+      fullPath: '/dc/menu'
+      preLoaderRoute: typeof DcMenuRouteImport
+      parentRoute: typeof DcRoute
+    }
+    '/dc/reports': {
+      id: '/dc/reports'
+      path: '/reports'
+      fullPath: '/dc/reports'
+      preLoaderRoute: typeof DcReportsRouteImport
+      parentRoute: typeof DcRoute
+    }
+    '/office/': {
+      id: '/office/'
+      path: '/'
+      fullPath: '/office/'
+      preLoaderRoute: typeof OfficeIndexRouteImport
+      parentRoute: typeof OfficeRoute
+    }
+    '/office/cash-pending': {
+      id: '/office/cash-pending'
+      path: '/cash-pending'
+      fullPath: '/office/cash-pending'
+      preLoaderRoute: typeof OfficeCashPendingRouteImport
+      parentRoute: typeof OfficeRoute
+    }
+    '/office/delivery-monitor': {
+      id: '/office/delivery-monitor'
+      path: '/delivery-monitor'
+      fullPath: '/office/delivery-monitor'
+      preLoaderRoute: typeof OfficeDeliveryMonitorRouteImport
+      parentRoute: typeof OfficeRoute
+    }
+    '/office/menu': {
+      id: '/office/menu'
+      path: '/menu'
+      fullPath: '/office/menu'
+      preLoaderRoute: typeof OfficeMenuRouteImport
+      parentRoute: typeof OfficeRoute
+    }
+    '/office/pending': {
+      id: '/office/pending'
+      path: '/pending'
+      fullPath: '/office/pending'
+      preLoaderRoute: typeof OfficePendingRouteImport
+      parentRoute: typeof OfficeRoute
+    }
+    '/office/print': {
+      id: '/office/print'
+      path: '/print'
+      fullPath: '/office/print'
+      preLoaderRoute: typeof OfficePrintRouteImport
+      parentRoute: typeof OfficeRoute
+    }
+    '/office/reports': {
+      id: '/office/reports'
+      path: '/reports'
+      fullPath: '/office/reports'
+      preLoaderRoute: typeof OfficeReportsRouteImport
+      parentRoute: typeof OfficeRoute
+    }
+    '/rider/': {
+      id: '/rider/'
+      path: '/'
+      fullPath: '/rider/'
+      preLoaderRoute: typeof RiderIndexRouteImport
+      parentRoute: typeof RiderRoute
+    }
+    '/rider/history': {
+      id: '/rider/history'
+      path: '/history'
+      fullPath: '/rider/history'
+      preLoaderRoute: typeof RiderHistoryRouteImport
+      parentRoute: typeof RiderRoute
+    }
+    '/rider/menu': {
+      id: '/rider/menu'
+      path: '/menu'
+      fullPath: '/rider/menu'
+      preLoaderRoute: typeof RiderMenuRouteImport
+      parentRoute: typeof RiderRoute
+    }
+    '/rider/reports': {
+      id: '/rider/reports'
+      path: '/reports'
+      fullPath: '/rider/reports'
+      preLoaderRoute: typeof RiderReportsRouteImport
+      parentRoute: typeof RiderRoute
+    }
+    '/waybill/receiver': {
+      id: '/waybill/receiver'
+      path: '/waybill/receiver'
+      fullPath: '/waybill/receiver'
+      preLoaderRoute: typeof WaybillReceiverRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/waybill/sender': {
+      id: '/waybill/sender'
+      path: '/waybill/sender'
+      fullPath: '/waybill/sender'
+      preLoaderRoute: typeof WaybillSenderRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/accounts/$id': {
+      id: '/admin/accounts/$id'
+      path: '/$id'
+      fullPath: '/admin/accounts/$id'
+      preLoaderRoute: typeof AdminAccountsIdRouteImport
+      parentRoute: typeof AdminAccountsRoute
+    }
+    '/admin/ops/$slug': {
+      id: '/admin/ops/$slug'
+      path: '/ops/$slug'
+      fullPath: '/admin/ops/$slug'
+      preLoaderRoute: typeof AdminOpsSlugRouteImport
       parentRoute: typeof AdminRoute
     }
     '/admin/scan/$type': {
@@ -911,19 +876,54 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminScanTypeRouteImport
       parentRoute: typeof AdminRoute
     }
-    '/admin/ops/$slug': {
-      id: '/admin/ops/$slug'
-      path: '/ops/$slug'
-      fullPath: '/admin/ops/$slug'
-      preLoaderRoute: typeof AdminOpsSlugRouteImport
+    '/admin/waybill/new': {
+      id: '/admin/waybill/new'
+      path: '/waybill/new'
+      fullPath: '/admin/waybill/new'
+      preLoaderRoute: typeof AdminWaybillNewRouteImport
       parentRoute: typeof AdminRoute
     }
-    '/admin/accounts/$id': {
-      id: '/admin/accounts/$id'
-      path: '/$id'
-      fullPath: '/admin/accounts/$id'
-      preLoaderRoute: typeof AdminAccountsIdRouteImport
-      parentRoute: typeof AdminAccountsRoute
+    '/dc/scan/$type': {
+      id: '/dc/scan/$type'
+      path: '/scan/$type'
+      fullPath: '/dc/scan/$type'
+      preLoaderRoute: typeof DcScanTypeRouteImport
+      parentRoute: typeof DcRoute
+    }
+    '/office/ops/$slug': {
+      id: '/office/ops/$slug'
+      path: '/ops/$slug'
+      fullPath: '/office/ops/$slug'
+      preLoaderRoute: typeof OfficeOpsSlugRouteImport
+      parentRoute: typeof OfficeRoute
+    }
+    '/office/scan/$type': {
+      id: '/office/scan/$type'
+      path: '/scan/$type'
+      fullPath: '/office/scan/$type'
+      preLoaderRoute: typeof OfficeScanTypeRouteImport
+      parentRoute: typeof OfficeRoute
+    }
+    '/office/waybill/new': {
+      id: '/office/waybill/new'
+      path: '/waybill/new'
+      fullPath: '/office/waybill/new'
+      preLoaderRoute: typeof OfficeWaybillNewRouteImport
+      parentRoute: typeof OfficeRoute
+    }
+    '/rider/parcel/$id': {
+      id: '/rider/parcel/$id'
+      path: '/parcel/$id'
+      fullPath: '/rider/parcel/$id'
+      preLoaderRoute: typeof RiderParcelIdRouteImport
+      parentRoute: typeof RiderRoute
+    }
+    '/rider/waybill/new': {
+      id: '/rider/waybill/new'
+      path: '/waybill/new'
+      fullPath: '/rider/waybill/new'
+      preLoaderRoute: typeof RiderWaybillNewRouteImport
+      parentRoute: typeof RiderRoute
     }
   }
 }
