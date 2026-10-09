@@ -620,3 +620,28 @@ export function useDepartureScan() {
 
 
 
+
+export function useKenyaCounties() {
+  return useQuery({
+    queryKey: ["kenya_counties"],
+    staleTime: Infinity,
+    queryFn: async () => {
+      const { data, error } = await supabase.from("kenya_counties").select("id,name").order("name");
+      if (error) throw error;
+      return data ?? [];
+    },
+  });
+}
+export function useKenyaLocations(countyId: number | null) {
+  return useQuery({
+    queryKey: ["kenya_locations", countyId],
+    enabled: countyId != null,
+    staleTime: Infinity,
+    queryFn: async () => {
+      const { data, error } = await supabase.from("kenya_locations")
+        .select("id,constituency,ward").eq("county_id", countyId!).order("constituency").order("ward");
+      if (error) throw error;
+      return data ?? [];
+    },
+  });
+}
