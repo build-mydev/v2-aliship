@@ -343,3 +343,252 @@ function WeightField({ value, onChange }: { value: number; onChange: (v: number)
   );
 }
 
+/* ---------- Location (County → Sub-county → Ward) ---------- */
+type Loc = { county: string; countyId: number | null; subCounty: string; ward: string };
+const emptyLoc: Loc = { county: "", countyId: null, subCounty: "", ward: "" };
+
+function LocationFields({ value, onChange, required }: { value: Loc; onChange: (l: Loc) => void; required?: boolean }) {
+  const { data: counties = [], isLoading: cLoading } = useKenyaCounties();
+  const { data: locs = [], isLoading: lLoading } = useKenyaLocations(value.countyId);
+  const [picker, setPicker] = useState<null | "county" | "sub" | "ward">(null);
+
+  const subs = useMemo(() => Array.from(new Set(locs.map(l => l.constituency))), [locs]);
+  const wards = useMemo(() => locs.filter(l => l.constituency === value.subCounty).map(l => l.ward), [locs, value.subCounty]);
+
+  return (
+    <>
+      <PickField label="County" required={required} value={value.county} placeholder="Select county" onClick={() => setPicker("county")} />
+      <PickField label="Sub-county" required={required} value={value.subCounty} placeholder={value.county ? "Select sub-county" : "Select county first"}
+        disabled={!value.county} onClick={() => setPicker("sub")} />
+      <PickField label="Ward" value={value.ward} placeholder={value.subCounty ? "Select ward" : "Select sub-county first"}
+        disabled={!value.subCounty} onClick={() => setPicker("ward")} />
+      {picker === "county" && (
+        <SearchPicker title="Select county" loading={cLoading} items={counties.map(c => c.name)} selected={value.county}
+          onClose={() => setPicker(null)}
+          onPick={n => { const c = counties.find(x => x.name === n)!; onChange({ county: c.name, countyId: c.id, subCounty: "", ward: "" }); setPicker("sub"); }} />
+      )}
+      {picker === "sub" && (
+        <SearchPicker title={`Sub-county · ${value.county}`} loading={lLoading} items={subs} selected={value.subCounty}
+          onClose={() => setPicker(null)}
+          onPick={n => { onChange({ ...value, subCounty: n, ward: "" }); setPicker("ward"); }} />
+      )}
+      {picker === "ward" && (
+        <SearchPicker title={`Ward · ${value.subCounty}`} loading={lLoading} items={wards} selected={value.ward}
+          onClose={() => setPicker(null)}
+          onPick={n => { onChange({ ...value, ward: n }); setPicker(null); }} />
+      )}
+    </>
+  );
+}
+
+function PickField({ label, value, placeholder, onClick, required, disabled }: {
+  label: string; value: string; placeholder: string; onClick: () => void; required?: boolean; disabled?: boolean;
+}) {
+  return (
+    <button type="button" disabled={disabled} onClick={onClick}
+      className="flex w-full items-center justify-between rounded-xl border border-border px-3 py-2 text-left disabled:opacity-50">
+      <span className="min-w-0">
+        <span className="block text-[11px] font-medium text-muted-foreground">{label}{required && <span className="text-destructive"> *</span>}</span>
+        <span className={"block truncate py-1 text-sm " + (value ? "font-semibold" : "text-muted-foreground")}>{value || placeholder}</span>
+      </span>
+      <ChevronDown className="h-4 w-4 shrink-0 text-muted-foreground" />
+    </button>
+  );
+}
+
+function SearchPicker({ title, items, selected, loading, onPick, onClose }: {
+  title: string; items: string[]; selected: string; loading?: boolean; onPick: (v: string) => void; onClose: () => void;
+}) {
+  const [q, setQ] = useState("");
+  const list = useMemo(() => {
+    const s = q.trim().toLowerCase();
+    return s ? items.filter(i => i.toLowerCase().includes(s)) : items;
+  }, [items, q]);
+  return (
+    <div className="fixed inset-0 z-[60] flex flex-col bg-background">
+      <div className="flex items-center gap-2 border-b border-border px-3 py-3">
+        <button onClick={onClose} aria-label="Back" className="p-1"><ChevronLeft className="h-5 w-5" /></button>
+        <div className="truncate text-base font-bold">{title}</div>
+      </div>
+      <div className="p-3">
+        <div className="flex items-center gap-2 rounded-full border border-border bg-card px-4 py-2.5 focus-within:border-primary">
+          <Search className="h-4 w-4 text-muted-foreground" />
+          <input autoFocus value={q} onChange={e => setQ(e.target.value)} placeholder="Search…" className="flex-1 bg-transparent text-sm outline-none" />
+          {q && <button onClick={() => setQ("")} aria-label="Clear"><X className="h-4 w-4 text-muted-foreground" /></button>}
+        </div>
+      </div>
+      <div className="flex-1 overflow-y-auto">
+        {loading && <div className="p-6 text-center text-sm text-muted-foreground">Loading…</div>}
+        {!loading && list.map(i => (
+          <button key={i} onClick={() => onPick(i)}
+            className={"flex w-full items-center justify-between border-b border-border px-4 py-3.5 text-left text-sm " + (i === selected ? "font-semibold text-primary" : "")}>
+            {i}{i === selected && <Check className="h-4 w-4" />}
+          </button>
+        ))}
+        {!loading && list.length === 0 && <div className="p-6 text-center text-sm text-muted-foreground">No matches</div>}
+      </div>
+    </div>
+  );
+}
+
+function locText(l: Loc) { return [l.ward, l.subCounty, l.county].filter(Boolean).join(", "); }
+
+/* ---------- Sender bottom sheet ---------- */
+function SenderSheet({ initial, accounts, originTownLabel, onClose, onSave }: {
+  initial: SenderData | null; accounts: any[]; originTownLabel: string; onClose: () => void; onSave: (s: SenderData) => void;
+}) {
+  const [isAccount, setIsAccount] = useState(initial?.isAccount ?? false);
+  const [accountId, setAccountId] = useState<string>(initial?.accountId ?? "");
+  const [name, setName] = useState(initial?.name ?? "");
+  const [phone, setPhone] = useState(initial?.phone ?? "");
+  const [email, setEmail] = useState(initial?.email ?? "");
+  const [address, setAddress] = useState(initial?.address ?? "");
+  const [loc, setLoc] = useState<Loc>(emptyLoc);
+  const [search, setSearch] = useState("");
+
+  const filteredAccounts = useMemo(() => {
+    const s = search.trim().toLowerCase();
+    if (!s) return accounts.slice(0, 20);
+    return accounts.filter(a => (a.company ?? "").toLowerCase().includes(s) || (a.account_no ?? "").toLowerCase().includes(s)).slice(0, 20);
+  }, [accounts, search]);
+  const selectedAccount = accounts.find(a => a.id === accountId);
+  const fullAddress = [address.trim(), locText(loc)].filter(Boolean).join(", ");
+
+  const submit = () => {
+    if (isAccount) {
+      if (!selectedAccount) { toast.error("Select an account"); return; }
+      onSave({ isAccount: true, accountId: selectedAccount.id, company: selectedAccount.company,
+        name: selectedAccount.contact_name ?? selectedAccount.company, phone: selectedAccount.phone ?? "", email, address: fullAddress });
+    } else {
+      if (!name.trim() || !phone.trim()) { toast.error("Name and phone required"); return; }
+      onSave({ isAccount: false, name: name.trim(), phone: phone.trim(), email: email.trim(), address: fullAddress });
+    }
+  };
+
+  return (
+    <Sheet icon={<Send className="h-5 w-5 text-primary" />} title="Sender" onClose={onClose} onConfirm={submit}>
+      <ToggleRow label="Account customer?" checked={isAccount} onChange={setIsAccount} />
+      {isAccount ? (
+        <>
+          <div className="flex items-center gap-2 rounded-full border border-border bg-background px-4 py-2.5 focus-within:border-primary">
+            <Search className="h-4 w-4 text-muted-foreground" />
+            <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search company or account no." className="flex-1 bg-transparent text-sm outline-none" />
+          </div>
+          <div className="max-h-52 overflow-y-auto rounded-xl border border-border">
+            {filteredAccounts.map(a => (
+              <button key={a.id} onClick={() => setAccountId(a.id)}
+                className={"flex w-full items-center justify-between gap-2 border-b border-border px-3 py-3 text-left text-sm last:border-b-0 " + (accountId === a.id ? "bg-primary/10 text-primary" : "")}>
+                <span className="min-w-0"><span className="block truncate font-semibold">{a.company}</span><span className="text-xs text-muted-foreground">{a.account_no}</span></span>
+                {accountId === a.id && <Check className="h-4 w-4 shrink-0" />}
+              </button>
+            ))}
+            {filteredAccounts.length === 0 && <div className="p-4 text-center text-xs text-muted-foreground">No accounts</div>}
+          </div>
+        </>
+      ) : (
+        <>
+          <BoxField label="Name" required value={name} onChange={setName} placeholder="Full name" />
+          <BoxField label="Telephone" required value={phone} onChange={setPhone} placeholder="07XX XXX XXX" />
+          <BoxField label="Email" value={email} onChange={setEmail} placeholder="Optional" />
+        </>
+      )}
+      <SectionLabel>Pickup location</SectionLabel>
+      <div className="flex items-center gap-2 rounded-xl bg-muted/40 px-3 py-2.5 text-xs">
+        <MapPin className="h-4 w-4 text-primary" /> Origin office: <span className="font-semibold">{originTownLabel || "—"}</span>
+      </div>
+      <LocationFields value={loc} onChange={setLoc} />
+      <BoxField label="Detail Address" value={address} onChange={setAddress} placeholder="Street, building, landmark" />
+    </Sheet>
+  );
+}
+
+/* ---------- Receiver bottom sheet ---------- */
+function ReceiverSheet({ initial, towns, onClose, onSave }: {
+  initial: ReceiverData | null; towns: any[]; onClose: () => void; onSave: (r: ReceiverData) => void;
+}) {
+  const [name, setName] = useState(initial?.name ?? "");
+  const [phone, setPhone] = useState(initial?.phone ?? "");
+  const [email, setEmail] = useState(initial?.email ?? "");
+  const [address, setAddress] = useState("");
+  const [loc, setLoc] = useState<Loc>(emptyLoc);
+  const [townName, setTownName] = useState<string>(initial?.town ?? "");
+  const [townPicker, setTownPicker] = useState(false);
+
+  // Auto-pick the delivery town (used for freight) from the chosen county
+  const countyTowns = useMemo(() => {
+    const c = loc.county.toLowerCase().replace(/ county$/, "");
+    return towns.filter(t => (t.county ?? "").toLowerCase().replace(/ county$/, "") === c);
+  }, [towns, loc.county]);
+  useEffect(() => {
+    if (!loc.county) return;
+    const sub = loc.subCounty.toLowerCase();
+    const match = countyTowns.find(t => sub && t.name.toLowerCase().includes(sub)) ?? countyTowns[0];
+    if (match) setTownName(match.name);
+  }, [loc.county, loc.subCounty, countyTowns]);
+
+  const submit = () => {
+    if (!name.trim() || !phone.trim()) { toast.error("Name and phone required"); return; }
+    if (!loc.county || !loc.subCounty) { toast.error("Select county and sub-county"); return; }
+    if (!townName) { toast.error("Select delivery town"); return; }
+    if (!address.trim()) { toast.error("Enter detail address"); return; }
+    onSave({ name: name.trim(), phone: phone.trim(), email: email.trim(),
+      address: [address.trim(), locText(loc)].join(", "), town: townName, county: loc.county });
+  };
+
+  return (
+    <Sheet icon={<Mail className="h-5 w-5 text-primary" />} title="Receiver" onClose={onClose} onConfirm={submit}>
+      <BoxField label="Name" required value={name} onChange={setName} placeholder="Full name" />
+      <BoxField label="Telephone" required value={phone} onChange={setPhone} placeholder="07XX XXX XXX" />
+      <BoxField label="Email" value={email} onChange={setEmail} placeholder="Optional" />
+      <SectionLabel>Delivery location</SectionLabel>
+      <LocationFields value={loc} onChange={setLoc} required />
+      <PickField label="Delivery town (for freight)" required value={townName} placeholder="Select town" onClick={() => setTownPicker(true)} />
+      <BoxField label="Detail Address" required value={address} onChange={setAddress} placeholder="Street, building, landmark" />
+      {townPicker && (
+        <SearchPicker title="Delivery town" items={(countyTowns.length ? countyTowns : towns).map(t => t.name)} selected={townName}
+          onClose={() => setTownPicker(false)} onPick={n => { setTownName(n); setTownPicker(false); }} />
+      )}
+    </Sheet>
+  );
+}
+
+function SectionLabel({ children }: { children: React.ReactNode }) {
+  return <div className="pt-1 text-[11px] font-bold uppercase tracking-wider text-muted-foreground">{children}</div>;
+}
+
+/* ---------- Sheet shell ---------- */
+function Sheet({ icon, title, children, onClose, onConfirm }: {
+  icon: React.ReactNode; title: string; children: React.ReactNode; onClose: () => void; onConfirm: () => void;
+}) {
+  return (
+    <div className="fixed inset-0 z-50 flex flex-col justify-end bg-black/50" onClick={onClose}>
+      <div className="flex max-h-[92vh] flex-col rounded-t-3xl bg-card" onClick={e => e.stopPropagation()}>
+        <div className="mx-auto mt-2 h-1.5 w-10 rounded-full bg-border" />
+        <div className="flex items-center justify-between px-4 py-3">
+          <div className="flex items-center gap-3">
+            <span className="flex h-9 w-9 items-center justify-center rounded-full bg-primary/10">{icon}</span>
+            <div className="text-lg font-bold">{title}</div>
+          </div>
+          <button onClick={onClose} aria-label="Close" className="rounded-full bg-muted p-1.5"><X className="h-4 w-4 text-muted-foreground" /></button>
+        </div>
+        <div className="flex-1 space-y-3 overflow-y-auto px-4 pb-4">{children}</div>
+        <div className="flex gap-2 border-t border-border bg-card px-4 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
+          <button onClick={onClose} className="flex-1 rounded-full border border-border py-3 text-sm font-semibold">Cancel</button>
+          <button onClick={onConfirm} className="flex-[2] rounded-full bg-primary py-3 text-sm font-bold text-primary-foreground shadow-md shadow-primary/30 active:scale-[0.98]">Confirm</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ToggleRow({ label, checked, onChange }: { label: string; checked: boolean; onChange: (v: boolean) => void }) {
+  return (
+    <label className="flex items-center justify-between rounded-xl bg-muted/40 px-3 py-3 text-sm">
+      <span>{label}</span>
+      <button type="button" onClick={() => onChange(!checked)}
+        className={"relative h-6 w-11 rounded-full transition-colors " + (checked ? "bg-primary" : "bg-border")}>
+        <span className={"absolute top-0.5 h-5 w-5 rounded-full bg-background shadow transition-all " + (checked ? "left-5" : "left-0.5")} />
+      </button>
+    </label>
+  );
+}
