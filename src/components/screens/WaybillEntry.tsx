@@ -2,6 +2,7 @@ import { PageLayout } from "@/components/layout/PageLayout";
 import { SubPageHeader } from "@/components/layout/SubPageHeader";
 import { StickyActionBar } from "@/components/layout/StickyActionBar";
 import { useEffect, useMemo, useState } from "react";
+import { createPortal } from "react-dom";
 import { useNavigate } from "@tanstack/react-router";
 import { toast } from "sonner";
 import { useAuth } from "@/lib/auth-context";
@@ -404,8 +405,8 @@ function SearchPicker({ title, items, selected, loading, onPick, onClose }: {
     const s = q.trim().toLowerCase();
     return s ? items.filter(i => i.toLowerCase().includes(s)) : items;
   }, [items, q]);
-  return (
-    <div className="fixed inset-0 z-[60] flex flex-col bg-background">
+  return createPortal(
+    <div className="fixed inset-0 z-[80] flex h-dvh flex-col bg-background">
       <div className="flex items-center gap-2 border-b border-border px-3 py-3">
         <button onClick={onClose} aria-label="Back" className="p-1"><ChevronLeft className="h-5 w-5" /></button>
         <div className="truncate text-base font-bold">{title}</div>
@@ -427,7 +428,8 @@ function SearchPicker({ title, items, selected, loading, onPick, onClose }: {
         ))}
         {!loading && list.length === 0 && <div className="p-6 text-center text-sm text-muted-foreground">No matches</div>}
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }
 
@@ -560,24 +562,25 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
 function Sheet({ icon, title, children, onClose, onConfirm }: {
   icon: React.ReactNode; title: string; children: React.ReactNode; onClose: () => void; onConfirm: () => void;
 }) {
-  return (
-    <div className="fixed inset-0 z-50 flex flex-col justify-end bg-black/50" onClick={onClose}>
-      <div className="flex max-h-[92vh] flex-col rounded-t-3xl bg-card" onClick={e => e.stopPropagation()}>
-        <div className="mx-auto mt-2 h-1.5 w-10 rounded-full bg-border" />
-        <div className="flex items-center justify-between px-4 py-3">
+  return createPortal(
+    <div className="fixed inset-0 z-[70] flex flex-col justify-end bg-black/50" onClick={onClose}>
+      <div className="flex max-h-[92dvh] flex-col rounded-t-3xl bg-card" onClick={e => e.stopPropagation()}>
+        <div className="mx-auto mt-2 h-1.5 w-10 shrink-0 rounded-full bg-border" />
+        <div className="flex shrink-0 items-center justify-between px-4 py-3">
           <div className="flex items-center gap-3">
             <span className="flex h-9 w-9 items-center justify-center rounded-full bg-primary/10">{icon}</span>
             <div className="text-lg font-bold">{title}</div>
           </div>
           <button onClick={onClose} aria-label="Close" className="rounded-full bg-muted p-1.5"><X className="h-4 w-4 text-muted-foreground" /></button>
         </div>
-        <div className="flex-1 space-y-3 overflow-y-auto px-4 pb-4">{children}</div>
-        <div className="flex gap-2 border-t border-border bg-card px-4 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
+        <div className="min-h-0 flex-1 space-y-3 overflow-y-auto px-4 pb-4">{children}</div>
+        <div className="flex shrink-0 gap-2 border-t border-border bg-card px-4 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
           <button onClick={onClose} className="flex-1 rounded-full border border-border py-3 text-sm font-semibold">Cancel</button>
           <button onClick={onConfirm} className="flex-[2] rounded-full bg-primary py-3 text-sm font-bold text-primary-foreground shadow-md shadow-primary/30 active:scale-[0.98]">Confirm</button>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }
 
