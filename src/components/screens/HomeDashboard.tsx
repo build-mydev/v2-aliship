@@ -33,7 +33,7 @@ export function HomeDashboard({ role }: { role: Role }) {
   const siteName = auth.siteName ?? profile.site;
   // Super admins see everything (siteId = null). Others are scoped to their site.
   const scopeSite = role === "super_admin" ? null : (auth.profile?.site_id ?? null);
-  const { data: counts } = useDashboardCounts(scopeSite);
+  const { data: counts, isLoading: countsLoading } = useDashboardCounts(scopeSite);
   const get = (k: string) => (counts as Record<string, number> | undefined)?.[k] ?? 0;
 
   return (
@@ -63,7 +63,7 @@ export function HomeDashboard({ role }: { role: Role }) {
           <div>
             <div className="text-sm text-muted-foreground">Cash Pending Settlement</div>
             <div className="mt-1 text-2xl font-bold text-primary">
-              KES {get("cashPendingSettlement").toLocaleString()}
+              {countsLoading ? <span className="inline-block h-7 w-32 animate-pulse rounded-md bg-muted align-middle" /> : <>KES {get("cashPendingSettlement").toLocaleString()}</>}
             </div>
           </div>
           <div className="flex flex-col items-end gap-1">

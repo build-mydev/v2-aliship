@@ -1,5 +1,6 @@
 import { useRouterState } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
+import { useIsFetching, useIsMutating } from "@tanstack/react-query";
 
 export function Spinner({ className = "h-10 w-10" }: { className?: string }) {
   return (
@@ -25,20 +26,24 @@ export function FullScreenLoader({ label = "Loading…" }: { label?: string }) {
 
 /** Top bar + full-screen spinner while navigating between pages. */
 export function NavigationLoader() {
-  const pending = useRouterState({ select: (s) => s.status === "pending" || s.isLoading });
+  const navPending = useRouterState({ select: (s) => s.status === "pending" || s.isLoading });
+  const fetching = useIsFetching() > 0;
+  const mutating = useIsMutating() > 0;
+  const pending = navPending || fetching || mutating;
+  const blocking = navPending || mutating;
   const [showOverlay, setShowOverlay] = useState(false);
   useEffect(() => {
-    if (!pending) { setShowOverlay(false); return; }
+    if (!blocking) { setShowOverlay(false); return; }
     const t = setTimeout(() => setShowOverlay(true), 250);
     return () => clearTimeout(t);
-  }, [pending]);
+  }, [blocking]);
   if (!pending) return null;
   return (
     <>
       <div className="fixed inset-x-0 top-0 z-[110] h-1 overflow-hidden bg-primary/20">
         <div className="h-full w-1/3 animate-[navbar_1s_ease-in-out_infinite] bg-primary" />
       </div>
-      {showOverlay && <FullScreenLoader />}
+      {showOverlay && <FullScreenLoader label={mutating ? "Saving…" : "Loading…"} />}
     </>
   );
 }

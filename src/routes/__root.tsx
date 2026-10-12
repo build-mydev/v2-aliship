@@ -14,6 +14,7 @@ import { reportLovableError } from "../lib/lovable-error-reporting";
 import { AuthProvider, useAuth } from "@/lib/auth-context";
 import { AccountPendingSetup } from "@/components/AccountPendingSetup";
 import { useRouterState } from "@tanstack/react-router";
+import { NavigationLoader, FullScreenLoader } from "@/components/layout/Loaders";
 
 function NotFoundComponent() {
   return (
@@ -135,6 +136,7 @@ function SiteGate() {
     }
     return null;
   }
+  if (loading && isProtected) return <FullScreenLoader label="Starting ALISHIP…" />;
   if (!loading && session && needsSiteAssignment && isProtected) {
     return <AccountPendingSetup />;
   }
@@ -148,6 +150,7 @@ function RootComponent() {
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
         {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
+        <NavigationLoader />
         <SiteGate />
       </AuthProvider>
     </QueryClientProvider>
