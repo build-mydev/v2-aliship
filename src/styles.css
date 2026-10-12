@@ -143,3 +143,13 @@
   0% { transform: translateX(-100%); }
   100% { transform: translateX(300%); }
 }
+
+/* Parcel Box Flip loader */
+.parcel-cube { position: relative; display: block; transform-style: preserve-3d; animation: parcel-spin 1.4s cubic-bezier(.6,.05,.3,.95) infinite; }
+.parcel-face { position: absolute; inset: 0; display: block; border: 1px solid rgb(0 0 0 / .15); backface-visibility: hidden; }
+.parcel-tape { position: absolute; top: 0; bottom: 0; left: 42%; width: 16%; background: var(--primary); }
+.parcel-bounce { animation: parcel-drop 1.4s cubic-bezier(.3,1.6,.5,1) infinite; }
+.parcel-shadow { animation: parcel-shadow 1.4s ease-in-out infinite; }
+@keyframes parcel-spin { 0% { transform: rotateX(-25deg) rotateY(45deg); } 100% { transform: rotateX(-25deg) rotateY(405deg); } }
+@keyframes parcel-drop { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-14px); } }
+@keyframes parcel-shadow { 0%,100% { transform: scaleX(1); opacity: .5; } 50% { transform: scaleX(.6); opacity: .2; } }
