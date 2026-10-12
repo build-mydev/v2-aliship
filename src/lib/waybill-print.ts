@@ -15,6 +15,7 @@ export type WaybillPrintData = {
   weightKg?: number | null;
   createdAt?: string | Date | null;
   brand?: string;   // "Aliship"
+  reprintCopy?: number | null; // >1 marks the label as a reprint
 };
 
 async function makeQr(text: string, size = 180): Promise<Uint8Array> {
@@ -75,6 +76,7 @@ export async function renderWaybillEscPos(w: WaybillPrintData): Promise<Uint8Arr
     cmd.align("center"),
     cmd.size(1, 1), cmd.bold(true), cmd.ln(brand.toUpperCase()),
     cmd.bold(false), cmd.size(0, 0), cmd.ln("express"),
+    w.reprintCopy && w.reprintCopy > 1 ? buildBytes([cmd.bold(true), cmd.ln(`*** REPRINT - COPY ${w.reprintCopy} ***`), cmd.bold(false)]) : new Uint8Array(),
     cmd.feed(1),
 
     // COD box
