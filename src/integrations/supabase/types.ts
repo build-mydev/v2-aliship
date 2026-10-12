@@ -728,6 +728,8 @@ export type Database = {
           origin_site_id: string | null
           payment_status: string
           pieces: number
+          print_count: number
+          printed_at: string | null
           prohibited_declaration: boolean
           receiver_address: string | null
           receiver_county: string | null
@@ -768,6 +770,8 @@ export type Database = {
           origin_site_id?: string | null
           payment_status?: string
           pieces?: number
+          print_count?: number
+          printed_at?: string | null
           prohibited_declaration?: boolean
           receiver_address?: string | null
           receiver_county?: string | null
@@ -808,6 +812,8 @@ export type Database = {
           origin_site_id?: string | null
           payment_status?: string
           pieces?: number
+          print_count?: number
+          printed_at?: string | null
           prohibited_declaration?: boolean
           receiver_address?: string | null
           receiver_county?: string | null
@@ -1288,6 +1294,7 @@ export type Database = {
         Args: { p_type?: Database["public"]["Enums"]["waybill_type"] }
         Returns: string
       }
+      mark_parcels_printed: { Args: { p_ids: string[] }; Returns: undefined }
     }
     Enums: {
       account_type: "Prepaid" | "Postpaid"

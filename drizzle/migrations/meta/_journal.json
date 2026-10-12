@@ -8,6 +8,13 @@
       "when": 1791826969687,
       "tag": "0000_grant_waybill_number",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1791827504197,
+      "tag": "0001_parcel_print_tracking",
+      "breakpoints": true
     }
   ]
 }
