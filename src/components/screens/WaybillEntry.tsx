@@ -60,7 +60,14 @@ export function WaybillEntry() {
   const [senderOpen, setSenderOpen] = useState(false);
   const [receiverOpen, setReceiverOpen] = useState(false);
 
-  const originTown = useMemo(() => sites.find(s => s.id === siteId)?.name ?? "", [sites, siteId]);
+  const originTown = useMemo(() => {
+    const site = sites.find(s => s.id === siteId);
+    if (!site) return "";
+    const exact = towns.find((t: any) => t.name.toLowerCase() === site.name.toLowerCase());
+    if (exact) return exact.name;
+    const key = ((site as any).region || site.name.split(" ")[0] || "").toLowerCase();
+    return towns.find((t: any) => t.name.toLowerCase().startsWith(key))?.name ?? site.name;
+  }, [sites, siteId, towns]);
   const destSite = useMemo(() => sites.find(s => s.name === receiver?.town)?.name ?? receiver?.town ?? "", [sites, receiver]);
 
   useEffect(() => {
